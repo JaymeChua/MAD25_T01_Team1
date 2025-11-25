@@ -1,4 +1,4 @@
-package np.mad.weekly.mynavui
+package np.mad.assignment.mad_assignment_t01_team1
 
 import android.R
 import android.os.Bundle
@@ -36,7 +36,7 @@ import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
 import kotlinx.coroutines.delay
-import np.mad.weekly.mynavui.ui.theme.MyNavUITheme
+import np.mad.assignment.mad_assignment_t01_team1.ui.theme.MAD_Assignment_T01_Team1Theme
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MyNavUITheme (isSystemInDarkTheme()) {
+            MAD_Assignment_T01_Team1Theme (isSystemInDarkTheme()) {
                 MyNavUIApp()
             }
         }
