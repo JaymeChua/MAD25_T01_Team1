@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MAD_Assignment_T01_Team1</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_login_screen">LoginScreen</string>
 </resources>

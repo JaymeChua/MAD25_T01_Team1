@@ -1,4 +1,5 @@
 package np.mad.assignment.mad_assignment_t01_team1
+
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,6 +10,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -40,13 +44,12 @@ class LoginScreen : ComponentActivity() {
                         },
                         modifier = Modifier.padding(innerPadding)
                     )
-
                 }
             }
         }
     }
 }
-@Preview
+
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,

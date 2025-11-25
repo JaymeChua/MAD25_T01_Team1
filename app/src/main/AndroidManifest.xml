@@ -12,9 +12,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MAD_Assignment_T01_Team1">
         <activity
+            android:name=".LoginScreen"
+            android:exported="true"
+            android:label="@string/title_activity_login_screen"
+            android:theme="@style/Theme.MAD_Assignment_T01_Team1" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:label="@string/title_activity_main"
             android:theme="@style/Theme.MAD_Assignment_T01_Team1">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
