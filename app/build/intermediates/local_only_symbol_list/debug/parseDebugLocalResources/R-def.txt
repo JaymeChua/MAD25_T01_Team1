@@ -12,8 +12,10 @@ drawable ic_launcher_foreground
 mipmap ic_launcher
 mipmap ic_launcher_round
 string app_name
+string title_activity_favorite_screen
 string title_activity_login_screen
 string title_activity_main
+string title_activity_main_navigation
 style Theme.MAD_Assignment_T01_Team1
 xml backup_rules
 xml data_extraction_rules
