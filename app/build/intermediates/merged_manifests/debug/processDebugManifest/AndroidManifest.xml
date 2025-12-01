@@ -28,6 +28,21 @@
         android:testOnly="true"
         android:theme="@style/Theme.MAD_Assignment_T01_Team1" >
         <activity
+            android:name="np.mad.assignment.mad_assignment_t01_team1.FavouriteScreen"
+            android:exported="false"
+            android:label="@string/title_activity_favourite_screen"
+            android:theme="@style/Theme.MAD_Assignment_T01_Team1" />
+        <activity
+            android:name="np.mad.assignment.mad_assignment_t01_team1.ReviewPage"
+            android:exported="false"
+            android:label="@string/title_activity_review_page"
+            android:theme="@style/Theme.MAD_Assignment_T01_Team1" />
+        <activity
+            android:name="np.mad.assignment.mad_assignment_t01_team1.MainNavigation"
+            android:exported="false"
+            android:label="@string/title_activity_main_navigation"
+            android:theme="@style/Theme.MAD_Assignment_T01_Team1" />
+        <activity
             android:name="np.mad.assignment.mad_assignment_t01_team1.LoginScreen"
             android:exported="true"
             android:label="@string/title_activity_login_screen"
@@ -43,13 +58,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="androidx.compose.ui.tooling.PreviewActivity"
-            android:exported="true" />
-        <activity
-            android:name="androidx.activity.ComponentActivity"
-            android:exported="true"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
 
         <uses-library
             android:name="androidx.window.extensions"
@@ -57,6 +65,14 @@
         <uses-library
             android:name="androidx.window.sidecar"
             android:required="false" />
+
+        <activity
+            android:name="androidx.compose.ui.tooling.PreviewActivity"
+            android:exported="true" />
+        <activity
+            android:name="androidx.activity.ComponentActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
 
         <provider
             android:name="androidx.startup.InitializationProvider"

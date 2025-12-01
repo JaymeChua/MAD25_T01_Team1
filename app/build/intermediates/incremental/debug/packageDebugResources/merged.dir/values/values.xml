@@ -8,7 +8,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="white">#FFFFFFFF</color>
     <string name="app_name">MAD_Assignment_T01_Team1</string>
+    <string name="title_activity_favourite_screen">FavouriteScreen</string>
     <string name="title_activity_login_screen">LoginScreen</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main_navigation">MainNavigation</string>
+    <string name="title_activity_review_page">ReviewPage</string>
     <style name="Theme.MAD_Assignment_T01_Team1" parent="android:Theme.Material.Light.NoActionBar"/>
 </resources>

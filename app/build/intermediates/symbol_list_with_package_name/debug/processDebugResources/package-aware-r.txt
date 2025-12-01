@@ -1,10 +1,17 @@
 np.mad.assignment.mad_assignment_t01_team1
+attr action
 attr activityAction
 attr activityName
 attr alpha
 attr alwaysExpand
 attr animationBackgroundColor
+attr argType
 attr clearTop
+attr data
+attr dataPattern
+attr destination
+attr enterAnim
+attr exitAnim
 attr finishPrimaryWithPlaceholder
 attr finishPrimaryWithSecondary
 attr finishSecondaryWithPrimary
@@ -20,11 +27,23 @@ attr fontProviderSystemFontFamily
 attr fontStyle
 attr fontVariationSettings
 attr fontWeight
+attr graph
 attr lStar
+attr launchSingleTop
+attr mimeType
+attr navGraph
 attr nestedScrollViewStyle
+attr nullable
 attr placeholderActivityName
+attr popEnterAnim
+attr popExitAnim
+attr popUpTo
+attr popUpToInclusive
+attr popUpToSaveState
 attr primaryActivityName
 attr queryPatterns
+attr restoreState
+attr route
 attr secondaryActivityAction
 attr secondaryActivityName
 attr shortcutMatchRequired
@@ -35,9 +54,12 @@ attr splitMinHeightDp
 attr splitMinSmallestWidthDp
 attr splitMinWidthDp
 attr splitRatio
+attr startDestination
 attr stickyPlaceholder
 attr tag
+attr targetPackage
 attr ttcIndex
+attr uri
 color androidx_core_ripple_material_light
 color androidx_core_secondary_text_default_material_light
 color black
@@ -96,6 +118,7 @@ drawable notification_template_icon_bg
 drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
+drawable pngegg3
 id accessibility_action_clickable_span
 id accessibility_custom_action_0
 id accessibility_custom_action_1
@@ -163,6 +186,7 @@ id line1
 id line3
 id locale
 id ltr
+id nav_controller_view_tag
 id never
 id normal
 id notification_background
@@ -300,8 +324,11 @@ string status_bar_notification_info_overflow
 string switch_role
 string tab
 string template_percent
+string title_activity_favourite_screen
 string title_activity_login_screen
 string title_activity_main
+string title_activity_main_navigation
+string title_activity_review_page
 string tooltip_description
 string tooltip_label
 style DialogWindowTheme
@@ -317,6 +344,7 @@ style Theme_MAD_Assignment_T01_Team1
 style Widget_Compat_NotificationActionContainer
 style Widget_Compat_NotificationActionText
 styleable ActivityFilter activityAction activityName
+styleable ActivityNavigator android_name action data dataPattern targetPackage
 styleable ActivityRule alwaysExpand tag
 styleable Capability queryPatterns shortcutMatchRequired
 styleable ColorStateListItem android_color android_alpha android_lStar alpha lStar
@@ -325,6 +353,13 @@ styleable FontFamilyFont android_font android_fontWeight android_fontStyle andro
 styleable FontFamilyProviderFallback fontProviderQuery fontProviderSystemFontFamily fontVariationSettings
 styleable GradientColor android_startColor android_endColor android_type android_centerX android_centerY android_gradientRadius android_tileMode android_centerColor android_startX android_startY android_endX android_endY
 styleable GradientColorItem android_color android_offset
+styleable NavAction android_id destination enterAnim exitAnim launchSingleTop popEnterAnim popExitAnim popUpTo popUpToInclusive popUpToSaveState restoreState
+styleable NavArgument android_name android_defaultValue argType nullable
+styleable NavDeepLink android_autoVerify action mimeType uri
+styleable NavGraphNavigator startDestination
+styleable NavHost navGraph
+styleable NavInclude graph
+styleable Navigator android_label android_id route
 styleable SplitPairFilter primaryActivityName secondaryActivityAction secondaryActivityName
 styleable SplitPairRule animationBackgroundColor clearTop finishPrimaryWithSecondary finishSecondaryWithPrimary splitLayoutDirection splitMaxAspectRatioInLandscape splitMaxAspectRatioInPortrait splitMinHeightDp splitMinSmallestWidthDp splitMinWidthDp splitRatio tag
 styleable SplitPlaceholderRule animationBackgroundColor finishPrimaryWithPlaceholder placeholderActivityName splitLayoutDirection splitMaxAspectRatioInLandscape splitMaxAspectRatioInPortrait splitMinHeightDp splitMinSmallestWidthDp splitMinWidthDp splitRatio stickyPlaceholder tag

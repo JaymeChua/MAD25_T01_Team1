@@ -2,4 +2,7 @@
     <string name="app_name">MAD_Assignment_T01_Team1</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_login_screen">LoginScreen</string>
+    <string name="title_activity_main_navigation">MainNavigation</string>
+    <string name="title_activity_review_page">ReviewPage</string>
+    <string name="title_activity_favourite_screen">FavouriteScreen</string>
 </resources>

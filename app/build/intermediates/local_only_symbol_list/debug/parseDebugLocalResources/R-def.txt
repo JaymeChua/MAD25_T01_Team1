@@ -9,11 +9,15 @@ color teal_700
 color white
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+drawable pngegg3
 mipmap ic_launcher
 mipmap ic_launcher_round
 string app_name
+string title_activity_favourite_screen
 string title_activity_login_screen
 string title_activity_main
+string title_activity_main_navigation
+string title_activity_review_page
 style Theme.MAD_Assignment_T01_Team1
 xml backup_rules
 xml data_extraction_rules

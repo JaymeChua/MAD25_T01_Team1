@@ -12,6 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MAD_Assignment_T01_Team1">
         <activity
+            android:name=".FavouriteScreen"
+            android:exported="false"
+            android:label="@string/title_activity_favourite_screen"
+            android:theme="@style/Theme.MAD_Assignment_T01_Team1" />
+        <activity
+            android:name=".ReviewPage"
+            android:exported="false"
+            android:label="@string/title_activity_review_page"
+            android:theme="@style/Theme.MAD_Assignment_T01_Team1" />
+        <activity
+            android:name=".MainNavigation"
+            android:exported="false"
+            android:label="@string/title_activity_main_navigation"
+            android:theme="@style/Theme.MAD_Assignment_T01_Team1" />
+        <activity
             android:name=".LoginScreen"
             android:exported="true"
             android:label="@string/title_activity_login_screen"
