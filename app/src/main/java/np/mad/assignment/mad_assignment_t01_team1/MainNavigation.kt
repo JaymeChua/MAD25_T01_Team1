@@ -1,4 +1,3 @@
-
 package np.mad.assignment.mad_assignment_t01_team1
 
 import androidx.compose.foundation.layout.padding
@@ -33,7 +32,6 @@ sealed class AppScreen(val route: String, val label: String, val icon: ImageVect
 
 @Composable
 fun MainNavigation(
-    // You can pass dependencies or viewModels if needed
 ) {
     val navController = rememberNavController()
     val tabs = listOf(
@@ -72,7 +70,7 @@ fun MainNavigation(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = AppScreen.Favorite.route, // Start at Favorites per your preference
+            startDestination = AppScreen.Favorite.route,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(AppScreen.Home.route) {
@@ -82,12 +80,11 @@ fun MainNavigation(
                 //CanteenScreenPlaceholder()
             }
             composable(AppScreen.Favorite.route) {
-                // Hook your existing FavoriteScreen here
                 FavoriteScreen(
+                    userId = 1L,
                     onStallClick = { stall ->
                         navController.navigate("stall/${stall.stallId}")
                     },
-                    onUnfavorite = { /* persist removal via ViewModel/Repo */ }
                 )
             }
             composable(AppScreen.Profile.route) {

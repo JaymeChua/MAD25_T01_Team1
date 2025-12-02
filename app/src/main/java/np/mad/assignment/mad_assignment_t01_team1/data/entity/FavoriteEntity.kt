@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "favorites",
-    indices = [Index("userId"), Index("stallId")],
+    indices = [Index(value = ["userId","stallId"], unique = true)],
     foreignKeys = [
         ForeignKey(
              UserEntity::class,

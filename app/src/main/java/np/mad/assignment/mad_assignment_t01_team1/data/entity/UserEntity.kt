@@ -10,5 +10,5 @@ data class UserEntity(
     val name: String,
     val password: String,
     @ColumnInfo(defaultValue = "CURRENT_TIMESTAMP")
-    val createdDate: String
+    val createdDate: String? = null
 )

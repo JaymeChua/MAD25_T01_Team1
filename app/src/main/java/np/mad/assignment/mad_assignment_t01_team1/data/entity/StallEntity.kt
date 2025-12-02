@@ -10,10 +10,10 @@ import androidx.room.PrimaryKey
     [Index("canteenId"), Index("name")],
     foreignKeys = [
         ForeignKey(
-            CanteenEntity::class,
-            ["canteenId"],
-            ["canteenId"],
-            ForeignKey.CASCADE
+            entity = CanteenEntity::class,
+            parentColumns = ["canteenId"],
+            childColumns = ["canteenId"],
+            onDelete = ForeignKey.CASCADE
         )
     ]
 )

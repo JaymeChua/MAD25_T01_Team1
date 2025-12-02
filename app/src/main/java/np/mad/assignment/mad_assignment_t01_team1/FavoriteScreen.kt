@@ -28,77 +28,64 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
+import np.mad.assignment.mad_assignment_t01_team1.data.db.AppDatabase
+import np.mad.assignment.mad_assignment_t01_team1.model.CanteenGroupUi
+import np.mad.assignment.mad_assignment_t01_team1.model.FavoriteStallUi
 import np.mad.assignment.mad_assignment_t01_team1.ui.theme.MAD_Assignment_T01_Team1Theme
-
-
-class FavoriteActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MAD_Assignment_T01_Team1Theme { FavoriteScreen()
-            }
-        }
-    }
-}
-
-data class FavoriteStall(
-    val favoriteId: Long,
-    val stallId: Long,
-    val stallName: String,
-    val canteenId: Long,
-    val canteenName: String,
-    val photoUrl: String? = null,
-)
-data class CanteenGroup(
-    val canteenId: Long,
-    val canteenName: String,
-    val stalls: List<FavoriteStall>
-)
 
 
 @Composable
 fun FavoriteScreen(
-    onStallClick: (FavoriteStall) -> Unit = {},
-    onUnfavorite: (FavoriteStall) -> Unit = {}
+    userId: Long,
+    onStallClick: (FavoriteStallUi) -> Unit = {},
 ){
-    var favorites by remember { mutableStateOf(
-        listOf(
-            FavoriteStall(1L,101L,"Hainan Chicken Rice",10L,"Food Club"),
-            FavoriteStall(2L,202L,"Mala Hotpot",20L,"Makan Place"),
-            FavoriteStall(3L,303L,"Ban Mian",10L,"Food Club"),
-            FavoriteStall(4L,404L,"Western",30L,"Munch"),
+    val context= LocalContext.current
+    val  db =remember(context){
+        AppDatabase.get(context)}
+    val favoritesDao = remember { db.favoriteDao() }
+    val scope = rememberCoroutineScope()
 
-            )
-    )
-    }
-    val  groups = remember(favorites) {
-        favorites.groupBy { it.canteenId }
-            .map { (id,stalls) ->
-                CanteenGroup(
-                    canteenId = id,
-                    canteenName = stalls.first().canteenName,
-                    stalls = stalls.sortedBy { it.stallName }
+
+    val favorites: List<FavoriteStallUi> by favoritesDao.getFavoriteStallsForUser(userId).collectAsState(initial = emptyList())
+
+
+    val groups: List<CanteenGroupUi> = remember(favorites){
+        favorites
+            .groupBy {it.canteenId to it.canteenName}
+            .map{(key,grouped)->
+                val(canteenId,canteenName) = key
+                CanteenGroupUi(
+                    canteenId = canteenId,
+                    canteenName = canteenName,
+                    stalls =  grouped.sortedBy {it.stallName}
                 )
-            }
+            }.sortedBy {it.canteenName}
     }
-    var expanded by remember { mutableStateOf(groups.map {it.canteenId }.toSet())}
+
+
+    var expanded by remember(groups) { mutableStateOf(groups.map {it.canteenId }.toSet())}
+
+
     if (favorites.isEmpty()){
         EmptyState(
             title = "No favorites yet",
             subtitle = "Tap on the ☆ on a stall to save it here."
         )
+        return
     }
-    else {
     LazyColumn(
         modifier = Modifier.fillMaxSize().padding(top = 16.dp),
         contentPadding = PaddingValues(16.dp),
@@ -140,8 +127,9 @@ fun FavoriteScreen(
                                     stall = stall,
                                     onClick = {onStallClick(stall)},
                                     onUnfavorite = {
-                                        favorites = favorites.filter { it.favoriteId != stall.favoriteId }
-                                        onUnfavorite(stall)
+                                        scope.launch {
+                                            favoritesDao.removeFavoriteById(stall.favoriteId)
+                                        }
                                     }
 
                                 )
@@ -152,23 +140,14 @@ fun FavoriteScreen(
                 }
             }
         }
-    }
 
 
 
-@Composable
-private fun canteenColorOf(canteenName: String): Color{
-    return when (canteenName){
-        "Food Club" -> Color(0xFF42A5F5)
-        "Makan Place" -> Color(0xFFFF7043)
-        "Munch"  -> Color(0xFF66BB6A)
-        else -> MaterialTheme.colorScheme.primaryContainer
-    }
-}
+
 
 @Composable
 private fun StallItem(
-    stall: FavoriteStall,
+    stall: FavoriteStallUi,
     onClick: ()-> Unit,
     onUnfavorite: () -> Unit
 ){
@@ -184,15 +163,21 @@ private fun StallItem(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        Column(Modifier.weight(1f)) {
+            Text(
+                text = stall.stallName,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.weight(1f)
+            )
+            if(stall.halal){
+                Text(
+                    text = "Halal",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+        }
 
-        Text(
-            text = stall.stallName,
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.weight(1f)
-        )
-        IconButton(
-            onClick = onUnfavorite
-        ) {
+        IconButton(onClick = onUnfavorite) {
             Icon(
                 imageVector = Icons.Outlined.Star,
                 contentDescription = "Remove from favorites",
@@ -200,6 +185,15 @@ private fun StallItem(
             )
         }
         }
+    }
+}
+@Composable
+private fun canteenColorOf(canteenName: String): Color{
+    return when (canteenName){
+        "Food Club" -> Color(0xFF42A5F5)
+        "Makan Place" -> Color(0xFFFF7043)
+        "Munch"  -> Color(0xFF66BB6A)
+        else -> MaterialTheme.colorScheme.primaryContainer
     }
 }
 
