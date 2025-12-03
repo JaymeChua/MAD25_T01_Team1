@@ -79,7 +79,13 @@ fun MainNavigation(
                 //HomeScreenPlaceholder()
             }
             composable(AppScreen.Canteen.route) {
-                //CanteenScreenPlaceholder()
+                //This page is for the actual stall description page. Put the stall description page once ready.
+                ReviewPage(
+                    onCloseClicked = {
+                        navController.navigate(AppScreen.Canteen.route) {
+                        }
+                    }
+                )
             }
             composable(AppScreen.Favorite.route) {
                 FavoriteScreen(
