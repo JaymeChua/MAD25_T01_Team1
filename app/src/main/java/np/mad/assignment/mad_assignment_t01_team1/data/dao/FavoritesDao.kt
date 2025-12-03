@@ -13,6 +13,9 @@ interface FavoritesDao{
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addFavorite(fav: FavoriteEntity): Long
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addFavorites(vararg favs: FavoriteEntity): List<Long>
+
     @Query("DELETE FROM favorites WHERE favoriteId = :favoriteId")
     suspend fun removeFavoriteById(favoriteId: Long)
 

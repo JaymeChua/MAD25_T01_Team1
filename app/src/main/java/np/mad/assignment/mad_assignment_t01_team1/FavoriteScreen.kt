@@ -6,6 +6,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
@@ -45,8 +48,10 @@ import np.mad.assignment.mad_assignment_t01_team1.data.db.AppDatabase
 import np.mad.assignment.mad_assignment_t01_team1.model.CanteenGroupUi
 import np.mad.assignment.mad_assignment_t01_team1.model.FavoriteStallUi
 import np.mad.assignment.mad_assignment_t01_team1.ui.theme.MAD_Assignment_T01_Team1Theme
+import androidx.compose.material3.*
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteScreen(
     userId: Long,
@@ -77,17 +82,35 @@ fun FavoriteScreen(
 
 
     var expanded by remember(groups) { mutableStateOf(groups.map {it.canteenId }.toSet())}
+    Box(Modifier.fillMaxSize()){
+        Row(
+            modifier = Modifier.align(Alignment.TopStart).padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Icon(
+                imageVector = Icons.Outlined.Star,
+                contentDescription = "Favorites",
+                tint = MaterialTheme.colorScheme.primary
+            )
+            Spacer(Modifier.width(8.dp))
+            Text(
+                text = "Favorites",
+                style = MaterialTheme.typography.titleLarge,
 
+            )
+        }
+    }
 
     if (favorites.isEmpty()){
         EmptyState(
             title = "No favorites yet",
-            subtitle = "Tap on the ☆ on a stall to save it here."
+            subtitle = "Tap on the ☆ on a stall to save it here.",
+            userId = userId
         )
         return
     }
     LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(top = 16.dp),
+        modifier = Modifier.fillMaxSize().padding(top = 56.dp,),
         contentPadding = PaddingValues(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -167,12 +190,11 @@ private fun StallItem(
             Text(
                 text = stall.stallName,
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.weight(1f)
             )
             if(stall.halal){
                 Text(
                     text = "Halal",
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }
@@ -199,7 +221,7 @@ private fun canteenColorOf(canteenName: String): Color{
 
 
 @Composable
-private fun EmptyState(title: String, subtitle: String) {
+private fun EmptyState(title: String, subtitle: String, userId: Long) {
     Column(
         modifier = Modifier.fillMaxSize().padding(24.dp),
         verticalArrangement = Arrangement.Center,
@@ -208,5 +230,7 @@ private fun EmptyState(title: String, subtitle: String) {
         Text(title, style = MaterialTheme.typography.titleMedium)
         Spacer(Modifier.height(8.dp))
         Text(subtitle, style = MaterialTheme.typography.bodyMedium)
+        Spacer(Modifier.height(8.dp))
+        Text(text = "$userId")
     }
 }
