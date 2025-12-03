@@ -3,6 +3,7 @@ package np.mad.assignment.mad_assignment_t01_team1
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
@@ -27,6 +28,7 @@ sealed class AppScreen(val route: String, val label: String, val icon: ImageVect
     data object Favorite : AppScreen("favorite","Favorite", Icons.Filled.Star)
     data object Profile : AppScreen("profile", "Profile", Icons.Filled.Person)
     //data object StallDetail : AppScreen("stall/{stallId)", "Stall Detail", Icons.Filled.Star)
+    data object Login : AppScreen("login", "Login", Icons.Filled.Lock)
 }
 
 
@@ -81,10 +83,13 @@ fun MainNavigation(
             }
             composable(AppScreen.Favorite.route) {
                 FavoriteScreen(
-                    userId = 1L,
+                    userId = 2L,
                     onStallClick = { stall ->
                         navController.navigate("stall/${stall.stallId}")
                     },
+                    onLoginClick = {
+                        navController.navigate((AppScreen.Login.route))
+                    }
                 )
             }
             composable(AppScreen.Profile.route) {

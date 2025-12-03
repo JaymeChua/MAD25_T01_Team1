@@ -56,6 +56,7 @@ import androidx.compose.material3.*
 fun FavoriteScreen(
     userId: Long,
     onStallClick: (FavoriteStallUi) -> Unit = {},
+    onLoginClick:()-> Unit
 ){
     val context= LocalContext.current
     val  db =remember(context){
@@ -99,16 +100,24 @@ fun FavoriteScreen(
 
             )
         }
+        if(userId <= 0L){
+            NotLoggedInState(
+                title = "Sign in to view your favorites",
+                subtitle = "Create an account or sign in to save and sync favorites.",
+                onLoginClick = onLoginClick
+            )
+            return@Box
+        }
+        if (favorites.isEmpty()){
+            EmptyState(
+                title = "No favorites yet",
+                subtitle = "Tap on the ☆ on a stall to save it here.",
+            )
+            return
+        }
     }
 
-    if (favorites.isEmpty()){
-        EmptyState(
-            title = "No favorites yet",
-            subtitle = "Tap on the ☆ on a stall to save it here.",
-            userId = userId
-        )
-        return
-    }
+
     LazyColumn(
         modifier = Modifier.fillMaxSize().padding(top = 56.dp,),
         contentPadding = PaddingValues(16.dp),
@@ -221,7 +230,7 @@ private fun canteenColorOf(canteenName: String): Color{
 
 
 @Composable
-private fun EmptyState(title: String, subtitle: String, userId: Long) {
+private fun EmptyState(title: String, subtitle: String) {
     Column(
         modifier = Modifier.fillMaxSize().padding(24.dp),
         verticalArrangement = Arrangement.Center,
@@ -231,6 +240,26 @@ private fun EmptyState(title: String, subtitle: String, userId: Long) {
         Spacer(Modifier.height(8.dp))
         Text(subtitle, style = MaterialTheme.typography.bodyMedium)
         Spacer(Modifier.height(8.dp))
-        Text(text = "$userId")
+    }
+}
+
+@Composable
+private fun NotLoggedInState(
+    title: String,
+    subtitle: String,
+    onLoginClick: () -> Unit
+){
+    Column(
+        modifier = Modifier.fillMaxSize().padding(24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(title, style = MaterialTheme.typography.titleMedium)
+        Spacer(Modifier.height(8.dp))
+        Text(subtitle, style = MaterialTheme.typography.bodyMedium)
+        Spacer(Modifier.height(16.dp))
+        Button(onLoginClick) {
+            Text("Sign in")
+        }
     }
 }

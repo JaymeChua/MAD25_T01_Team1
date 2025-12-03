@@ -11,6 +11,9 @@ suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
         val userId = db.userDao().upsert(
             UserEntity(userId = 1L, name = "demo", password = "pass_demo", createdDate = null)
         )
+        val userId1 = db.userDao().upsert(
+            UserEntity(userId = 2L, name = "demo1", password = "pass_demo", createdDate = null)
+        )
 
         val canteenIds = db.canteenDao().insert(
             CanteenEntity(name = "Food Club"),
