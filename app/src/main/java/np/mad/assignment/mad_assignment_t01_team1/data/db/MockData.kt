@@ -5,8 +5,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import np.mad.assignment.mad_assignment_t01_team1.FavoriteScreen
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.*
+import java.time.LocalDate
 
 suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
+    db.clearAllTables()// LLM
+    try {
+        db.openHelper.writableDatabase.execSQL("DELETE FROM sqlite_sequence")
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }//LLM
     db.withTransaction {
         val userId = db.userDao().upsert(
             UserEntity(userId = 1L, name = "demo", password = "pass_demo", createdDate = null)
@@ -34,7 +41,12 @@ suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
         val banMianStallId = db.stallDao().getByName("Ban Mian")?.stallId ?: error("Stall 'Chicken Rice' not found after insert")
         val malaHotpotStallId = db.stallDao().getByName("Mala Hotpot")?.stallId ?: error("Stall 'Chicken Rice' not found after insert")
         val westernStallId = db.stallDao().getByName("Western")?.stallId ?: error("Stall 'Chicken Rice' not found after insert")
-
+        val name1 = db.userDao().getById(userId)?.name ?: "Unknown"
+        val name2 = db.userDao().getById(userId1)?.name ?: "Unknown"
+        db.reviewDao().addReviews(
+            //ReviewEntity(userId = userId, username = name1, review = "Yoo this food is bussin. Unc locked in", rating = 5, stallId = chickenRiceStallId, date = LocalDate.now()),
+            ReviewEntity(userId = userId1, username = name2, review = "It was half-uncooked bro. This uncle trolling", rating = 1, stallId = chickenRiceStallId, date = LocalDate.now()),
+        )
         db.favoriteDao().addFavorites(
             FavoriteEntity(userId = userId, stallId = chickenRiceStallId),
             FavoriteEntity(userId = userId, stallId = banMianStallId),
