@@ -16,44 +16,53 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import np.mad.assignment.mad_assignment_t01_team1.data.db.AppDatabase
+import np.mad.assignment.mad_assignment_t01_team1.data.entity.ReviewEntity
+import np.mad.assignment.mad_assignment_t01_team1.model.FavoriteStallUi
 
-data class Review(
-    val name: String,
-    val comment: String,
-    val rating: String,
-    val date: String
-)
 
-class ReviewActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            MaterialTheme {
-                ReviewPage()
-            }
-        }
-    }
-}
+//class ReviewActivity : ComponentActivity() {
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContent {
+//            MaterialTheme {
+//                ReviewPage()
+//            }
+//        }
+//    }
+//}
 
 @Composable
 fun ReviewPage(
+    stallId: Long,
     onCloseClicked: () -> Unit = {},
 ) {
-    // Mock Data based on your image
-    val reviews = listOf(
-        Review("KaiJie", "Yoo this food is bussin. Unc locked in", "5/5", "23/11/2025"),
-        Review("JieKai", "It was half-uncooked bro. This uncle trolling", "1/5", "22/11/2025")
-    )
+    val context= LocalContext.current
+    val  db =remember(context){
+        AppDatabase.get(context)}
+    val reviewsDao = remember { db.reviewDao() }
+    val scope = rememberCoroutineScope()
+    val reviews: List<ReviewEntity> by reviewsDao.getAllReviewsForStall(stallId).collectAsState(initial = emptyList())
+
+//    val reviews = listOf(
+//        Review("KaiJie", "Yoo this food is bussin. Unc locked in", "5/5", "23/11/2025"),
+//        Review("JieKai", "It was half-uncooked bro. This uncle trolling", "1/5", "22/11/2025")
+//    )
 
     // Main Container
     Box(
@@ -137,10 +146,10 @@ fun ReviewPage(
 }
 
 @Composable
-fun ReviewCardItem(review: Review) {
+fun ReviewCardItem(review: ReviewEntity) {
     val reviewBackgroundColor = when (review.rating) {
-        "1/5" -> Color(0xFFFAE0E3)
-        "5/5" -> Color(0xFFDCEFD9)
+        1 -> Color(0xFFFAE0E3)
+        5 -> Color(0xFFDCEFD9)
         else -> Color.White
     }
 
@@ -160,7 +169,7 @@ fun ReviewCardItem(review: Review) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = review.name,
+                    text = review.username,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
                 )
@@ -174,7 +183,7 @@ fun ReviewCardItem(review: Review) {
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        text = review.rating,
+                        text = "${review.rating}/5",
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -185,7 +194,7 @@ fun ReviewCardItem(review: Review) {
 
             // Comment
             Text(
-                text = review.comment,
+                text = review.review,
                 style = MaterialTheme.typography.bodyLarge,
                 lineHeight = 22.sp,
                 modifier = Modifier.padding(bottom = 12.dp)
@@ -193,7 +202,7 @@ fun ReviewCardItem(review: Review) {
 
             // Date
             Text(
-                text = review.date,
+                text = review.date.toString(),
                 style = MaterialTheme.typography.labelSmall,
                 color = Color.Gray.copy(alpha = 0.7f)
             )
