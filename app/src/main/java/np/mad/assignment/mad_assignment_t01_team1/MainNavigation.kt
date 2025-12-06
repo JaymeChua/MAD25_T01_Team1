@@ -79,13 +79,39 @@ fun MainNavigation(
                 //HomeScreenPlaceholder()
             }
             composable(AppScreen.Canteen.route) {
-                //This page is for the actual stall description page. Put the stall description page once ready.
-                ReviewPage(
+                //Canteen directory page here:
+                CanteenDirectoryScreen(
+                    canteens = getSampleCanteens(), // Pass the sample canteen data here
+                    navController = navController,
+                    modifier = Modifier.padding(innerPadding)
+                )
+                //Stall directory page here:
+                /*StallDirectoryScreen(
+                    foodStalls = getSampleFoodStalls(), // Pass the sample data here
+                    modifier = Modifier.padding(innerPadding)
+                )*/
+                //COMMENTED OUT REVIEW PAGE AS THIS IS MEANT FOR STALL DIREDTORY
+                /*ReviewPage(
                     onCloseClicked = {
                         navController.navigate(AppScreen.Canteen.route) {
                         }
                     }
-                )
+                )*/
+            }
+            composable("stallDirectory/{canteenName}") { backStackEntry ->
+                // Get the canteen name from the backstack arguments
+                val canteenName = backStackEntry.arguments?.getString("canteenName")
+
+                // Find the canteen based on the name
+                val selectedCanteen = getSampleCanteens().firstOrNull { it.name == canteenName }
+
+                // Pass the selected canteen data to StallDirectoryScreen
+                selectedCanteen?.let {
+                    StallDirectoryScreen(
+                        canteen = it, // Pass the selected canteen to filter food stalls
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
             }
             composable(AppScreen.Favorite.route) {
                 FavoriteScreen(

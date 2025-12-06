@@ -1,74 +1,94 @@
 [
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-xhdpi\\ic_launcher_round.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-xhdpi\\ic_launcher.webp"
     },
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\xml_backup_rules.xml.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\xml\\backup_rules.xml"
+        "merged": "np.mad.assignment.mad_assignment_t01_team1.app-debug-47:/drawable_munch.png.flat",
+        "source": "np.mad.assignment.mad_assignment_t01_team1.app-main-49:/drawable/munch.png"
     },
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-mdpi_ic_launcher_round.webp.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-mdpi\\ic_launcher_round.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\xml\\data_extraction_rules.xml"
     },
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\drawable_ic_launcher_background.xml.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\drawable\\ic_launcher_background.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-mdpi\\ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-hdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-hdpi\\ic_launcher.webp"
+        "merged": "np.mad.assignment.mad_assignment_t01_team1.app-debug-47:/drawable_food_club.png.flat",
+        "source": "np.mad.assignment.mad_assignment_t01_team1.app-main-49:/drawable/food_club.png"
     },
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\drawable_ic_launcher_foreground.xml.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\drawable\\ic_launcher_foreground.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-xxxhdpi\\ic_launcher.webp"
     },
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-xxhdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-xxhdpi\\ic_launcher.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-mdpi\\ic_launcher.webp"
     },
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-anydpi-v26\\ic_launcher.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\drawable_pngegg3.png.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\drawable\\pngegg3.png"
     },
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-xxxhdpi\\ic_launcher.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\drawable_western_food.png.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\drawable\\western_food.png"
     },
     {
-        "merged": "np.mad.assignment.mad_assignment_t01_team1.app-debug-47:/drawable_pngegg3.png.flat",
-        "source": "np.mad.assignment.mad_assignment_t01_team1.app-main-49:/drawable/pngegg3.png"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-xxhdpi\\ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\drawable_chicken_rice.png.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\drawable\\chicken_rice.png"
     },
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-hdpi_ic_launcher_round.webp.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-hdpi\\ic_launcher_round.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\drawable\\ic_launcher_background.xml"
     },
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\xml_backup_rules.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\xml\\backup_rules.xml"
     },
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\xml_data_extraction_rules.xml.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\xml\\data_extraction_rules.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-mdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-mdpi\\ic_launcher.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-xxhdpi\\ic_launcher.webp"
     },
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\drawable_pngegg_3.png.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\drawable\\pngegg_3.png"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-anydpi-v26\\ic_launcher.xml"
     },
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-xhdpi\\ic_launcher_round.webp"
     },
     {
-        "merged": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-xhdpi_ic_launcher.webp.flat",
-        "source": "C:\\Users\\lucas\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-xhdpi\\ic_launcher.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\drawable\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "np.mad.assignment.mad_assignment_t01_team1.app-debug-47:/drawable_makan_place.png.flat",
+        "source": "np.mad.assignment.mad_assignment_t01_team1.app-main-49:/drawable/makan_place.png"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\drawable_mala_xiangguo.png.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\drawable\\mala_xiangguo.png"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-debug-47:\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\8.13\\np.mad.assignment.mad_assignment_t01_team1.app-main-49:\\mipmap-hdpi\\ic_launcher_round.webp"
     }
 ]
