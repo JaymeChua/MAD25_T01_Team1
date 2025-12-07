@@ -117,8 +117,8 @@ fun StallDirectoryScreen(
         items(stalls.size) { index ->
             StallCard(
                 stall = stalls[index].toFoodStall(),
-                onReviewClick = { stallId ->
-                    navController.navigate("review/$stallId")
+                onStallClick = { stallId ->
+                    navController.navigate("menu/$stallId")
                 }
             )
         }
@@ -130,9 +130,10 @@ fun StallDirectoryScreen(
 fun StallCard(
     stall: FoodStall,
     modifier: Modifier = Modifier,
-    onReviewClick: (Long) -> Unit
+    onStallClick: (Long) -> Unit
 ) {
     Card(
+        onClick = { onStallClick(stall.stallId) },
         modifier = modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp),
@@ -182,13 +183,6 @@ fun StallCard(
                     contentDescription = "Favorite",
                     tint = Color.Red
                 )
-            }
-            Button(
-                onClick = { onReviewClick(stall.stallId)  },
-                modifier = Modifier
-                    .padding(top = 12.dp)
-            ) {
-                Text("Write Review")
             }
         }
     }

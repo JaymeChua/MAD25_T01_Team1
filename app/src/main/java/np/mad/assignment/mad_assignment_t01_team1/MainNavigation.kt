@@ -122,7 +122,16 @@ fun MainNavigation(
                     onCloseClicked = { navController.popBackStack() }
                 )
             }
-
+            composable("menu/{stallId}"){ backStackEntry ->
+                val stallId = backStackEntry.arguments?.getString("stallId")?.toLong() ?: 4L
+                MenuScreen(
+                    stallId = stallId,
+                    onBackClick = { navController.popBackStack() },
+                    onReviewClick = {
+                        navController.navigate("review/$stallId")
+                    }
+                )
+            }
             composable(AppScreen.Favorite.route) {
                 FavoriteScreen(
                     userId = 2L,
@@ -135,7 +144,7 @@ fun MainNavigation(
                 )
             }
             composable(AppScreen.Profile.route) {
-                //ProfileScreenPlaceholder()
+
             }
             // Optional: stall detail route with argument
             /*

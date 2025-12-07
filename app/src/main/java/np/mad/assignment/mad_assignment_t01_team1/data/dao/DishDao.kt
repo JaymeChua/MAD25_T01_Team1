@@ -5,20 +5,19 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
+import np.mad.assignment.mad_assignment_t01_team1.data.entity.DishEntity
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.ReviewEntity
-
 @Dao
-interface ReviewDao {
+interface DishDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addReview(review: ReviewEntity): Long
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addReviews(vararg reviews: ReviewEntity): List<Long>
+    suspend fun addDish(dish: DishEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(vararg reviews: ReviewEntity): List<Long>
+    suspend fun addAllDishes(vararg dishes: DishEntity): List<Long>
 
-    @Query("SELECT * FROM reviews WHERE stallId = :stallId ORDER BY date")
-    fun getAllReviewsForStall(stallId: Long): Flow<List<ReviewEntity>>
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(vararg dishes: DishEntity): List<Long>
 
+    @Query("SELECT * FROM dishes WHERE stallId = :stallId ORDER BY dishName")
+    fun getAllDishesForStall(stallId: Long): Flow<List<DishEntity>>
 }
