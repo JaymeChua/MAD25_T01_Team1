@@ -158,6 +158,13 @@ suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
             DishEntity(stallId = banMianStallId, dishName = "Ban Mian", dishPrice = "6.50", imageResId = R.drawable.banmian),
             DishEntity(stallId = banMianStallId, dishName = "You Mian", dishPrice = "6.50", imageResId = R.drawable.umian),
         )
+        db.dishDao().insert(
+            DishEntity(stallId = chickenRiceStallId, dishName = "Roasted Chicken Rice Set", dishPrice = "4.00", imageResId = R.drawable.roastedchickenset),
+            DishEntity(stallId = chickenRiceStallId, dishName = "Roasted Chicken Rice", dishPrice = "2.80", imageResId = R.drawable.roastedchicken),
+            DishEntity(stallId = chickenRiceStallId, dishName = "Lemon Chicken Rice", dishPrice = "3.30", imageResId = R.drawable.lemonchicken),
+            DishEntity(stallId = chickenRiceStallId, dishName = "Chicken Cutlet Noodle", dishPrice = "3.30", imageResId = R.drawable.chickennoodle),
+            DishEntity(stallId = chickenRiceStallId, dishName = "Roasted Chicken Noodle", dishPrice = "2.80", imageResId = R.drawable.roastedchickennoodle),
+        )
             db.favoriteDao().addFavorites(
             FavoriteEntity(userId = userId, stallId = chickenRiceStallId),
             FavoriteEntity(userId = userId, stallId = banMianStallId),
