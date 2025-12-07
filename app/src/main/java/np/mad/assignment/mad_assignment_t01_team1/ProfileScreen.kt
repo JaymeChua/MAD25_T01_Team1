@@ -11,6 +11,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,9 +38,11 @@ fun ProfileScreen(
 ) {
     val context = LocalContext.current
     val db = remember { AppDatabase.get(context) }
-
+    val reviewsDao = remember { db.reviewDao() }
+    val favoritesDao = remember { db.favoriteDao() }
     var username by remember { mutableStateOf("Loading...") }
-
+    val reviewCount by reviewsDao.getReviewCountForUser(userId).collectAsState(initial = 0)
+    val favouriteCount by favoritesDao.getFavoriteCountForUser(userId).collectAsState(initial = 0)
     LaunchedEffect(userId) {
         try {
             val userFlow = db.userDao().getById(userId)
@@ -113,7 +116,7 @@ fun ProfileScreen(
             // Favorite Stall
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = "0", // Replace with actual count from DB
+                    text = favouriteCount.toString(), // Replace with actual count from DB
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -123,7 +126,7 @@ fun ProfileScreen(
             // Reviews Written
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    text = "0", // Replace with actual count from DB
+                    text = reviewCount.toString(), // Replace with actual count from DB
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold
                 )
