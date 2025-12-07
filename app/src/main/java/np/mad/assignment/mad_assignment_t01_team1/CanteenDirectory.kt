@@ -101,4 +101,3 @@ fun CanteenCard(canteen: Canteen, modifier: Modifier = Modifier, navController: 
         }
     }
 }
-

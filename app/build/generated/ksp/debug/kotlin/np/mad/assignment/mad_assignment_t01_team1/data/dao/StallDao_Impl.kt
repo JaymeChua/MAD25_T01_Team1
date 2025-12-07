@@ -281,6 +281,75 @@ public class StallDao_Impl(
     }
   }
 
+  public override fun getStallsOrderedByPopularity(): Flow<List<StallEntity>> {
+    val _sql: String = """
+        |
+        |    SELECT s.*, COUNT(r.reviewId) as review_count 
+        |    FROM stalls s 
+        |    LEFT JOIN reviews r ON s.stallId = r.stallId 
+        |    GROUP BY s.stallId 
+        |    ORDER BY review_count DESC
+        |""".trimMargin()
+    return createFlow(__db, false, arrayOf("stalls", "reviews")) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        val _columnIndexOfStallId: Int = getColumnIndexOrThrow(_stmt, "stallId")
+        val _columnIndexOfCanteenName: Int = getColumnIndexOrThrow(_stmt, "canteenName")
+        val _columnIndexOfCanteenId: Int = getColumnIndexOrThrow(_stmt, "canteenId")
+        val _columnIndexOfCuisine: Int = getColumnIndexOrThrow(_stmt, "cuisine")
+        val _columnIndexOfDescription: Int = getColumnIndexOrThrow(_stmt, "description")
+        val _columnIndexOfName: Int = getColumnIndexOrThrow(_stmt, "name")
+        val _columnIndexOfImageResId: Int = getColumnIndexOrThrow(_stmt, "imageResId")
+        val _columnIndexOfHalal: Int = getColumnIndexOrThrow(_stmt, "halal")
+        val _result: MutableList<StallEntity> = mutableListOf()
+        while (_stmt.step()) {
+          val _item: StallEntity
+          val _tmpStallId: Long
+          _tmpStallId = _stmt.getLong(_columnIndexOfStallId)
+          val _tmpCanteenName: String
+          _tmpCanteenName = _stmt.getText(_columnIndexOfCanteenName)
+          val _tmpCanteenId: Long
+          _tmpCanteenId = _stmt.getLong(_columnIndexOfCanteenId)
+          val _tmpCuisine: String
+          _tmpCuisine = _stmt.getText(_columnIndexOfCuisine)
+          val _tmpDescription: String
+          _tmpDescription = _stmt.getText(_columnIndexOfDescription)
+          val _tmpName: String
+          _tmpName = _stmt.getText(_columnIndexOfName)
+          val _tmpImageResId: Int
+          _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          val _tmpHalal: Boolean
+          val _tmp: Int
+          _tmp = _stmt.getLong(_columnIndexOfHalal).toInt()
+          _tmpHalal = _tmp != 0
+          _item = StallEntity(_tmpStallId,_tmpCanteenName,_tmpCanteenId,_tmpCuisine,_tmpDescription,_tmpName,_tmpImageResId,_tmpHalal)
+          _result.add(_item)
+        }
+        _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
+  public override fun getAllCuisines(): Flow<List<String>> {
+    val _sql: String = "SELECT DISTINCT cuisine FROM stalls"
+    return createFlow(__db, false, arrayOf("stalls")) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        val _result: MutableList<String> = mutableListOf()
+        while (_stmt.step()) {
+          val _item: String
+          _item = _stmt.getText(0)
+          _result.add(_item)
+        }
+        _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
   public companion object {
     public fun getRequiredConverters(): List<KClass<*>> = emptyList()
   }
