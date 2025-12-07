@@ -26,4 +26,16 @@ interface StallDao{
 
     @Query("SELECT * FROM stalls WHERE name = :name LIMIT 1")
     suspend fun getByName(name: String): StallEntity?
+
+    @Query("""
+    SELECT s.*, COUNT(r.reviewId) as review_count 
+    FROM stalls s 
+    LEFT JOIN reviews r ON s.stallId = r.stallId 
+    GROUP BY s.stallId 
+    ORDER BY review_count DESC
+""")
+    fun getStallsOrderedByPopularity(): Flow<List<StallEntity>>
+
+    @Query("SELECT DISTINCT cuisine FROM stalls")
+    fun getAllCuisines(): Flow<List<String>>
 }
