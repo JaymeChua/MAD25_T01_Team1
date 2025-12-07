@@ -80,7 +80,7 @@ fun MenuScreen(
                         .fillMaxWidth()
                         .height(250.dp)
                 )
-
+                //Back Button to Stall Page
                 SmallFloatingActionButton(
                     onClick = onBackClick,
                     modifier = Modifier
@@ -150,7 +150,6 @@ fun MenuScreen(
                                     )
                                     Spacer(modifier = Modifier.width(8.dp))
                                     Text(
-                                        // Matches image format: "2.5(2 reviews)"
                                         text = String.format("%.1f(%d reviews)", averageRating, reviewCount),
                                         style = MaterialTheme.typography.bodyLarge,
                                         fontWeight = FontWeight.Normal,
