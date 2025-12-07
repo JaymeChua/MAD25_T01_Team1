@@ -21,6 +21,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true"
+            android:label="Login"
+            android:theme="@style/Theme.MAD_Assignment_T01_Team1" />
+
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="true"
+            android:label="Register"
+            android:theme="@style/Theme.MAD_Assignment_T01_Team1" />
     </application>
 
 </manifest>
