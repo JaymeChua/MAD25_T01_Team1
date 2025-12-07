@@ -40,6 +40,8 @@ suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
             StallEntity(name = "Noodle Delights", canteenName = "Makan Place", canteenId = makanPlaceId, cuisine = "Asian", imageResId = R.drawable.bakchormee,description = "Serving delicious noodle dishes, including Singapore Laksa, Mini Pot Noodle, and Famous Lor Mee, all at affordable prices.", halal = false),
             StallEntity(name = "Korean", canteenName = "Munch", canteenId = munchId, cuisine = "Korean", imageResId = R.drawable.bbqcrispychicken,description = "Serving delicious korean food from bibimap to kimchi fried rice.", halal = false),
             StallEntity(name = "Ban Mian", canteenName = "Makan Place", canteenId = makanPlaceId, cuisine = "Asian", imageResId = R.drawable.banmian,description = "Serving delicious noodle dishes, including ban mian and U mian, all at affordable prices.", halal = false),
+            StallEntity(name = "Rice", canteenName = "Food Club", canteenId = foodClubId, cuisine = "Japanese", imageResId = R.drawable.chickenscrambled,description = "Providing a base of scrambled egg rice with chicken cutlet, luncheon meat and other options    all at affordable prices.", halal = false),
+
             )
         val chickenRiceStallId = db.stallDao().getByName("Chicken Rice")?.stallId ?: error("Stall 'Chicken Rice' not found after insert")
         val indonesianStallId = db.stallDao().getByName("Indonesian")?.stallId ?: error("Stall 'Indonesian' not found after insert")
@@ -48,6 +50,7 @@ suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
         val malaHotpotStallId = db.stallDao().getByName("Mala Hotpot")?.stallId ?: error("Stall 'Mala' not found after insert")
         val westernStallId = db.stallDao().getByName("Western")?.stallId ?: error("Stall 'Western' not found after insert")
         val koreanStallId = db.stallDao().getByName("Korean")?.stallId ?: error("Stall 'Korean' not found after insert")
+        val riceStallId = db.stallDao().getByName("Rice")?.stallId ?: error("Stall 'Rice' not found after insert")
         val name1 = db.userDao().getById(userId)?.name ?: "Unknown"
         val name2 = db.userDao().getById(userId1)?.name ?: "Unknown"
         db.reviewDao().addReviews(
@@ -139,6 +142,49 @@ suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
                 dishName = "Mini Pot Noodle",
                 dishPrice = "5.00",
                 imageResId = R.drawable.minipot
+            ),
+            // Ethan's dishes (Munch, Western)
+            DishEntity(
+                stallId = westernStallId,
+                dishName = "Chicken Chop",
+                dishPrice = "5.50",
+                imageResId = R.drawable.chickenchop
+            ),
+            DishEntity(
+                stallId = westernStallId,
+                dishName = "Crispy Chicken",
+                dishPrice = "5.50",
+                imageResId = R.drawable.crispychicken
+            ),
+            DishEntity(
+                stallId = westernStallId,
+                dishName = "Aglio Olio Spaghetti",
+                dishPrice = "4.00",
+                imageResId = R.drawable.aglioolio
+            ),
+            DishEntity(
+                stallId = westernStallId,
+                dishName = "Fish & Chips",
+                dishPrice = "6.00",
+                imageResId = R.drawable.fishandchips
+            ),
+            DishEntity(
+                stallId = westernStallId,
+                dishName = "Sausage & Fries",
+                dishPrice = "3.50",
+                imageResId = R.drawable.sausageandfries
+            ),
+            DishEntity(
+                stallId = westernStallId,
+                dishName = "Spaghetti Bolognese",
+                dishPrice = "4.50",
+                imageResId = R.drawable.spagettibolognese
+            ),
+            DishEntity(
+                stallId = westernStallId,
+                dishName = "Steak & Fries",
+                dishPrice = "7.50",
+                imageResId = R.drawable.steakandfries
             )
         )
         db.dishDao().insert(
@@ -165,6 +211,17 @@ suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
             DishEntity(stallId = chickenRiceStallId, dishName = "Chicken Cutlet Noodle", dishPrice = "3.30", imageResId = R.drawable.chickennoodle),
             DishEntity(stallId = chickenRiceStallId, dishName = "Roasted Chicken Noodle", dishPrice = "2.80", imageResId = R.drawable.roastedchickennoodle),
         )
+        db.dishDao().insert(
+            DishEntity(stallId = riceStallId, dishName = "Chicken Cutlet Scrambled Egg Rice", dishPrice = "5.50", imageResId = R.drawable.chickenscrambled),
+            DishEntity(stallId = riceStallId, dishName = "Chicken Curry Scrambled Egg Rice", dishPrice = "5.50", imageResId = R.drawable.curryscrambled),
+            DishEntity(stallId = riceStallId, dishName = "Luncheon Scrambled Egg Rice", dishPrice = "5.00", imageResId = R.drawable.luncheonscrambled),
+            DishEntity(stallId = riceStallId, dishName = "Dumpling Scrambled Egg Rice", dishPrice = "4.80", imageResId = R.drawable.dumplingscrambled),
+            DishEntity(stallId = riceStallId, dishName = "Fried Prawn Scrambled Egg Rice", dishPrice = "5.80", imageResId = R.drawable.dumplingscrambled),
+            DishEntity(stallId = riceStallId, dishName = "Vegetable Scrambled Egg Rice", dishPrice = "4.00", imageResId = R.drawable.veganscrambled),
+            DishEntity(stallId = riceStallId, dishName = "Fried Wontons(8 pieces)", dishPrice = "3.00", imageResId = R.drawable.friedwonton),
+            DishEntity(stallId = riceStallId, dishName = "Dumpling Soup", dishPrice = "3.00", imageResId = R.drawable.soup),
+
+            )
             db.favoriteDao().addFavorites(
             FavoriteEntity(userId = userId, stallId = chickenRiceStallId),
             FavoriteEntity(userId = userId, stallId = banMianStallId),
