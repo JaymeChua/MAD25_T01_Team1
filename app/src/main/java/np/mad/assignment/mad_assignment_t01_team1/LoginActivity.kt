@@ -10,22 +10,30 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -73,7 +81,8 @@ class LoginActivity : ComponentActivity() {
                             // Start RegisterActivity
                             startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
                         },
-                        modifier = Modifier.padding(innerPadding)
+                        contentPadding = innerPadding,
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
             }
@@ -85,6 +94,7 @@ class LoginActivity : ComponentActivity() {
 fun LoginScreen(
     onLoginSuccess: (Long) -> Unit,
     onRegisterClick: () -> Unit,
+    contentPadding: PaddingValues,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -95,8 +105,7 @@ fun LoginScreen(
 
     Box(
         modifier = modifier
-            .fillMaxSize()
-            .padding(24.dp),
+            .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Image(
@@ -108,15 +117,17 @@ fun LoginScreen(
         Column(
             modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 180.dp),
+            .padding(contentPadding)
+            .padding(top = 200.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = "Welcome to",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Normal,
-                color = Color.White,
-                textAlign = TextAlign.Center
+                fontSize = 45.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -124,7 +135,8 @@ fun LoginScreen(
             // "np" + Logo in a Row
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = "np",
@@ -148,26 +160,47 @@ fun LoginScreen(
                 fontSize = 64.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
             )
 
-            Text(text = "Login Page", style = MaterialTheme.typography.headlineLarge)
-            Spacer(modifier = Modifier.padding(12.dp))
+//            Text(text = "Login Page", style = MaterialTheme.typography.headlineLarge)
+//            Spacer(modifier = Modifier.padding(12.dp))
 
-            OutlinedTextField(
+            TextField(
                 value = username,
                 onValueChange = { username = it },
                 label = { Text(text = "Username") },
-                leadingIcon = { Icon(Icons.Default.Person, contentDescription = "Username") }
+                leadingIcon = { Icon(Icons.Default.Person, contentDescription = "Username") },
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    cursorColor = Color.Black
+                ),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.fillMaxWidth(0.85f).padding (top = 50.dp)
             )
 
             Spacer(modifier = Modifier.padding(12.dp))
 
-            OutlinedTextField(
+            TextField(
                 value = password,
                 onValueChange = { password = it },
                 label = { Text(text = "Password") },
-                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = "Password") }
+                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = "Password") },
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    cursorColor = Color.Black
+                ),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.fillMaxWidth(0.85f)
+
+
             )
 
             Spacer(modifier = Modifier.padding(12.dp))
@@ -194,25 +227,36 @@ fun LoginScreen(
                         Toast.makeText(context, "Login failed: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
                 }
-            }) {
+            },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Black
+                ),
+                modifier = Modifier
+                    .padding (top = 50.dp)
+                    .fillMaxWidth(0.85f)
+                    .height(50.dp)
+            ) {
                 Text(text = "Login")
             }
 
             Spacer(modifier = Modifier.padding(8.dp))
 
             // Register button
-            Button(onClick = { onRegisterClick() }) {
+            Button(onClick = { onRegisterClick() },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Black
+                ),
+                modifier = Modifier
+                    .fillMaxWidth(0.85f)
+                    .height(50.dp)
+            ) {
                 Text(text = "Register")
             }
 
             Spacer(modifier = Modifier.padding(8.dp))
 
-            // Continue as Guest: use -1L to represent guest
-            Button(onClick = {
-                onLoginSuccess(-1L)
-            }) {
-                Text(text = "Continue as Guest")
-            }
         }
     }
 }
