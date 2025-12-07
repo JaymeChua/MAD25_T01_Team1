@@ -108,10 +108,30 @@ fun MainNavigation(
                 // Pass the selected canteen data to StallDirectoryScreen
                 selectedCanteen?.let {
                     StallDirectoryScreen(
+                        userId = 2L,
                         canteen = it, // Pass the selected canteen to filter food stalls
+                        navController = navController,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
+            }
+            composable("review/{stallId}") { backStackEntry ->
+                val stallId = backStackEntry.arguments?.getString("stallId")?.toLong() ?: 1L
+
+                ReviewPage(
+                    stallId = stallId,
+                    onCloseClicked = { navController.popBackStack() }
+                )
+            }
+            composable("menu/{stallId}"){ backStackEntry ->
+                val stallId = backStackEntry.arguments?.getString("stallId")?.toLong() ?: 4L
+                MenuScreen(
+                    stallId = stallId,
+                    onBackClick = { navController.popBackStack() },
+                    onReviewClick = {
+                        navController.navigate("review/$stallId")
+                    }
+                )
             }
             composable(AppScreen.Favorite.route) {
                 FavoriteScreen(
@@ -125,17 +145,8 @@ fun MainNavigation(
                 )
             }
             composable(AppScreen.Profile.route) {
-                //ProfileScreenPlaceholder()
+
             }
-            // Optional: stall detail route with argument
-            /*
-            composable(
-                route = AppScreen.StallDetail.route,
-                arguments = listOf(navArgument("stallId") { type = NavType.LongType })
-            ) { backStackEntry ->
-                val stallId = backStackEntry.arguments?.getLong("stallId") ?: -1L
-                StallDetailPlaceholder(stallId)
-            }*/
         }
     }
 }

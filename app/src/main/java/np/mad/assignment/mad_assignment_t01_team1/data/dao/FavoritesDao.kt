@@ -26,7 +26,7 @@ interface FavoritesDao{
         SELECT f.favoriteId,
                 s.stallId,
                 s.name AS stallName,
-                s.imageUrl,
+                s.imageResId,
                 s.halal,
                 c.canteenId,
                 c.name AS canteenName
@@ -37,4 +37,6 @@ interface FavoritesDao{
                 ORDER BY c.name, s.name
     """)
     fun getFavoriteStallsForUser(userId: Long): Flow<List<FavoriteStallUi>>
+    @Query("SELECT stallId FROM favorites WHERE userId = :userId")
+    fun getFavoriteStallIdsForUser(userId: Long): Flow<List<Long>>
 }

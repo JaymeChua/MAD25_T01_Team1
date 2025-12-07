@@ -25,8 +25,12 @@ import kotlin.collections.mutableSetOf
 import kotlin.reflect.KClass
 import np.mad.assignment.mad_assignment_t01_team1.`data`.dao.CanteenDao
 import np.mad.assignment.mad_assignment_t01_team1.`data`.dao.CanteenDao_Impl
+import np.mad.assignment.mad_assignment_t01_team1.`data`.dao.DishDao
+import np.mad.assignment.mad_assignment_t01_team1.`data`.dao.DishDao_Impl
 import np.mad.assignment.mad_assignment_t01_team1.`data`.dao.FavoritesDao
 import np.mad.assignment.mad_assignment_t01_team1.`data`.dao.FavoritesDao_Impl
+import np.mad.assignment.mad_assignment_t01_team1.`data`.dao.ReviewDao
+import np.mad.assignment.mad_assignment_t01_team1.`data`.dao.ReviewDao_Impl
 import np.mad.assignment.mad_assignment_t01_team1.`data`.dao.StallDao
 import np.mad.assignment.mad_assignment_t01_team1.`data`.dao.StallDao_Impl
 import np.mad.assignment.mad_assignment_t01_team1.`data`.dao.UserDao
@@ -51,18 +55,30 @@ public class AppDatabase_Impl : AppDatabase() {
     UserDao_Impl(this)
   }
 
+  private val _reviewDao: Lazy<ReviewDao> = lazy {
+    ReviewDao_Impl(this)
+  }
+
+  private val _dishDao: Lazy<DishDao> = lazy {
+    DishDao_Impl(this)
+  }
+
   protected override fun createOpenDelegate(): RoomOpenDelegate {
-    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(1, "95a9104084fbcb49e56c153d31969675", "672e423940d644ba808a71e83892c3ca") {
+    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(3, "1ef6c86def82f49f1428506f507b5ed1", "bc0f2d576ce084061929620d029ea885") {
       public override fun createAllTables(connection: SQLiteConnection) {
         connection.execSQL("CREATE TABLE IF NOT EXISTS `canteens` (`canteenId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)")
-        connection.execSQL("CREATE TABLE IF NOT EXISTS `stalls` (`stallId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `canteenId` INTEGER NOT NULL, `name` TEXT NOT NULL, `imageUrl` TEXT, `halal` INTEGER NOT NULL, FOREIGN KEY(`canteenId`) REFERENCES `canteens`(`canteenId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+        connection.execSQL("CREATE TABLE IF NOT EXISTS `stalls` (`stallId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `canteenName` TEXT NOT NULL, `canteenId` INTEGER NOT NULL, `cuisine` TEXT NOT NULL, `description` TEXT NOT NULL, `name` TEXT NOT NULL, `imageResId` INTEGER NOT NULL, `halal` INTEGER NOT NULL, FOREIGN KEY(`canteenId`) REFERENCES `canteens`(`canteenId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_stalls_canteenId` ON `stalls` (`canteenId`)")
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_stalls_name` ON `stalls` (`name`)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `favorites` (`favoriteId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userId` INTEGER NOT NULL, `stallId` INTEGER NOT NULL, FOREIGN KEY(`userId`) REFERENCES `users`(`userId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`stallId`) REFERENCES `stalls`(`stallId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
         connection.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_favorites_userId_stallId` ON `favorites` (`userId`, `stallId`)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `users` (`userId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `password` TEXT NOT NULL, `createdDate` TEXT DEFAULT CURRENT_TIMESTAMP)")
+        connection.execSQL("CREATE TABLE IF NOT EXISTS `reviews` (`reviewId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stallId` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `username` TEXT NOT NULL, `review` TEXT NOT NULL, `rating` INTEGER NOT NULL, `date` TEXT NOT NULL, FOREIGN KEY(`stallId`) REFERENCES `stalls`(`stallId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+        connection.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_reviews_userId_stallId` ON `reviews` (`userId`, `stallId`)")
+        connection.execSQL("CREATE TABLE IF NOT EXISTS `dishes` (`dishId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stallId` INTEGER NOT NULL, `dishName` TEXT NOT NULL, `dishPrice` TEXT NOT NULL, `imageResId` INTEGER NOT NULL, FOREIGN KEY(`stallId`) REFERENCES `stalls`(`stallId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+        connection.execSQL("CREATE INDEX IF NOT EXISTS `index_dishes_stallId` ON `dishes` (`stallId`)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)")
-        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '95a9104084fbcb49e56c153d31969675')")
+        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1ef6c86def82f49f1428506f507b5ed1')")
       }
 
       public override fun dropAllTables(connection: SQLiteConnection) {
@@ -70,6 +86,8 @@ public class AppDatabase_Impl : AppDatabase() {
         connection.execSQL("DROP TABLE IF EXISTS `stalls`")
         connection.execSQL("DROP TABLE IF EXISTS `favorites`")
         connection.execSQL("DROP TABLE IF EXISTS `users`")
+        connection.execSQL("DROP TABLE IF EXISTS `reviews`")
+        connection.execSQL("DROP TABLE IF EXISTS `dishes`")
       }
 
       public override fun onCreate(connection: SQLiteConnection) {
@@ -106,9 +124,12 @@ public class AppDatabase_Impl : AppDatabase() {
         }
         val _columnsStalls: MutableMap<String, TableInfo.Column> = mutableMapOf()
         _columnsStalls.put("stallId", TableInfo.Column("stallId", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsStalls.put("canteenName", TableInfo.Column("canteenName", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
         _columnsStalls.put("canteenId", TableInfo.Column("canteenId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsStalls.put("cuisine", TableInfo.Column("cuisine", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsStalls.put("description", TableInfo.Column("description", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
         _columnsStalls.put("name", TableInfo.Column("name", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
-        _columnsStalls.put("imageUrl", TableInfo.Column("imageUrl", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsStalls.put("imageResId", TableInfo.Column("imageResId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
         _columnsStalls.put("halal", TableInfo.Column("halal", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
         val _foreignKeysStalls: MutableSet<TableInfo.ForeignKey> = mutableSetOf()
         _foreignKeysStalls.add(TableInfo.ForeignKey("canteens", "CASCADE", "NO ACTION", listOf("canteenId"), listOf("canteenId")))
@@ -164,6 +185,50 @@ public class AppDatabase_Impl : AppDatabase() {
               | Found:
               |""".trimMargin() + _existingUsers)
         }
+        val _columnsReviews: MutableMap<String, TableInfo.Column> = mutableMapOf()
+        _columnsReviews.put("reviewId", TableInfo.Column("reviewId", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsReviews.put("stallId", TableInfo.Column("stallId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsReviews.put("userId", TableInfo.Column("userId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsReviews.put("username", TableInfo.Column("username", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsReviews.put("review", TableInfo.Column("review", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsReviews.put("rating", TableInfo.Column("rating", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsReviews.put("date", TableInfo.Column("date", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        val _foreignKeysReviews: MutableSet<TableInfo.ForeignKey> = mutableSetOf()
+        _foreignKeysReviews.add(TableInfo.ForeignKey("stalls", "CASCADE", "NO ACTION", listOf("stallId"), listOf("stallId")))
+        val _indicesReviews: MutableSet<TableInfo.Index> = mutableSetOf()
+        _indicesReviews.add(TableInfo.Index("index_reviews_userId_stallId", true, listOf("userId", "stallId"), listOf("ASC", "ASC")))
+        val _infoReviews: TableInfo = TableInfo("reviews", _columnsReviews, _foreignKeysReviews, _indicesReviews)
+        val _existingReviews: TableInfo = read(connection, "reviews")
+        if (!_infoReviews.equals(_existingReviews)) {
+          return RoomOpenDelegate.ValidationResult(false, """
+              |reviews(np.mad.assignment.mad_assignment_t01_team1.data.entity.ReviewEntity).
+              | Expected:
+              |""".trimMargin() + _infoReviews + """
+              |
+              | Found:
+              |""".trimMargin() + _existingReviews)
+        }
+        val _columnsDishes: MutableMap<String, TableInfo.Column> = mutableMapOf()
+        _columnsDishes.put("dishId", TableInfo.Column("dishId", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsDishes.put("stallId", TableInfo.Column("stallId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsDishes.put("dishName", TableInfo.Column("dishName", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsDishes.put("dishPrice", TableInfo.Column("dishPrice", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsDishes.put("imageResId", TableInfo.Column("imageResId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        val _foreignKeysDishes: MutableSet<TableInfo.ForeignKey> = mutableSetOf()
+        _foreignKeysDishes.add(TableInfo.ForeignKey("stalls", "CASCADE", "NO ACTION", listOf("stallId"), listOf("stallId")))
+        val _indicesDishes: MutableSet<TableInfo.Index> = mutableSetOf()
+        _indicesDishes.add(TableInfo.Index("index_dishes_stallId", false, listOf("stallId"), listOf("ASC")))
+        val _infoDishes: TableInfo = TableInfo("dishes", _columnsDishes, _foreignKeysDishes, _indicesDishes)
+        val _existingDishes: TableInfo = read(connection, "dishes")
+        if (!_infoDishes.equals(_existingDishes)) {
+          return RoomOpenDelegate.ValidationResult(false, """
+              |dishes(np.mad.assignment.mad_assignment_t01_team1.data.entity.DishEntity).
+              | Expected:
+              |""".trimMargin() + _infoDishes + """
+              |
+              | Found:
+              |""".trimMargin() + _existingDishes)
+        }
         return RoomOpenDelegate.ValidationResult(true, null)
       }
     }
@@ -173,11 +238,11 @@ public class AppDatabase_Impl : AppDatabase() {
   protected override fun createInvalidationTracker(): InvalidationTracker {
     val _shadowTablesMap: MutableMap<String, String> = mutableMapOf()
     val _viewTables: MutableMap<String, Set<String>> = mutableMapOf()
-    return InvalidationTracker(this, _shadowTablesMap, _viewTables, "canteens", "stalls", "favorites", "users")
+    return InvalidationTracker(this, _shadowTablesMap, _viewTables, "canteens", "stalls", "favorites", "users", "reviews", "dishes")
   }
 
   public override fun clearAllTables() {
-    super.performClear(true, "canteens", "stalls", "favorites", "users")
+    super.performClear(true, "canteens", "stalls", "favorites", "users", "reviews", "dishes")
   }
 
   protected override fun getRequiredTypeConverterClasses(): Map<KClass<*>, List<KClass<*>>> {
@@ -186,6 +251,8 @@ public class AppDatabase_Impl : AppDatabase() {
     _typeConvertersMap.put(StallDao::class, StallDao_Impl.getRequiredConverters())
     _typeConvertersMap.put(FavoritesDao::class, FavoritesDao_Impl.getRequiredConverters())
     _typeConvertersMap.put(UserDao::class, UserDao_Impl.getRequiredConverters())
+    _typeConvertersMap.put(ReviewDao::class, ReviewDao_Impl.getRequiredConverters())
+    _typeConvertersMap.put(DishDao::class, DishDao_Impl.getRequiredConverters())
     return _typeConvertersMap
   }
 
@@ -206,4 +273,8 @@ public class AppDatabase_Impl : AppDatabase() {
   public override fun favoriteDao(): FavoritesDao = _favoritesDao.value
 
   public override fun userDao(): UserDao = _userDao.value
+
+  public override fun reviewDao(): ReviewDao = _reviewDao.value
+
+  public override fun dishDao(): DishDao = _dishDao.value
 }

@@ -56,7 +56,7 @@ public class FavoritesDao_Impl(
         |        SELECT f.favoriteId,
         |                s.stallId,
         |                s.name AS stallName,
-        |                s.imageUrl,
+        |                s.imageResId,
         |                s.halal,
         |                c.canteenId,
         |                c.name AS canteenName
@@ -75,7 +75,6 @@ public class FavoritesDao_Impl(
         val _columnIndexOfFavoriteId: Int = 0
         val _columnIndexOfStallId: Int = 1
         val _columnIndexOfStallName: Int = 2
-        val _columnIndexOfImageUrl: Int = 3
         val _columnIndexOfHalal: Int = 4
         val _columnIndexOfCanteenId: Int = 5
         val _columnIndexOfCanteenName: Int = 6
@@ -88,12 +87,6 @@ public class FavoritesDao_Impl(
           _tmpStallId = _stmt.getLong(_columnIndexOfStallId)
           val _tmpStallName: String
           _tmpStallName = _stmt.getText(_columnIndexOfStallName)
-          val _tmpImageUrl: String?
-          if (_stmt.isNull(_columnIndexOfImageUrl)) {
-            _tmpImageUrl = null
-          } else {
-            _tmpImageUrl = _stmt.getText(_columnIndexOfImageUrl)
-          }
           val _tmpHalal: Boolean
           val _tmp: Int
           _tmp = _stmt.getLong(_columnIndexOfHalal).toInt()
@@ -102,7 +95,27 @@ public class FavoritesDao_Impl(
           _tmpCanteenId = _stmt.getLong(_columnIndexOfCanteenId)
           val _tmpCanteenName: String
           _tmpCanteenName = _stmt.getText(_columnIndexOfCanteenName)
-          _item = FavoriteStallUi(_tmpFavoriteId,_tmpStallId,_tmpStallName,_tmpCanteenId,_tmpCanteenName,_tmpImageUrl,_tmpHalal)
+          _item = FavoriteStallUi(_tmpFavoriteId,_tmpStallId,_tmpStallName,_tmpCanteenId,_tmpCanteenName,null,_tmpHalal)
+          _result.add(_item)
+        }
+        _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
+  public override fun getFavoriteStallIdsForUser(userId: Long): Flow<List<Long>> {
+    val _sql: String = "SELECT stallId FROM favorites WHERE userId = ?"
+    return createFlow(__db, false, arrayOf("favorites")) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        var _argIndex: Int = 1
+        _stmt.bindLong(_argIndex, userId)
+        val _result: MutableList<Long> = mutableListOf()
+        while (_stmt.step()) {
+          val _item: Long
+          _item = _stmt.getLong(0)
           _result.add(_item)
         }
         _result

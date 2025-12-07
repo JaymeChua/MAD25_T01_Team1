@@ -15,6 +15,12 @@ interface StallDao{
     @Query("SELECT * FROM stalls WHERE canteenId = :canteenId ORDER BY name")
     fun getByCanteen(canteenId: Long): Flow<List<StallEntity>>
 
+    @Query("SELECT * FROM stalls WHERE canteenName = :canteenName ORDER BY name")
+    fun getByCanteenName(canteenName: String): Flow<List<StallEntity>>
+
+    @Query("SELECT * FROM stalls WHERE stallId = :stallId LIMIT 1")
+    fun getByIdFlow(stallId: Long): Flow<StallEntity?>
+
     @Query("SELECT  * FROM stalls WHERE stallId = :stallId LIMIT 1")
     suspend fun getById(stallId: Long): StallEntity?
 

@@ -19,8 +19,11 @@ import androidx.room.PrimaryKey
 )
 data class StallEntity(
     @PrimaryKey(autoGenerate = true) val stallId: Long = 0,
+    val canteenName: String,
     val canteenId: Long,
+    val cuisine: String,
+    val description: String,
     val name: String,
-    val imageUrl: String? = null,
+    val imageResId: Int,
     val halal: Boolean = false
 )
