@@ -139,6 +139,49 @@ suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
                 dishName = "Mini Pot Noodle",
                 dishPrice = "5.00",
                 imageResId = R.drawable.minipot
+            ),
+            //Ethan's dishes (Munch, Western)
+            DishEntity(
+                stallId = westernStallId,
+                dishName = "Chicken Chop",
+                dishPrice = "5.50",
+                imageResId = R.drawable.chickenchop
+            ),
+            DishEntity(
+                stallId = westernStallId,
+                dishName = "Crispy Chicken",
+                dishPrice = "5.50",
+                imageResId = R.drawable.crispychicken
+            ),
+            DishEntity(
+                stallId = westernStallId,
+                dishName = "Aglio Olio Spagetti",
+                dishPrice = "4.00",
+                imageResId = R.drawable.aglioolio
+            ),
+            DishEntity(
+                stallId = westernStallId,
+                dishName = "Fish & Chips",
+                dishPrice = "6.00",
+                imageResId = R.drawable.fishandchips
+            ),
+            DishEntity(
+                stallId = westernStallId,
+                dishName = "Sausage & Fries",
+                dishPrice = "3.50",
+                imageResId = R.drawable.sausageandfries
+            ),
+            DishEntity(
+                stallId = westernStallId,
+                dishName = "Spagetti Bolognese",
+                dishPrice = "4.50",
+                imageResId = R.drawable.spagettibolognese
+            ),
+            DishEntity(
+                stallId = westernStallId,
+                dishName = "Steak & Fries",
+                dishPrice = "7.50",
+                imageResId = R.drawable.steakandfries
             )
         )
         db.dishDao().insert(
