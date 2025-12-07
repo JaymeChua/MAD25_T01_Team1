@@ -85,7 +85,7 @@ fun MenuScreen(
                         .padding(top = 40.dp, start = 16.dp)
                         .align(Alignment.TopStart),
                     containerColor = Color.White,
-                    contentColor = Color.Black
+                    contentColor = Color(0xFFF4B400)
                 ) {
                     Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
                 }

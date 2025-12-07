@@ -34,20 +34,10 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.layout.ContentScale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-
-//class ReviewActivity : ComponentActivity() {
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContent {
-//            MaterialTheme {
-//                ReviewPage()
-//            }
-//        }
-//    }
-//}
 
 @Composable
 fun ReviewPage(
@@ -96,6 +86,7 @@ fun ReviewPage(
                     Image(
                         painter = painterResource(stallEntity.imageResId),
                         contentDescription = stallEntity.name,
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(250.dp)
@@ -123,7 +114,7 @@ fun ReviewPage(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = stall?.name ?: "Loading...",
+                    text = "Reviews for ${stall?.name ?: "Loading..."}",
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black
@@ -144,16 +135,16 @@ fun ReviewPage(
             }
         }
 
-        IconButton(
+        SmallFloatingActionButton(
             onClick = { onCloseClicked() },
             modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.TopStart)
-                .background(Color.White, shape = CircleShape)
-                .size(40.dp)
-                .padding(4.dp) // Inner padding
+                .padding(top = 40.dp, start = 16.dp)
+                .align(Alignment.TopStart),
+            containerColor = Color.White,
+            contentColor = Color(0xFFF4B400) // Matches your yellow theme
         ) {
-            Icon(Icons.Default.Close, contentDescription = "Close", tint = Color.Gray)
+            // Changed icon to ArrowBack to be consistent with MenuScreen
+            Icon(Icons.Default.Close, contentDescription = "Close")
         }
         FloatingActionButton(
             onClick = { showDialog = true },
