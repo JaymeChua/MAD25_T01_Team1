@@ -15,6 +15,16 @@ import np.mad.assignment.mad_assignment_t01_team1.ui.theme.MAD_Assignment_T01_Te
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Check session: if no logged-in user, open LoginActivity
+        val authPrefs = getSharedPreferences("auth", MODE_PRIVATE)
+        val loggedInUserId = authPrefs.getLong("logged_in_user", -1L)
+        if (loggedInUserId == -1L) {
+            // No user saved: launch LoginActivity and finish MainActivity
+            startActivity(android.content.Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
         val db = AppDatabase.get(this)
         val prefs = getSharedPreferences("seed_prefs",MODE_PRIVATE)
         prefs.edit().remove("mock_seed_done").commit()
