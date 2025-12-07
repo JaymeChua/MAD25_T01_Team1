@@ -36,16 +36,18 @@ suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
             StallEntity(name = "Chicken Rice",canteenName = "Food Club", canteenId = foodClubId, cuisine = "Asian",imageResId = R.drawable.chicken_rice, description = "A cozy chicken rice food stall offering tender chicken with fragrant rice.", halal = true),
             StallEntity(name = "Ban Mian", canteenName = "Food Club",canteenId = foodClubId, cuisine = "Asian",imageResId = R.drawable.chicken_rice, description = "A ban mian store", halal = true),
             StallEntity(name = "Mala Hotpot", canteenName = "Makan Place",canteenId = makanPlaceId, cuisine = "Asian",imageResId = R.drawable.mala_xiangguo, description = "Serving delicious mala xiang guo with a variety of ingredients.",halal = false),
-            StallEntity(name = "Indonesian", canteenName = "Food Club", canteenId = foodClubId, cuisine = "Indonesian", imageResId = R.drawable.ayampenyat,description = "Serving the best indonesian food including ayam penyat and mee reebus.", halal = false),
+            StallEntity(name = "Indonesian", canteenName = "Food Club", canteenId = foodClubId, cuisine = "Indonesian", imageResId = R.drawable.ayampenyat,description = "Serving the best indonesian food including ayam penyat and mee reebus.", halal = true),
             StallEntity(name = "Western", canteenName = "Munch", canteenId = munchId, cuisine = "Western", imageResId = R.drawable.western_food,description = "Serving the best western dishes, including pastas, pizzas, and more.", halal = false),
             StallEntity(name = "Noodle Delights", canteenName = "Makan Place", canteenId = makanPlaceId, cuisine = "Asian", imageResId = R.drawable.bakchormee,description = "Serving delicious noodle dishes, including Singapore Laksa, Mini Pot Noodle, and Famous Lor Mee, all at affordable prices.", halal = false),
-        )
+            StallEntity(name = "Korean", canteenName = "Munch", canteenId = munchId, cuisine = "Korean", imageResId = R.drawable.bbqcrispychicken,description = "Serving delicious korean food from bibimap to kimchi fried rice.", halal = false),
+            )
         val chickenRiceStallId = db.stallDao().getByName("Chicken Rice")?.stallId ?: error("Stall 'Chicken Rice' not found after insert")
         val indonesianStallId = db.stallDao().getByName("Indonesian")?.stallId ?: error("Stall 'Chicken Rice' not found after insert")
         val noodleStallId = db.stallDao().getByName("Noodle Delights")?.stallId ?: error("Stall 'Chicken Rice' not found after insert")
         val banMianStallId = db.stallDao().getByName("Ban Mian")?.stallId ?: error("Stall 'Chicken Rice' not found after insert")
         val malaHotpotStallId = db.stallDao().getByName("Mala Hotpot")?.stallId ?: error("Stall 'Chicken Rice' not found after insert")
-        val westernStallId = db.stallDao().getByName("Western")?.stallId ?: error("Stall 'Chicken Rice' not found after insert")
+        val westernStallId = db.stallDao().getByName("Western")?.stallId ?: error("Stall 'Western' not found after insert")
+        val koreanStallId = db.stallDao().getByName("Korean")?.stallId ?: error("Stall 'Korean' not found after insert")
         val name1 = db.userDao().getById(userId)?.name ?: "Unknown"
         val name2 = db.userDao().getById(userId1)?.name ?: "Unknown"
         db.reviewDao().addReviews(
@@ -138,9 +140,19 @@ suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
                 dishPrice = "5.00",
                 imageResId = R.drawable.minipot
             )
-
         )
-        db.favoriteDao().addFavorites(
+        db.dishDao().insert(
+            DishEntity(stallId = koreanStallId, dishName = "BBQ Crispy Chicken Omelette Set", dishPrice = "4.80", imageResId = R.drawable.bbqcrispychicken),
+                DishEntity(stallId = koreanStallId, dishName = "Hot Stone Bibimap", dishPrice = "5.30", imageResId = R.drawable.hotstonebibimap),
+                DishEntity(stallId = koreanStallId, dishName = "Chicken Cutlet Mayo and Omelette Curry Rice", dishPrice = "4.50", imageResId = R.drawable.chickencutlet),
+            DishEntity(stallId = koreanStallId, dishName = "Fried Prawn Mayo and Omelette Curry Rice", dishPrice = "4.80", imageResId = R.drawable.friedprawn),
+            DishEntity(stallId = koreanStallId, dishName = "Fish Fillet Mayo and Omelette Curry Rice", dishPrice = "4.50", imageResId = R.drawable.fishfillet),
+            DishEntity(stallId = koreanStallId, dishName = "Sundubu(Spicy Tofu Stew)", dishPrice = "4.00", imageResId = R.drawable.sundubu),
+            DishEntity(stallId = koreanStallId, dishName = "Bulgoga Jungol(Beef Stew)", dishPrice = "5.00", imageResId = R.drawable.bulgoga),
+            DishEntity(stallId = koreanStallId, dishName = "Kimchi Jjigae(Spicy Kimchi Stew)", dishPrice = "4.00", imageResId = R.drawable.spicykimchistew),
+
+            )
+            db.favoriteDao().addFavorites(
             FavoriteEntity(userId = userId, stallId = chickenRiceStallId),
             FavoriteEntity(userId = userId, stallId = banMianStallId),
             FavoriteEntity(userId=userId, stallId = malaHotpotStallId),
