@@ -38,6 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun ReviewPage(
@@ -141,9 +142,8 @@ fun ReviewPage(
                 .padding(top = 40.dp, start = 16.dp)
                 .align(Alignment.TopStart),
             containerColor = Color.White,
-            contentColor = Color(0xFFF4B400) // Matches your yellow theme
+            contentColor = Color(0xFFF4B400)
         ) {
-            // Changed icon to ArrowBack to be consistent with MenuScreen
             Icon(Icons.Default.Close, contentDescription = "Close")
         }
         FloatingActionButton(
@@ -249,7 +249,6 @@ fun ReviewCardItem(review: ReviewEntity) {
         5 -> Color(0xFFDCEFD9)
         else -> Color.White
     }
-
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),

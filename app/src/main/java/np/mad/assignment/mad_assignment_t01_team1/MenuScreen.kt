@@ -10,8 +10,10 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
@@ -132,18 +134,34 @@ fun MenuScreen(
                             Spacer(modifier = Modifier.height(12.dp))
 
                             Row(
-                                verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
-                                    .clip(RoundedCornerShape(8.dp))
+                                    .fillMaxWidth()
                                     .clickable { onReviewClick() }
-                                    .padding(4.dp)
-
+                                    .padding(16.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Icon(Icons.Default.Star, contentDescription = null, tint = Color(0xFFFFC107))
-                                Text(
-                                    text = String.format("%.1f/5 (%d reviews)", averageRating, reviewCount),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 14.sp,
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = Icons.Default.Star,
+                                        contentDescription = "Rating",
+                                        tint = Color(0xFFFFC107),
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        // Matches image format: "2.5(2 reviews)"
+                                        text = String.format("%.1f(%d reviews)", averageRating, reviewCount),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        fontWeight = FontWeight.Normal,
+                                        color = Color.Black
+                                    )
+                                }
+
+                                Icon(
+                                    imageVector = Icons.Default.KeyboardArrowRight,
+                                    contentDescription = "View Details",
+                                    tint = Color.Gray
                                 )
                             }
                         }
