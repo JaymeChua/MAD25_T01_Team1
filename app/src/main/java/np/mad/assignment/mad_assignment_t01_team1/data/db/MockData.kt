@@ -38,9 +38,11 @@ suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
             StallEntity(name = "Mala Hotpot", canteenName = "Makan Place",canteenId = makanPlaceId, cuisine = "Asian",imageResId = R.drawable.mala_xiangguo, description = "Serving delicious mala xiang guo with a variety of ingredients.",halal = false),
             StallEntity(name = "Indonesian", canteenName = "Food Club", canteenId = foodClubId, cuisine = "Indonesian", imageResId = R.drawable.ayampenyat,description = "Serving the best indonesian food including ayam penyat and mee reebus.", halal = false),
             StallEntity(name = "Western", canteenName = "Munch", canteenId = munchId, cuisine = "Western", imageResId = R.drawable.western_food,description = "Serving the best western dishes, including pastas, pizzas, and more.", halal = false),
+            StallEntity(name = "Noodle Delights", canteenName = "Makan Place", canteenId = makanPlaceId, cuisine = "Asian", imageResId = R.drawable.bakchormee,description = "Serving delicious noodle dishes, including Singapore Laksa, Mini Pot Noodle, and Famous Lor Mee, all at affordable prices.", halal = false),
         )
         val chickenRiceStallId = db.stallDao().getByName("Chicken Rice")?.stallId ?: error("Stall 'Chicken Rice' not found after insert")
         val indonesianStallId = db.stallDao().getByName("Indonesian")?.stallId ?: error("Stall 'Chicken Rice' not found after insert")
+        val noodleStallId = db.stallDao().getByName("Noodle Delights")?.stallId ?: error("Stall 'Chicken Rice' not found after insert")
         val banMianStallId = db.stallDao().getByName("Ban Mian")?.stallId ?: error("Stall 'Chicken Rice' not found after insert")
         val malaHotpotStallId = db.stallDao().getByName("Mala Hotpot")?.stallId ?: error("Stall 'Chicken Rice' not found after insert")
         val westernStallId = db.stallDao().getByName("Western")?.stallId ?: error("Stall 'Chicken Rice' not found after insert")
@@ -92,13 +94,58 @@ suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
                 dishName = "Mee Siam",
                 dishPrice = "2.50",
                 imageResId = R.drawable.meesiam
+            ),
+            //Ethan's dishes (Makan place, Noodle store)
+            DishEntity(
+                stallId = noodleStallId,
+                dishName = "Laksa",
+                dishPrice = "4.50",
+                imageResId = R.drawable.laksa
+            ),
+            DishEntity(
+                stallId = noodleStallId,
+                dishName = "Prawn Noodle",
+                dishPrice = "5.00",
+                imageResId = R.drawable.prawnnoodle
+            ),
+            DishEntity(
+                stallId = noodleStallId,
+                dishName = "Mushroom Minced Meat Noodle",
+                dishPrice = "4.50",
+                imageResId = R.drawable.mushroommincedmeatnoodle
+            ),
+            DishEntity(
+                stallId = noodleStallId,
+                dishName = "Lor Mee",
+                dishPrice = "4.50",
+                imageResId = R.drawable.lormee
+            ),
+            DishEntity(
+                stallId = noodleStallId,
+                dishName = "Chicken Meatball Noodle",
+                dishPrice = "4.30",
+                imageResId = R.drawable.chickenmeatballnoodle
+            ),
+            DishEntity(
+                stallId = noodleStallId,
+                dishName = "Chicken Cutlet Noodle",
+                dishPrice = "5.00",
+                imageResId = R.drawable.chickencutletnoodle
+            ),
+            DishEntity(
+                stallId = noodleStallId,
+                dishName = "Mini Pot Noodle",
+                dishPrice = "5.00",
+                imageResId = R.drawable.minipot
             )
+
         )
         db.favoriteDao().addFavorites(
             FavoriteEntity(userId = userId, stallId = chickenRiceStallId),
             FavoriteEntity(userId = userId, stallId = banMianStallId),
             FavoriteEntity(userId=userId, stallId = malaHotpotStallId),
-            FavoriteEntity(userId=userId, stallId = westernStallId)
+            FavoriteEntity(userId=userId, stallId = westernStallId),
+            FavoriteEntity(userId=userId, stallId = noodleStallId)
         )
     }
 }
