@@ -46,3 +46,6 @@ I declare that I used Generative AI tools to assist in the development of this a
 
 ### **Jayme**
 * **User Onboarding:** Designed and implemented the **Login Page**, handling the UI for user entry into the application.
+
+## 6. Task(s) and feature(s) allocation of each member in the team for Stage 2
+* **Assigned Role:** Admin Management System 
