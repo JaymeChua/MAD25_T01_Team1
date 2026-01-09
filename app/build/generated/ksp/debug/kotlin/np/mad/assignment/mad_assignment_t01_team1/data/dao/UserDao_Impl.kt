@@ -27,17 +27,18 @@ public class UserDao_Impl(
   init {
     this.__db = __db
     this.__insertAdapterOfUserEntity = object : EntityInsertAdapter<UserEntity>() {
-      protected override fun createQuery(): String = "INSERT OR REPLACE INTO `users` (`userId`,`name`,`password`,`createdDate`) VALUES (nullif(?, 0),?,?,?)"
+      protected override fun createQuery(): String = "INSERT OR REPLACE INTO `users` (`userId`,`name`,`password`,`role`,`createdDate`) VALUES (nullif(?, 0),?,?,?,?)"
 
       protected override fun bind(statement: SQLiteStatement, entity: UserEntity) {
         statement.bindLong(1, entity.userId)
         statement.bindText(2, entity.name)
         statement.bindText(3, entity.password)
+        statement.bindText(4, entity.role)
         val _tmpCreatedDate: String? = entity.createdDate
         if (_tmpCreatedDate == null) {
-          statement.bindNull(4)
+          statement.bindNull(5)
         } else {
-          statement.bindText(4, _tmpCreatedDate)
+          statement.bindText(5, _tmpCreatedDate)
         }
       }
     }
@@ -58,6 +59,7 @@ public class UserDao_Impl(
         val _columnIndexOfUserId: Int = getColumnIndexOrThrow(_stmt, "userId")
         val _columnIndexOfName: Int = getColumnIndexOrThrow(_stmt, "name")
         val _columnIndexOfPassword: Int = getColumnIndexOrThrow(_stmt, "password")
+        val _columnIndexOfRole: Int = getColumnIndexOrThrow(_stmt, "role")
         val _columnIndexOfCreatedDate: Int = getColumnIndexOrThrow(_stmt, "createdDate")
         val _result: UserEntity?
         if (_stmt.step()) {
@@ -67,13 +69,15 @@ public class UserDao_Impl(
           _tmpName = _stmt.getText(_columnIndexOfName)
           val _tmpPassword: String
           _tmpPassword = _stmt.getText(_columnIndexOfPassword)
+          val _tmpRole: String
+          _tmpRole = _stmt.getText(_columnIndexOfRole)
           val _tmpCreatedDate: String?
           if (_stmt.isNull(_columnIndexOfCreatedDate)) {
             _tmpCreatedDate = null
           } else {
             _tmpCreatedDate = _stmt.getText(_columnIndexOfCreatedDate)
           }
-          _result = UserEntity(_tmpUserId,_tmpName,_tmpPassword,_tmpCreatedDate)
+          _result = UserEntity(_tmpUserId,_tmpName,_tmpPassword,_tmpRole,_tmpCreatedDate)
         } else {
           _result = null
         }
@@ -94,6 +98,7 @@ public class UserDao_Impl(
         val _columnIndexOfUserId: Int = getColumnIndexOrThrow(_stmt, "userId")
         val _columnIndexOfName: Int = getColumnIndexOrThrow(_stmt, "name")
         val _columnIndexOfPassword: Int = getColumnIndexOrThrow(_stmt, "password")
+        val _columnIndexOfRole: Int = getColumnIndexOrThrow(_stmt, "role")
         val _columnIndexOfCreatedDate: Int = getColumnIndexOrThrow(_stmt, "createdDate")
         val _result: UserEntity?
         if (_stmt.step()) {
@@ -103,13 +108,15 @@ public class UserDao_Impl(
           _tmpName = _stmt.getText(_columnIndexOfName)
           val _tmpPassword: String
           _tmpPassword = _stmt.getText(_columnIndexOfPassword)
+          val _tmpRole: String
+          _tmpRole = _stmt.getText(_columnIndexOfRole)
           val _tmpCreatedDate: String?
           if (_stmt.isNull(_columnIndexOfCreatedDate)) {
             _tmpCreatedDate = null
           } else {
             _tmpCreatedDate = _stmt.getText(_columnIndexOfCreatedDate)
           }
-          _result = UserEntity(_tmpUserId,_tmpName,_tmpPassword,_tmpCreatedDate)
+          _result = UserEntity(_tmpUserId,_tmpName,_tmpPassword,_tmpRole,_tmpCreatedDate)
         } else {
           _result = null
         }

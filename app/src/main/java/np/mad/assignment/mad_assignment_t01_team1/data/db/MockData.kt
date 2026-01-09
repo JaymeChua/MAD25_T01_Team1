@@ -6,6 +6,7 @@ import kotlinx.coroutines.withContext
 import np.mad.assignment.mad_assignment_t01_team1.FavoriteScreen
 import np.mad.assignment.mad_assignment_t01_team1.R
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.*
+import np.mad.assignment.mad_assignment_t01_team1.util.SecurityUtils
 import java.time.LocalDate
 
 suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
@@ -16,11 +17,25 @@ suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
         e.printStackTrace()
     }//LLM
     db.withTransaction {
+        val hashedPass = SecurityUtils.sha256("pass_demo")
+
         val userId = db.userDao().upsert(
-            UserEntity(userId = 1L, name = "demo", password = "pass_demo", createdDate = null)
+            UserEntity(
+                userId = 1L,
+                role = "USER",
+                name = "demo",
+                password = hashedPass,
+                createdDate = null
+            )
         )
         val userId1 = db.userDao().upsert(
-            UserEntity(userId = 2L, name = "demo1", password = "pass_demo", createdDate = null)
+            UserEntity(
+                userId = 2L,
+                role = "ADMIN",
+                name = "demo1",
+                password = hashedPass,
+                createdDate = null
+            )
         )
 
         val canteenIds = db.canteenDao().insert(

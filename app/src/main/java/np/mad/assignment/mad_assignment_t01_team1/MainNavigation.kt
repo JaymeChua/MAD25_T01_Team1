@@ -23,7 +23,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+    import androidx.navigation.compose.rememberNavController
 
 sealed class AppScreen(val route: String, val label: String, val icon: ImageVector){
     data object Home    : AppScreen("home", "Home", Icons.Filled.Home)

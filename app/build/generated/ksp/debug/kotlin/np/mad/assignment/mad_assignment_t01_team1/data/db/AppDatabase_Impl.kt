@@ -64,7 +64,7 @@ public class AppDatabase_Impl : AppDatabase() {
   }
 
   protected override fun createOpenDelegate(): RoomOpenDelegate {
-    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(3, "1ef6c86def82f49f1428506f507b5ed1", "bc0f2d576ce084061929620d029ea885") {
+    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(3, "02625e0cd4ef7102cb102ad712d25b87", "7478157d68e3148cdfebb3f2e24ac6e5") {
       public override fun createAllTables(connection: SQLiteConnection) {
         connection.execSQL("CREATE TABLE IF NOT EXISTS `canteens` (`canteenId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `stalls` (`stallId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `canteenName` TEXT NOT NULL, `canteenId` INTEGER NOT NULL, `cuisine` TEXT NOT NULL, `description` TEXT NOT NULL, `name` TEXT NOT NULL, `imageResId` INTEGER NOT NULL, `halal` INTEGER NOT NULL, FOREIGN KEY(`canteenId`) REFERENCES `canteens`(`canteenId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
@@ -72,13 +72,13 @@ public class AppDatabase_Impl : AppDatabase() {
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_stalls_name` ON `stalls` (`name`)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `favorites` (`favoriteId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userId` INTEGER NOT NULL, `stallId` INTEGER NOT NULL, FOREIGN KEY(`userId`) REFERENCES `users`(`userId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`stallId`) REFERENCES `stalls`(`stallId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
         connection.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_favorites_userId_stallId` ON `favorites` (`userId`, `stallId`)")
-        connection.execSQL("CREATE TABLE IF NOT EXISTS `users` (`userId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `password` TEXT NOT NULL, `createdDate` TEXT DEFAULT CURRENT_TIMESTAMP)")
+        connection.execSQL("CREATE TABLE IF NOT EXISTS `users` (`userId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `password` TEXT NOT NULL, `role` TEXT NOT NULL, `createdDate` TEXT DEFAULT CURRENT_TIMESTAMP)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `reviews` (`reviewId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stallId` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `username` TEXT NOT NULL, `review` TEXT NOT NULL, `rating` INTEGER NOT NULL, `date` TEXT NOT NULL, FOREIGN KEY(`stallId`) REFERENCES `stalls`(`stallId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
         connection.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_reviews_userId_stallId` ON `reviews` (`userId`, `stallId`)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `dishes` (`dishId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stallId` INTEGER NOT NULL, `dishName` TEXT NOT NULL, `dishPrice` TEXT NOT NULL, `imageResId` INTEGER NOT NULL, FOREIGN KEY(`stallId`) REFERENCES `stalls`(`stallId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_dishes_stallId` ON `dishes` (`stallId`)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)")
-        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1ef6c86def82f49f1428506f507b5ed1')")
+        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '02625e0cd4ef7102cb102ad712d25b87')")
       }
 
       public override fun dropAllTables(connection: SQLiteConnection) {
@@ -171,6 +171,7 @@ public class AppDatabase_Impl : AppDatabase() {
         _columnsUsers.put("userId", TableInfo.Column("userId", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY))
         _columnsUsers.put("name", TableInfo.Column("name", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
         _columnsUsers.put("password", TableInfo.Column("password", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsUsers.put("role", TableInfo.Column("role", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
         _columnsUsers.put("createdDate", TableInfo.Column("createdDate", "TEXT", false, 0, "CURRENT_TIMESTAMP", TableInfo.CREATED_FROM_ENTITY))
         val _foreignKeysUsers: MutableSet<TableInfo.ForeignKey> = mutableSetOf()
         val _indicesUsers: MutableSet<TableInfo.Index> = mutableSetOf()

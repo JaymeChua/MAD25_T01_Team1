@@ -9,6 +9,7 @@ data class UserEntity(
     @PrimaryKey(autoGenerate = true) val userId: Long = 0,
     val name: String,
     val password: String,
+    val role: String = "USER",
     @ColumnInfo(defaultValue = "CURRENT_TIMESTAMP")
     val createdDate: String? = null
 )
