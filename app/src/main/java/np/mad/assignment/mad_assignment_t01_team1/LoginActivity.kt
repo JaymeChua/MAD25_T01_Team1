@@ -70,11 +70,10 @@ class LoginActivity : ComponentActivity() {
             MAD_Assignment_T01_Team1Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     LoginScreen(
-                        onLoginSuccess = { userId ->
+                        onLoginSuccess = { userId, role ->
                             // Save userId to SharedPreferences (simple session)
                             val prefs = getSharedPreferences("auth", MODE_PRIVATE)
-                            prefs.edit().putLong("logged_in_user", userId).apply()
-
+                            prefs.edit().putLong("logged_in_user", userId).putString("user_role", role).apply()
                             // Launch MainActivity and finish LoginActivity
                             val intent = Intent(this@LoginActivity, MainActivity::class.java)
                             intent.putExtra("userId", userId)
@@ -96,7 +95,7 @@ class LoginActivity : ComponentActivity() {
 
 @Composable
 fun LoginScreen(
-    onLoginSuccess: (Long) -> Unit,
+    onLoginSuccess: (Long, String) -> Unit,
     onRegisterClick: () -> Unit,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     modifier: Modifier = Modifier
@@ -222,7 +221,7 @@ fun LoginScreen(
                         val hashedInput = SecurityUtils.sha256(password)
                         if (user != null && user.password == hashedInput) {
                             // success: return real userId
-                            onLoginSuccess(user.userId)
+                            onLoginSuccess(user.userId, user.role)
                         } else {
                             // show simple toast on failure
                             Toast.makeText(context, "Invalid username or password", Toast.LENGTH_SHORT).show()

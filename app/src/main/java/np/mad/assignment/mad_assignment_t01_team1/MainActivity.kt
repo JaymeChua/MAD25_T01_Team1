@@ -41,11 +41,17 @@ class MainActivity : ComponentActivity() {
                             .getLong("logged_in_user", -1L)
                     )
                 }
-
-                if (loggedInUserId == -1L) { //LLM traffic cop
+                var userRole by remember {
+                    mutableStateOf(
+                        context.getSharedPreferences("auth", Context.MODE_PRIVATE)
+                            .getString("user_role", "USER")
+                    )
+                }
+                if (loggedInUserId == -1L && userRole == "USER") {
                     LoginScreen(
-                        onLoginSuccess = { newId ->
+                        onLoginSuccess = { newId, role ->
                             loggedInUserId = newId
+                            userRole = role
                         },
                         onRegisterClick = {
                             val intent = android.content.Intent(context, RegisterActivity::class.java)
@@ -53,15 +59,30 @@ class MainActivity : ComponentActivity() {
                         }
                     )
                 } else {
-                    // If user logged in, Show the Main App.
-                    MainNavigation(
-                        userId = loggedInUserId,
-                        onLogout = {
-                            context.getSharedPreferences("auth", Context.MODE_PRIVATE)
-                                .edit().clear().apply()
-                            loggedInUserId = -1L
-                        }// LLM
-                    )
+                    if (userRole == "ADMIN"){
+                        AdminDashboardScreen(
+                            onManageStalls = {  },
+                            onManageDishes = { },
+                            onManageUsers = {  },
+                            onLogout = {
+                                context.getSharedPreferences("auth", Context.MODE_PRIVATE)
+                                    .edit().clear().apply()
+                                loggedInUserId = -1L
+                                userRole = "USER"
+                            }
+                        )
+                    }else {
+                        // If user logged in, Show the Main App.
+                        MainNavigation(
+                            userId = loggedInUserId,
+                            onLogout = {
+                                context.getSharedPreferences("auth", Context.MODE_PRIVATE)
+                                    .edit().clear().apply()
+                                loggedInUserId = -1L
+                                userRole = "USER"
+                            }// LLM
+                        )
+                    }
                 }
             }
         }

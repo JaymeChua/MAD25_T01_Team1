@@ -1,5 +1,6 @@
 package np.mad.assignment.mad_assignment_t01_team1.`data`.dao
 
+import androidx.room.EntityDeleteOrUpdateAdapter
 import androidx.room.EntityInsertAdapter
 import androidx.room.RoomDatabase
 import androidx.room.coroutines.createFlow
@@ -12,6 +13,7 @@ import kotlin.Int
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
+import kotlin.Unit
 import kotlin.collections.List
 import kotlin.collections.MutableList
 import kotlin.collections.mutableListOf
@@ -27,6 +29,10 @@ public class StallDao_Impl(
   private val __db: RoomDatabase
 
   private val __insertAdapterOfStallEntity: EntityInsertAdapter<StallEntity>
+
+  private val __deleteAdapterOfStallEntity: EntityDeleteOrUpdateAdapter<StallEntity>
+
+  private val __updateAdapterOfStallEntity: EntityDeleteOrUpdateAdapter<StallEntity>
   init {
     this.__db = __db
     this.__insertAdapterOfStallEntity = object : EntityInsertAdapter<StallEntity>() {
@@ -44,11 +50,42 @@ public class StallDao_Impl(
         statement.bindLong(8, _tmp.toLong())
       }
     }
+    this.__deleteAdapterOfStallEntity = object : EntityDeleteOrUpdateAdapter<StallEntity>() {
+      protected override fun createQuery(): String = "DELETE FROM `stalls` WHERE `stallId` = ?"
+
+      protected override fun bind(statement: SQLiteStatement, entity: StallEntity) {
+        statement.bindLong(1, entity.stallId)
+      }
+    }
+    this.__updateAdapterOfStallEntity = object : EntityDeleteOrUpdateAdapter<StallEntity>() {
+      protected override fun createQuery(): String = "UPDATE OR ABORT `stalls` SET `stallId` = ?,`canteenName` = ?,`canteenId` = ?,`cuisine` = ?,`description` = ?,`name` = ?,`imageResId` = ?,`halal` = ? WHERE `stallId` = ?"
+
+      protected override fun bind(statement: SQLiteStatement, entity: StallEntity) {
+        statement.bindLong(1, entity.stallId)
+        statement.bindText(2, entity.canteenName)
+        statement.bindLong(3, entity.canteenId)
+        statement.bindText(4, entity.cuisine)
+        statement.bindText(5, entity.description)
+        statement.bindText(6, entity.name)
+        statement.bindLong(7, entity.imageResId.toLong())
+        val _tmp: Int = if (entity.halal) 1 else 0
+        statement.bindLong(8, _tmp.toLong())
+        statement.bindLong(9, entity.stallId)
+      }
+    }
   }
 
   public override suspend fun insert(vararg stalls: StallEntity): List<Long> = performSuspending(__db, false, true) { _connection ->
     val _result: List<Long> = __insertAdapterOfStallEntity.insertAndReturnIdsList(_connection, stalls)
     _result
+  }
+
+  public override suspend fun deleteStall(stall: StallEntity): Unit = performSuspending(__db, false, true) { _connection ->
+    __deleteAdapterOfStallEntity.handle(_connection, stall)
+  }
+
+  public override suspend fun updateStall(stall: StallEntity): Unit = performSuspending(__db, false, true) { _connection ->
+    __updateAdapterOfStallEntity.handle(_connection, stall)
   }
 
   public override fun getByCanteen(canteenId: Long): Flow<List<StallEntity>> {
@@ -344,6 +381,20 @@ public class StallDao_Impl(
           _result.add(_item)
         }
         _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
+  public override suspend fun deleteStallById(stallId: Long) {
+    val _sql: String = "DELETE FROM stalls WHERE stallId = ?"
+    return performSuspending(__db, false, true) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        var _argIndex: Int = 1
+        _stmt.bindLong(_argIndex, stallId)
+        _stmt.step()
       } finally {
         _stmt.close()
       }
