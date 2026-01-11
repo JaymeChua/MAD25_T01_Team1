@@ -155,9 +155,10 @@ fun MainNavigation(
             composable(AppScreen.Login.route) {
                 val context = LocalContext.current
                 LoginScreen(
-                    onLoginSuccess = { newUserId: Long ->
+                    onLoginSuccess = { newUserId: Long, userRole: String ->
                         val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
                         prefs.edit().putLong("logged_in_user", newUserId).apply()
+                        prefs.edit().putString("user_role", userRole).apply()
 
                         navController.navigate(AppScreen.Home.route) {
                             popUpTo(AppScreen.Login.route) { inclusive = true }

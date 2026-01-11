@@ -1,5 +1,6 @@
 package np.mad.assignment.mad_assignment_t01_team1.`data`.dao
 
+import androidx.room.EntityDeleteOrUpdateAdapter
 import androidx.room.EntityInsertAdapter
 import androidx.room.RoomDatabase
 import androidx.room.coroutines.createFlow
@@ -11,6 +12,7 @@ import kotlin.Int
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
+import kotlin.Unit
 import kotlin.collections.List
 import kotlin.collections.MutableList
 import kotlin.collections.mutableListOf
@@ -26,6 +28,10 @@ public class ReviewDao_Impl(
   private val __db: RoomDatabase
 
   private val __insertAdapterOfReviewEntity: EntityInsertAdapter<ReviewEntity>
+
+  private val __deleteAdapterOfReviewEntity: EntityDeleteOrUpdateAdapter<ReviewEntity>
+
+  private val __updateAdapterOfReviewEntity: EntityDeleteOrUpdateAdapter<ReviewEntity>
   init {
     this.__db = __db
     this.__insertAdapterOfReviewEntity = object : EntityInsertAdapter<ReviewEntity>() {
@@ -39,6 +45,27 @@ public class ReviewDao_Impl(
         statement.bindText(5, entity.review)
         statement.bindLong(6, entity.rating.toLong())
         statement.bindText(7, entity.date)
+      }
+    }
+    this.__deleteAdapterOfReviewEntity = object : EntityDeleteOrUpdateAdapter<ReviewEntity>() {
+      protected override fun createQuery(): String = "DELETE FROM `reviews` WHERE `reviewId` = ?"
+
+      protected override fun bind(statement: SQLiteStatement, entity: ReviewEntity) {
+        statement.bindLong(1, entity.reviewId)
+      }
+    }
+    this.__updateAdapterOfReviewEntity = object : EntityDeleteOrUpdateAdapter<ReviewEntity>() {
+      protected override fun createQuery(): String = "UPDATE OR ABORT `reviews` SET `reviewId` = ?,`stallId` = ?,`userId` = ?,`username` = ?,`review` = ?,`rating` = ?,`date` = ? WHERE `reviewId` = ?"
+
+      protected override fun bind(statement: SQLiteStatement, entity: ReviewEntity) {
+        statement.bindLong(1, entity.reviewId)
+        statement.bindLong(2, entity.stallId)
+        statement.bindLong(3, entity.userId)
+        statement.bindText(4, entity.username)
+        statement.bindText(5, entity.review)
+        statement.bindLong(6, entity.rating.toLong())
+        statement.bindText(7, entity.date)
+        statement.bindLong(8, entity.reviewId)
       }
     }
   }
@@ -56,6 +83,14 @@ public class ReviewDao_Impl(
   public override suspend fun insert(vararg reviews: ReviewEntity): List<Long> = performSuspending(__db, false, true) { _connection ->
     val _result: List<Long> = __insertAdapterOfReviewEntity.insertAndReturnIdsList(_connection, reviews)
     _result
+  }
+
+  public override suspend fun deleteReview(review: ReviewEntity): Unit = performSuspending(__db, false, true) { _connection ->
+    __deleteAdapterOfReviewEntity.handle(_connection, review)
+  }
+
+  public override suspend fun updateReview(review: ReviewEntity): Unit = performSuspending(__db, false, true) { _connection ->
+    __updateAdapterOfReviewEntity.handle(_connection, review)
   }
 
   public override fun getAllReviewsForStall(stallId: Long): Flow<List<ReviewEntity>> {
@@ -115,6 +150,20 @@ public class ReviewDao_Impl(
           _result = 0
         }
         _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
+  public override suspend fun deleteReviewById(reviewId: Long) {
+    val _sql: String = "DELETE FROM reviews WHERE reviewId = ?"
+    return performSuspending(__db, false, true) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        var _argIndex: Int = 1
+        _stmt.bindLong(_argIndex, reviewId)
+        _stmt.step()
       } finally {
         _stmt.close()
       }

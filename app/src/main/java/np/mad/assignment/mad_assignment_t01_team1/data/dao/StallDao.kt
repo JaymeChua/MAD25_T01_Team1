@@ -1,9 +1,11 @@
 package np.mad.assignment.mad_assignment_t01_team1.data.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.StallEntity
 
@@ -38,4 +40,13 @@ interface StallDao{
 
     @Query("SELECT DISTINCT cuisine FROM stalls")
     fun getAllCuisines(): Flow<List<String>>
+
+    @Update
+    suspend fun updateStall(stall: StallEntity)
+
+    @Delete
+    suspend fun deleteStall(stall: StallEntity)
+
+    @Query("DELETE FROM stalls WHERE stallId = :stallId")
+    suspend fun deleteStallById(stallId: Long)
 }

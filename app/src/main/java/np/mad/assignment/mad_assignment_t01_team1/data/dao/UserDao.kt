@@ -18,4 +18,7 @@ interface UserDao{
     @Query("SELECT * FROM users WHERE name = :name LIMIT 1")
     suspend fun getByName(name: String): UserEntity?
 
+    @Query("DELETE FROM users WHERE userId = :userId")
+    suspend fun deleteUser(userId: Long)
+
 }

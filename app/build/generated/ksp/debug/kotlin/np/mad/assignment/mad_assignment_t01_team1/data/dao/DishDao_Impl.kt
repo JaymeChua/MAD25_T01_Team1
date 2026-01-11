@@ -1,5 +1,6 @@
 package np.mad.assignment.mad_assignment_t01_team1.`data`.dao
 
+import androidx.room.EntityDeleteOrUpdateAdapter
 import androidx.room.EntityInsertAdapter
 import androidx.room.RoomDatabase
 import androidx.room.coroutines.createFlow
@@ -11,6 +12,7 @@ import kotlin.Int
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
+import kotlin.Unit
 import kotlin.collections.List
 import kotlin.collections.MutableList
 import kotlin.collections.mutableListOf
@@ -26,6 +28,10 @@ public class DishDao_Impl(
   private val __db: RoomDatabase
 
   private val __insertAdapterOfDishEntity: EntityInsertAdapter<DishEntity>
+
+  private val __deleteAdapterOfDishEntity: EntityDeleteOrUpdateAdapter<DishEntity>
+
+  private val __updateAdapterOfDishEntity: EntityDeleteOrUpdateAdapter<DishEntity>
   init {
     this.__db = __db
     this.__insertAdapterOfDishEntity = object : EntityInsertAdapter<DishEntity>() {
@@ -37,6 +43,25 @@ public class DishDao_Impl(
         statement.bindText(3, entity.dishName)
         statement.bindText(4, entity.dishPrice)
         statement.bindLong(5, entity.imageResId.toLong())
+      }
+    }
+    this.__deleteAdapterOfDishEntity = object : EntityDeleteOrUpdateAdapter<DishEntity>() {
+      protected override fun createQuery(): String = "DELETE FROM `dishes` WHERE `dishId` = ?"
+
+      protected override fun bind(statement: SQLiteStatement, entity: DishEntity) {
+        statement.bindLong(1, entity.dishId)
+      }
+    }
+    this.__updateAdapterOfDishEntity = object : EntityDeleteOrUpdateAdapter<DishEntity>() {
+      protected override fun createQuery(): String = "UPDATE OR ABORT `dishes` SET `dishId` = ?,`stallId` = ?,`dishName` = ?,`dishPrice` = ?,`imageResId` = ? WHERE `dishId` = ?"
+
+      protected override fun bind(statement: SQLiteStatement, entity: DishEntity) {
+        statement.bindLong(1, entity.dishId)
+        statement.bindLong(2, entity.stallId)
+        statement.bindText(3, entity.dishName)
+        statement.bindText(4, entity.dishPrice)
+        statement.bindLong(5, entity.imageResId.toLong())
+        statement.bindLong(6, entity.dishId)
       }
     }
   }
@@ -54,6 +79,14 @@ public class DishDao_Impl(
   public override suspend fun insert(vararg dishes: DishEntity): List<Long> = performSuspending(__db, false, true) { _connection ->
     val _result: List<Long> = __insertAdapterOfDishEntity.insertAndReturnIdsList(_connection, dishes)
     _result
+  }
+
+  public override suspend fun deleteDish(dish: DishEntity): Unit = performSuspending(__db, false, true) { _connection ->
+    __deleteAdapterOfDishEntity.handle(_connection, dish)
+  }
+
+  public override suspend fun updateDish(dish: DishEntity): Unit = performSuspending(__db, false, true) { _connection ->
+    __updateAdapterOfDishEntity.handle(_connection, dish)
   }
 
   public override fun getAllDishesForStall(stallId: Long): Flow<List<DishEntity>> {
@@ -85,6 +118,20 @@ public class DishDao_Impl(
           _result.add(_item)
         }
         _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
+  public override suspend fun deleteDishById(dishId: Long) {
+    val _sql: String = "DELETE FROM dishes WHERE dishId = ?"
+    return performSuspending(__db, false, true) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        var _argIndex: Int = 1
+        _stmt.bindLong(_argIndex, dishId)
+        _stmt.step()
       } finally {
         _stmt.close()
       }

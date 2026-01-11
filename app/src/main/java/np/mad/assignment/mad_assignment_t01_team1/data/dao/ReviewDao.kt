@@ -1,9 +1,11 @@
 package np.mad.assignment.mad_assignment_t01_team1.data.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.ReviewEntity
 
@@ -24,4 +26,12 @@ interface ReviewDao {
     @Query("SELECT COUNT(*) FROM reviews WHERE userId = :userId")
     fun getReviewCountForUser(userId: Long): Flow<Int>
 
+    @Update
+    suspend fun updateReview(review: ReviewEntity)
+
+    @Delete
+    suspend fun deleteReview(review: ReviewEntity)
+
+    @Query("DELETE FROM reviews WHERE reviewId = :reviewId")
+    suspend fun deleteReviewById(reviewId: Long)
 }
