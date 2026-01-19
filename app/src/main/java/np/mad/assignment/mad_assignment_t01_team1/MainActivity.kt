@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import np.mad.assignment.mad_assignment_t01_team1.data.db.AppDatabase
 import np.mad.assignment.mad_assignment_t01_team1.data.db.seedMockData
+import np.mad.assignment.mad_assignment_t01_team1.data.firebase.FirebaseTest
 import np.mad.assignment.mad_assignment_t01_team1.ui.theme.MAD_Assignment_T01_Team1Theme
 
 class MainActivity : ComponentActivity() {
@@ -30,7 +31,7 @@ class MainActivity : ComponentActivity() {
             }
         }
         enableEdgeToEdge()
-
+        FirebaseTest.test()
         setContent {
             MAD_Assignment_T01_Team1Theme {
                 val context = LocalContext.current
