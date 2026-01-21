@@ -18,22 +18,27 @@ object FirebaseTest {
         )
 
         // 2) Do a write, then read the same doc back
+
         val db = Firebase.firestore
-        val col = db.collection("test_connection")
-        val doc = col.document() // random ID
-        val payload = mapOf(
-            "message" to "Hello Firebase!",
-            "ts" to System.currentTimeMillis()
-        )
+        val doc = db.collection("test_connection").document()
+        val payload = mapOf("message" to "Hello Firebase!", "ts" to System.currentTimeMillis())
 
         doc.set(payload)
             .addOnSuccessListener {
-                Log.d("FIREBASE_TEST", "WRITE_OK docId=${doc.id}")
+                Log.d("FIREBASE_TEST", "WRITE_OK id=${doc.id}")
                 doc.get()
                     .addOnSuccessListener { snap ->
                         Log.d("FIREBASE_TEST", "READ_OK exists=${snap.exists()} data=${snap.data}")
                     }
+                    .addOnFailureListener { e ->
+                        Log.e("FIREBASE_TEST", "READ_FAIL ${e.javaClass.simpleName}: ${e.message}", e)
+                    }
             }
+            .addOnFailureListener { e ->
+                Log.e("FIREBASE_TEST", "WRITE_FAIL ${e.javaClass.simpleName}: ${e.message}", e)
+            }
+
+
 
     }
 }
