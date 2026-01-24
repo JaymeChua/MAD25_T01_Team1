@@ -5,7 +5,7 @@ import com.google.firebase.firestore.Query
 import np.mad.assignment.mad_assignment_t01_team1.data.firebase.dto.StallRemote
 
 class FirestoreStallService (
-    private val db: FirebaseFirestore = FirebaseFirestore.g etInstance()
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 ){
     private fun col() =db.collection(FirestorePath.STALLS)
 
@@ -17,7 +17,7 @@ class FirestoreStallService (
         description: String,
         halal: Boolean,
         imageUrl: String?,
-        onSucces: (String)-> Unit,
+        onSuccess: (String)-> Unit,
         onError: (Exception) -> Unit
     ){
         val data = hashMapOf(
@@ -29,7 +29,7 @@ class FirestoreStallService (
             "imageUrl" to imageUrl,
             "updatedAt" to System.currentTimeMillis()
         )
-        col().add(data).addOnSuccessListener { onSucces(it.id) }.addOnFailureListener(onError)
+        col().add(data).addOnSuccessListener { onSuccess(it.id) }.addOnFailureListener(onError)
     }
 
     fun getStall(
@@ -53,7 +53,7 @@ class FirestoreStallService (
         }.addOnFailureListener(onError)
     }
 
-    fun updatestall(
+    fun updateStall(
         stallId: String,
         updates: Map<String, Any?>,
         onSuccess: () -> Unit,
