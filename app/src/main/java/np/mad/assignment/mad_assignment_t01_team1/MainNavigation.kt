@@ -1,5 +1,7 @@
 package np.mad.assignment.mad_assignment_t01_team1
 
+import android.content.Context
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -16,11 +18,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+    import androidx.navigation.compose.rememberNavController
 
 sealed class AppScreen(val route: String, val label: String, val icon: ImageVector){
     data object Home    : AppScreen("home", "Home", Icons.Filled.Home)
@@ -34,45 +37,48 @@ sealed class AppScreen(val route: String, val label: String, val icon: ImageVect
 
 @Composable
 fun MainNavigation(
+    userId: Long,
+    onLogout: () -> Unit
 ) {
     val navController = rememberNavController()
+    val context = LocalContext.current
     val tabs = listOf(
         AppScreen.Home,
         AppScreen.Canteen,
         AppScreen.Favorite,
         AppScreen.Profile
     )
-
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
     Scaffold(
         bottomBar = {
-            NavigationBar {
-                val currentBackStackEntry by navController.currentBackStackEntryAsState()
-                val currentDestination = currentBackStackEntry?.destination
-
-                tabs.forEach { screen ->
-                    val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
-                    NavigationBarItem(
-                        selected = selected,
-                        onClick = {
-                            navController.navigate(screen.route) {
-                                // Keep only one instance of the destination & restore previous state
-                                popUpTo(navController.graph.startDestinationId) {
-                                    saveState = true
+            if (currentRoute != AppScreen.Login.route && currentRoute != "register") {
+                NavigationBar {
+                    val currentDestination = navBackStackEntry?.destination
+                    tabs.forEach { screen ->
+                        val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
+                        NavigationBarItem(
+                            selected = selected,
+                            onClick = {
+                                navController.navigate(screen.route) {
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        icon = { Icon(imageVector = screen.icon, contentDescription = screen.label) },
-                        label = { Text(screen.label) }
-                    )
+                            },
+                            icon = { Icon(imageVector = screen.icon, contentDescription = screen.label) },
+                            label = { Text(screen.label) }
+                        )
+                    }
                 }
             }
         }
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = AppScreen.Favorite.route,
+            startDestination = AppScreen.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(AppScreen.Home.route) {
@@ -101,16 +107,18 @@ fun MainNavigation(
                 // Pass the selected canteen data to StallDirectoryScreen
                 selectedCanteen?.let {
                     StallDirectoryScreen(
-                        userId = 2L,
+                        userId = userId,
                         canteen = it, // Pass the selected canteen to filter food stalls
                         navController = navController,
                     )
                 }
             }
+
             composable("review/{stallId}") { backStackEntry ->
                 val stallId = backStackEntry.arguments?.getString("stallId")?.toLong() ?: 1L
 
                 ReviewPage(
+                    userId = userId,
                     stallId = stallId,
                     onCloseClicked = { navController.popBackStack() }
                 )
@@ -127,9 +135,9 @@ fun MainNavigation(
             }
             composable(AppScreen.Favorite.route) {
                 FavoriteScreen(
-                    userId = 2L,
+                    userId = userId,
                     onStallClick = { stall ->
-                        navController.navigate("stall/${stall.stallId}")
+                        navController.navigate("menu/${stall.stallId}")
                     },
                     onLoginClick = {
                         navController.navigate((AppScreen.Login.route))
@@ -137,8 +145,42 @@ fun MainNavigation(
                 )
             }
             composable(AppScreen.Profile.route) {
-
+                ProfileScreen(
+                    userId = userId,
+                    onLogout = {
+                        onLogout()
+                    }
+                )
             }
+            composable(AppScreen.Login.route) {
+                val context = LocalContext.current
+                LoginScreen(
+                    onLoginSuccess = { newUserId: Long, userRole: String ->
+                        val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+                        prefs.edit().putLong("logged_in_user", newUserId).apply()
+                        prefs.edit().putString("user_role", userRole).apply()
+
+                        navController.navigate(AppScreen.Home.route) {
+                            popUpTo(AppScreen.Login.route) { inclusive = true }
+                        }
+                    },
+                    onRegisterClick = {
+                        navController.navigate("register")
+                    }
+                )
+            }
+            composable("register") {
+                RegisterScreen(
+                    onRegisterSuccess = {
+                        navController.navigate(AppScreen.Login.route) {
+                            popUpTo("register") { inclusive = true }
+                        }
+                    },
+                    onCancel = { navController.popBackStack() }
+                )
+            }
+
+
         }
     }
 }

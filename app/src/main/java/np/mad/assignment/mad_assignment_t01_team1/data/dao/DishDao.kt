@@ -1,9 +1,11 @@
 package np.mad.assignment.mad_assignment_t01_team1.data.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.DishEntity
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.ReviewEntity
@@ -20,4 +22,13 @@ interface DishDao {
 
     @Query("SELECT * FROM dishes WHERE stallId = :stallId ORDER BY dishName")
     fun getAllDishesForStall(stallId: Long): Flow<List<DishEntity>>
+
+    @Update
+    suspend fun updateDish(dish: DishEntity)
+
+    @Delete
+    suspend fun deleteDish(dish: DishEntity)
+
+    @Query("DELETE FROM dishes WHERE dishId = :dishId")
+    suspend fun deleteDishById(dishId: Long)
 }

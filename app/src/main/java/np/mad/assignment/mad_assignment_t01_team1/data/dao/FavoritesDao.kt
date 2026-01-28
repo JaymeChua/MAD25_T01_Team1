@@ -39,4 +39,7 @@ interface FavoritesDao{
     fun getFavoriteStallsForUser(userId: Long): Flow<List<FavoriteStallUi>>
     @Query("SELECT stallId FROM favorites WHERE userId = :userId")
     fun getFavoriteStallIdsForUser(userId: Long): Flow<List<Long>>
+
+    @Query("SELECT COUNT(*) FROM favorites WHERE userId = :userId")
+    fun getFavoriteCountForUser(userId: Long): Flow<Int>
 }

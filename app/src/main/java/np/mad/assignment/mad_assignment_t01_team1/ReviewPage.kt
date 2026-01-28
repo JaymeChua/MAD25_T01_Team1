@@ -34,9 +34,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.withContext
+import np.mad.assignment.mad_assignment_t01_team1.data.entity.StallEntity
+import np.mad.assignment.mad_assignment_t01_team1.data.entity.UserEntity
 
 @Composable
 fun ReviewPage(
+    userId:Long,
     stallId: Long,
     onCloseClicked: () -> Unit = {},
 ) {
@@ -45,9 +50,11 @@ fun ReviewPage(
         AppDatabase.get(context)}
     val reviewsDao = remember { db.reviewDao() }
     val stallDao = remember { db.stallDao() }
+    val userDao = remember { db.userDao() }
     val stall by stallDao.getByIdFlow(stallId).collectAsState(initial = null)
     val scope = rememberCoroutineScope()
     val reviews: List<ReviewEntity> by reviewsDao.getAllReviewsForStall(stallId).collectAsState(initial = emptyList())
+    val user by userDao.getById(userId).collectAsState(initial = null)
 
     val reviewCount = reviews.size
     val averageRating = if (reviewCount > 0) {
@@ -189,7 +196,7 @@ fun ReviewPage(
                         OutlinedTextField(
                             value = inputReviewText,
                             onValueChange = { inputReviewText = it },
-                            label = { Text("Share your thoughts...") },
+                            label = { Text("Write something.") },
                             modifier = Modifier.fillMaxWidth(),
                             maxLines = 3
                         )
@@ -200,11 +207,10 @@ fun ReviewPage(
                         onClick = {
                             if (inputReviewText.isNotBlank()) {
                                 scope.launch(Dispatchers.IO) {
-                                    val currentUserId = 1L
-                                    val currentUserName = "demo"
+                                    val currentUserName = user?.name ?: "Loading."
 
                                     val newReview = ReviewEntity(
-                                        userId = currentUserId,
+                                        userId = userId,
                                         username = currentUserName,
                                         stallId = stallId,
                                         review = inputReviewText,

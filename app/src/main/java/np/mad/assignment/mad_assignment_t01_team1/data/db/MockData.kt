@@ -6,6 +6,7 @@ import kotlinx.coroutines.withContext
 import np.mad.assignment.mad_assignment_t01_team1.FavoriteScreen
 import np.mad.assignment.mad_assignment_t01_team1.R
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.*
+import np.mad.assignment.mad_assignment_t01_team1.util.SecurityUtils
 import java.time.LocalDate
 
 suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
@@ -16,11 +17,25 @@ suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
         e.printStackTrace()
     }//LLM
     db.withTransaction {
+        val hashedPass = SecurityUtils.sha256("pass_demo")
+
         val userId = db.userDao().upsert(
-            UserEntity(userId = 1L, name = "demo", password = "pass_demo", createdDate = null)
+            UserEntity(
+                userId = 1L,
+                role = "USER",
+                name = "demo",
+                password = hashedPass,
+                createdDate = null
+            )
         )
         val userId1 = db.userDao().upsert(
-            UserEntity(userId = 2L, name = "demo1", password = "pass_demo", createdDate = null)
+            UserEntity(
+                userId = 2L,
+                role = "ADMIN",
+                name = "demo1",
+                password = hashedPass,
+                createdDate = null
+            )
         )
 
         val canteenIds = db.canteenDao().insert(
@@ -51,12 +66,7 @@ suspend fun seedMockData(db: AppDatabase) = withContext(Dispatchers.IO){
         val westernStallId = db.stallDao().getByName("Western")?.stallId ?: error("Stall 'Western' not found after insert")
         val koreanStallId = db.stallDao().getByName("Korean")?.stallId ?: error("Stall 'Korean' not found after insert")
         val riceStallId = db.stallDao().getByName("Rice")?.stallId ?: error("Stall 'Rice' not found after insert")
-        val name1 = db.userDao().getById(userId)?.name ?: "Unknown"
-        val name2 = db.userDao().getById(userId1)?.name ?: "Unknown"
-        db.reviewDao().addReviews(
-            //ReviewEntity(userId = userId, username = name1, review = "Yoo this food is bussin. Unc locked in", rating = 5, stallId = chickenRiceStallId, date = LocalDate.now()),
-            ReviewEntity(userId = userId1, username = name2, review = "It was half-uncooked bro. This uncle trolling", rating = 1, stallId = chickenRiceStallId, date = "2025-02-16"),
-        )
+
         db.dishDao().insert(
             DishEntity(
                 stallId = indonesianStallId,

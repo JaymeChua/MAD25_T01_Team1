@@ -125,6 +125,28 @@ public class FavoritesDao_Impl(
     }
   }
 
+  public override fun getFavoriteCountForUser(userId: Long): Flow<Int> {
+    val _sql: String = "SELECT COUNT(*) FROM favorites WHERE userId = ?"
+    return createFlow(__db, false, arrayOf("favorites")) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        var _argIndex: Int = 1
+        _stmt.bindLong(_argIndex, userId)
+        val _result: Int
+        if (_stmt.step()) {
+          val _tmp: Int
+          _tmp = _stmt.getLong(0).toInt()
+          _result = _tmp
+        } else {
+          _result = 0
+        }
+        _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
   public override suspend fun removeFavoriteById(favoriteId: Long) {
     val _sql: String = "DELETE FROM favorites WHERE favoriteId = ?"
     return performSuspending(__db, false, true) { _connection ->

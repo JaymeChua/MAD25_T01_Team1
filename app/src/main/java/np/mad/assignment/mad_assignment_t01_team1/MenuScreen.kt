@@ -107,7 +107,7 @@ fun MenuScreen(
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                CategoryChip(text = "Price Range: $2.50-$4.00", color = Color(0xFFFFF3E0))
+                                CategoryChip(text = "Price Range: $2.50-$5.00", color = Color(0xFFFFF3E0))
                                 CategoryChip(
                                     text = stall?.cuisine ?: "Loading...",
                                     color = Color(0xFFE8F5E9)
@@ -174,7 +174,7 @@ fun MenuScreen(
                 text = "For You",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(horizontal = 16.dp) // No top padding needed as grid handles spacing
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
 
