@@ -34,4 +34,7 @@ interface ReviewDao {
 
     @Query("DELETE FROM reviews WHERE reviewId = :reviewId")
     suspend fun deleteReviewById(reviewId: Long)
+
+    @Query("SELECT * FROM reviews WHERE userId = :uId ORDER BY date DESC")
+    fun getAllReviewsByUserId(uId: Long): Flow<List<ReviewEntity>>
 }
