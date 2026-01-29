@@ -1,5 +1,6 @@
 package np.mad.assignment.mad_assignment_t01_team1.`data`.dao
 
+import androidx.room.EntityDeleteOrUpdateAdapter
 import androidx.room.EntityInsertAdapter
 import androidx.room.RoomDatabase
 import androidx.room.coroutines.createFlow
@@ -11,6 +12,7 @@ import kotlin.Int
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
+import kotlin.Unit
 import kotlin.collections.List
 import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.Flow
@@ -24,6 +26,10 @@ public class UserDao_Impl(
   private val __db: RoomDatabase
 
   private val __insertAdapterOfUserEntity: EntityInsertAdapter<UserEntity>
+
+  private val __deleteAdapterOfUserEntity: EntityDeleteOrUpdateAdapter<UserEntity>
+
+  private val __updateAdapterOfUserEntity: EntityDeleteOrUpdateAdapter<UserEntity>
   init {
     this.__db = __db
     this.__insertAdapterOfUserEntity = object : EntityInsertAdapter<UserEntity>() {
@@ -42,11 +48,43 @@ public class UserDao_Impl(
         }
       }
     }
+    this.__deleteAdapterOfUserEntity = object : EntityDeleteOrUpdateAdapter<UserEntity>() {
+      protected override fun createQuery(): String = "DELETE FROM `users` WHERE `userId` = ?"
+
+      protected override fun bind(statement: SQLiteStatement, entity: UserEntity) {
+        statement.bindLong(1, entity.userId)
+      }
+    }
+    this.__updateAdapterOfUserEntity = object : EntityDeleteOrUpdateAdapter<UserEntity>() {
+      protected override fun createQuery(): String = "UPDATE OR ABORT `users` SET `userId` = ?,`name` = ?,`password` = ?,`role` = ?,`createdDate` = ? WHERE `userId` = ?"
+
+      protected override fun bind(statement: SQLiteStatement, entity: UserEntity) {
+        statement.bindLong(1, entity.userId)
+        statement.bindText(2, entity.name)
+        statement.bindText(3, entity.password)
+        statement.bindText(4, entity.role)
+        val _tmpCreatedDate: String? = entity.createdDate
+        if (_tmpCreatedDate == null) {
+          statement.bindNull(5)
+        } else {
+          statement.bindText(5, _tmpCreatedDate)
+        }
+        statement.bindLong(6, entity.userId)
+      }
+    }
   }
 
   public override suspend fun upsert(user: UserEntity): Long = performSuspending(__db, false, true) { _connection ->
     val _result: Long = __insertAdapterOfUserEntity.insertAndReturnId(_connection, user)
     _result
+  }
+
+  public override suspend fun deleteUser(user: UserEntity): Unit = performSuspending(__db, false, true) { _connection ->
+    __deleteAdapterOfUserEntity.handle(_connection, user)
+  }
+
+  public override suspend fun updateUser(user: UserEntity): Unit = performSuspending(__db, false, true) { _connection ->
+    __updateAdapterOfUserEntity.handle(_connection, user)
   }
 
   public override fun getById(userId: Long): Flow<UserEntity?> {
@@ -95,6 +133,45 @@ public class UserDao_Impl(
       try {
         var _argIndex: Int = 1
         _stmt.bindText(_argIndex, name)
+        val _columnIndexOfUserId: Int = getColumnIndexOrThrow(_stmt, "userId")
+        val _columnIndexOfName: Int = getColumnIndexOrThrow(_stmt, "name")
+        val _columnIndexOfPassword: Int = getColumnIndexOrThrow(_stmt, "password")
+        val _columnIndexOfRole: Int = getColumnIndexOrThrow(_stmt, "role")
+        val _columnIndexOfCreatedDate: Int = getColumnIndexOrThrow(_stmt, "createdDate")
+        val _result: UserEntity?
+        if (_stmt.step()) {
+          val _tmpUserId: Long
+          _tmpUserId = _stmt.getLong(_columnIndexOfUserId)
+          val _tmpName: String
+          _tmpName = _stmt.getText(_columnIndexOfName)
+          val _tmpPassword: String
+          _tmpPassword = _stmt.getText(_columnIndexOfPassword)
+          val _tmpRole: String
+          _tmpRole = _stmt.getText(_columnIndexOfRole)
+          val _tmpCreatedDate: String?
+          if (_stmt.isNull(_columnIndexOfCreatedDate)) {
+            _tmpCreatedDate = null
+          } else {
+            _tmpCreatedDate = _stmt.getText(_columnIndexOfCreatedDate)
+          }
+          _result = UserEntity(_tmpUserId,_tmpName,_tmpPassword,_tmpRole,_tmpCreatedDate)
+        } else {
+          _result = null
+        }
+        _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
+  public override fun getUserById(id: Long): Flow<UserEntity?> {
+    val _sql: String = "SELECT * FROM users WHERE userId = ?"
+    return createFlow(__db, false, arrayOf("users")) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        var _argIndex: Int = 1
+        _stmt.bindLong(_argIndex, id)
         val _columnIndexOfUserId: Int = getColumnIndexOrThrow(_stmt, "userId")
         val _columnIndexOfName: Int = getColumnIndexOrThrow(_stmt, "name")
         val _columnIndexOfPassword: Int = getColumnIndexOrThrow(_stmt, "password")

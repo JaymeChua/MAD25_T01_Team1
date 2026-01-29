@@ -156,6 +156,47 @@ public class ReviewDao_Impl(
     }
   }
 
+  public override fun getAllReviewsByUserId(uId: Long): Flow<List<ReviewEntity>> {
+    val _sql: String = "SELECT * FROM reviews WHERE userId = ? ORDER BY date DESC"
+    return createFlow(__db, false, arrayOf("reviews")) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        var _argIndex: Int = 1
+        _stmt.bindLong(_argIndex, uId)
+        val _columnIndexOfReviewId: Int = getColumnIndexOrThrow(_stmt, "reviewId")
+        val _columnIndexOfStallId: Int = getColumnIndexOrThrow(_stmt, "stallId")
+        val _columnIndexOfUserId: Int = getColumnIndexOrThrow(_stmt, "userId")
+        val _columnIndexOfUsername: Int = getColumnIndexOrThrow(_stmt, "username")
+        val _columnIndexOfReview: Int = getColumnIndexOrThrow(_stmt, "review")
+        val _columnIndexOfRating: Int = getColumnIndexOrThrow(_stmt, "rating")
+        val _columnIndexOfDate: Int = getColumnIndexOrThrow(_stmt, "date")
+        val _result: MutableList<ReviewEntity> = mutableListOf()
+        while (_stmt.step()) {
+          val _item: ReviewEntity
+          val _tmpReviewId: Long
+          _tmpReviewId = _stmt.getLong(_columnIndexOfReviewId)
+          val _tmpStallId: Long
+          _tmpStallId = _stmt.getLong(_columnIndexOfStallId)
+          val _tmpUserId: Long
+          _tmpUserId = _stmt.getLong(_columnIndexOfUserId)
+          val _tmpUsername: String
+          _tmpUsername = _stmt.getText(_columnIndexOfUsername)
+          val _tmpReview: String
+          _tmpReview = _stmt.getText(_columnIndexOfReview)
+          val _tmpRating: Int
+          _tmpRating = _stmt.getLong(_columnIndexOfRating).toInt()
+          val _tmpDate: String
+          _tmpDate = _stmt.getText(_columnIndexOfDate)
+          _item = ReviewEntity(_tmpReviewId,_tmpStallId,_tmpUserId,_tmpUsername,_tmpReview,_tmpRating,_tmpDate)
+          _result.add(_item)
+        }
+        _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
   public override suspend fun deleteReviewById(reviewId: Long) {
     val _sql: String = "DELETE FROM reviews WHERE reviewId = ?"
     return performSuspending(__db, false, true) { _connection ->
