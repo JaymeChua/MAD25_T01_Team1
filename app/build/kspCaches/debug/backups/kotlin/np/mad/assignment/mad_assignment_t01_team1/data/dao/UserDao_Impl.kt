@@ -14,6 +14,8 @@ import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
 import kotlin.collections.List
+import kotlin.collections.MutableList
+import kotlin.collections.mutableListOf
 import kotlin.reflect.KClass
 import kotlinx.coroutines.flow.Flow
 import np.mad.assignment.mad_assignment_t01_team1.`data`.entity.UserEntity
@@ -196,6 +198,43 @@ public class UserDao_Impl(
           _result = UserEntity(_tmpUserId,_tmpName,_tmpPassword,_tmpRole,_tmpCreatedDate)
         } else {
           _result = null
+        }
+        _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
+  public override fun getAllUsers(): Flow<List<UserEntity>> {
+    val _sql: String = "SELECT * FROM users"
+    return createFlow(__db, false, arrayOf("users")) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        val _columnIndexOfUserId: Int = getColumnIndexOrThrow(_stmt, "userId")
+        val _columnIndexOfName: Int = getColumnIndexOrThrow(_stmt, "name")
+        val _columnIndexOfPassword: Int = getColumnIndexOrThrow(_stmt, "password")
+        val _columnIndexOfRole: Int = getColumnIndexOrThrow(_stmt, "role")
+        val _columnIndexOfCreatedDate: Int = getColumnIndexOrThrow(_stmt, "createdDate")
+        val _result: MutableList<UserEntity> = mutableListOf()
+        while (_stmt.step()) {
+          val _item: UserEntity
+          val _tmpUserId: Long
+          _tmpUserId = _stmt.getLong(_columnIndexOfUserId)
+          val _tmpName: String
+          _tmpName = _stmt.getText(_columnIndexOfName)
+          val _tmpPassword: String
+          _tmpPassword = _stmt.getText(_columnIndexOfPassword)
+          val _tmpRole: String
+          _tmpRole = _stmt.getText(_columnIndexOfRole)
+          val _tmpCreatedDate: String?
+          if (_stmt.isNull(_columnIndexOfCreatedDate)) {
+            _tmpCreatedDate = null
+          } else {
+            _tmpCreatedDate = _stmt.getText(_columnIndexOfCreatedDate)
+          }
+          _item = UserEntity(_tmpUserId,_tmpName,_tmpPassword,_tmpRole,_tmpCreatedDate)
+          _result.add(_item)
         }
         _result
       } finally {

@@ -38,6 +38,7 @@ sealed class AppScreen(val route: String, val label: String, val icon: ImageVect
 @Composable
 fun MainNavigation(
     userId: Long,
+    userRole: String,
     onLogout: () -> Unit
 ) {
     val navController = rememberNavController()
@@ -52,7 +53,9 @@ fun MainNavigation(
     val currentRoute = navBackStackEntry?.destination?.route
     Scaffold(
         bottomBar = {
-            if (currentRoute != AppScreen.Login.route && currentRoute != "register") {
+            if (currentRoute != AppScreen.Login.route &&
+                currentRoute != "register" &&
+                userRole != "ADMIN") {
                 NavigationBar {
                     val currentDestination = navBackStackEntry?.destination
                     tabs.forEach { screen ->
@@ -78,7 +81,7 @@ fun MainNavigation(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = AppScreen.Home.route,
+            startDestination = if (userRole == "ADMIN") "Admin" else AppScreen.Home.route,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(AppScreen.Home.route) {
@@ -179,7 +182,25 @@ fun MainNavigation(
                     onCancel = { navController.popBackStack() }
                 )
             }
-
+            composable("Admin") {
+                AdminDashboardScreen(
+                    onManageStalls = { },
+                    onManageDishes = { },
+                    onManageUsers = {
+                        println("DEBUG: Navigation triggered")
+                        navController.navigate("userManagement")
+                    },
+                    onLogout = {
+                        onLogout()
+                    }
+                )
+            }
+            composable("userManagement") {
+                println("DEBUG: Arrived at UserManagementScreen")
+                UserManagementScreen(
+                    navController = navController,
+                )
+            }
 
         }
     }
