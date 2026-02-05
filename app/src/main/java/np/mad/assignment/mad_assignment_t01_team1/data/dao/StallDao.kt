@@ -42,11 +42,14 @@ interface StallDao{
     fun getAllCuisines(): Flow<List<String>>
 
     @Update
-    suspend fun updateStall(stall: StallEntity)
+    fun updateStall(stall: StallEntity)
 
     @Delete
     suspend fun deleteStall(stall: StallEntity)
 
     @Query("DELETE FROM stalls WHERE stallId = :stallId")
     suspend fun deleteStallById(stallId: Long)
+
+    @Query("SELECT * FROM stalls")
+    fun getAllStalls(): Flow<List<StallEntity>>
 }
