@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
             }
         }
         enableEdgeToEdge()
-        FirebaseTest.test()
+        //FirebaseTest.test()
         setContent {
             MAD_Assignment_T01_Team1Theme {
                 val context = LocalContext.current
