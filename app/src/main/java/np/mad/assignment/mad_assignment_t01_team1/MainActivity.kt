@@ -60,30 +60,16 @@ class MainActivity : ComponentActivity() {
                         }
                     )
                 } else {
-                    if (userRole == "ADMIN"){
-                        AdminDashboardScreen(
-                            onManageStalls = {  },
-                            onManageDishes = { },
-                            onManageUsers = {  },
-                            onLogout = {
-                                context.getSharedPreferences("auth", Context.MODE_PRIVATE)
-                                    .edit().clear().apply()
-                                loggedInUserId = -1L
-                                userRole = "USER"
-                            }
-                        )
-                    }else {
-                        // If user logged in, Show the Main App.
-                        MainNavigation(
-                            userId = loggedInUserId,
-                            onLogout = {
-                                context.getSharedPreferences("auth", Context.MODE_PRIVATE)
-                                    .edit().clear().apply()
-                                loggedInUserId = -1L
-                                userRole = "USER"
-                            }// LLM
-                        )
-                    }
+                    MainNavigation(
+                        userId = loggedInUserId,
+                        userRole = userRole ?: "USER",
+                        onLogout = {
+                            context.getSharedPreferences("auth", Context.MODE_PRIVATE)
+                                .edit().clear().apply()
+                            loggedInUserId = -1L
+                            userRole = "USER"
+                        }
+                    )
                 }
             }
         }
