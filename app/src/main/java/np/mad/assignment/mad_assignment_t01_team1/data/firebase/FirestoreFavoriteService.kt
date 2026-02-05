@@ -8,7 +8,7 @@ class FirestoreFavoriteService (
     private val refs: UserScopedRefs,
     private val now: ()-> Long = { System.currentTimeMillis() }
 ){
-    private fun col() = refs.favorites(),
+    private fun col() = refs.favorites()
 
     fun putFavorite(
         stallId: String,
