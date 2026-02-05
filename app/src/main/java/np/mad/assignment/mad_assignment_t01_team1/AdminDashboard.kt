@@ -21,6 +21,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+val AdminDarkBlue = Color(0xFF181F4D)
+val AdminLightBlue = Color(0xFFE3F2FD)
+val AdminBlack = Color(0xFF212121)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdminDashboardScreen(
@@ -40,7 +44,6 @@ fun AdminDashboardScreen(
                         onClick = {
                             val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
                             prefs.edit().clear().apply()
-
                             onLogout()
                         }
                     ) {
@@ -65,7 +68,8 @@ fun AdminDashboardScreen(
             Text(
                 text = "Management Overview",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Bold,
+                color = AdminBlack,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
@@ -76,16 +80,15 @@ fun AdminDashboardScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 item {
-                    AdminCard("Stalls", Icons.Filled.Home, Color(0xFFF1F8E9), onManageStalls)
+                    AdminCard("Stalls", Icons.Filled.Home, AdminLightBlue, onManageStalls)
                 }
                 item {
-                    AdminCard("Dishes", Icons.Default.Info, Color(0xFFFFF3E0), onManageDishes)
+                    AdminCard("Dishes", Icons.Default.Info, AdminLightBlue, onManageDishes)
                 }
                 item {
-                    AdminCard("Users", Icons.Default.Person, Color(0xFFF3E5F5), onManageUsers)
+                    AdminCard("Users", Icons.Default.Person, AdminLightBlue, onManageUsers)
                 }
             }
-
         }
     }
 }
@@ -96,19 +99,29 @@ fun AdminCard(title: String, icon: ImageVector, bgColor: Color, onClick: () -> U
         modifier = Modifier
             .fillMaxWidth()
             .height(140.dp)
-            .clickable { println("Card $title clicked!") // Local debug
-                onClick() },
+            .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = bgColor)
+        colors = CardDefaults.cardColors(containerColor = bgColor),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp) // Added slight shadow
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Icon(icon, contentDescription = null, modifier = Modifier.size(40.dp), tint = Color.DarkGray)
+            Icon(
+                icon,
+                contentDescription = null,
+                modifier = Modifier.size(40.dp),
+                tint = AdminDarkBlue
+            )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(
+                text = title,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                color = AdminBlack
+            )
         }
     }
 }
