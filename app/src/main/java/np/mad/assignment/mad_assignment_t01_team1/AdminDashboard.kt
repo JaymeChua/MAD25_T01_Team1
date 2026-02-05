@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 
 val AdminDarkBlue = Color(0xFF181F4D)
 val AdminLightBlue = Color(0xFFE3F2FD)
-val AdminBlack = Color(0xFF212121)
+val AdminBlack = Color(0xFF181F4D)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
