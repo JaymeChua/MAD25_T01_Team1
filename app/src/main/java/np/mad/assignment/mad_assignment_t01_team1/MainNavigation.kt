@@ -199,6 +199,7 @@ fun MainNavigation(
                 println("DEBUG: Arrived at UserManagementScreen")
                 UserManagementScreen(
                     navController = navController,
+                    currentAdminId = userId,
                 )
             }
 
