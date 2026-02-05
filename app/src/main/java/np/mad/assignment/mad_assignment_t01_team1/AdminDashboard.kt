@@ -1,5 +1,7 @@
 package np.mad.assignment.mad_assignment_t01_team1
 
+import android.content.Context
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -13,6 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,13 +29,28 @@ fun AdminDashboardScreen(
     onManageUsers: () -> Unit,
     onLogout: () -> Unit
 ) {
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Admin Panel", fontWeight = FontWeight.Bold) },
                 actions = {
-                    IconButton(onClick = onLogout) {
-                        Icon(Icons.Filled.Lock, contentDescription = "Logout")
+                    TextButton(
+                        onClick = {
+                            val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+                            prefs.edit().clear().apply()
+
+                            onLogout()
+                        }
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.logout),
+                            contentDescription = "Logout Icon",
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text("Logout", color = Color.Red)
                     }
                 }
             )

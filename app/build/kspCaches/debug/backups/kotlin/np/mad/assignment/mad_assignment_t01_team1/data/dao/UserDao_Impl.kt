@@ -206,11 +206,13 @@ public class UserDao_Impl(
     }
   }
 
-  public override fun getAllUsers(): Flow<List<UserEntity>> {
-    val _sql: String = "SELECT * FROM users"
+  public override fun getAllUsersExceptAdmin(currentAdminId: Long): Flow<List<UserEntity>> {
+    val _sql: String = "SELECT * FROM users WHERE userId != ?"
     return createFlow(__db, false, arrayOf("users")) { _connection ->
       val _stmt: SQLiteStatement = _connection.prepare(_sql)
       try {
+        var _argIndex: Int = 1
+        _stmt.bindLong(_argIndex, currentAdminId)
         val _columnIndexOfUserId: Int = getColumnIndexOrThrow(_stmt, "userId")
         val _columnIndexOfName: Int = getColumnIndexOrThrow(_stmt, "name")
         val _columnIndexOfPassword: Int = getColumnIndexOrThrow(_stmt, "password")
