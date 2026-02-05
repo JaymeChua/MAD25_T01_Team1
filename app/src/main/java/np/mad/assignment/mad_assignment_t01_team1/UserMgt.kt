@@ -29,6 +29,8 @@ import np.mad.assignment.mad_assignment_t01_team1.data.entity.UserEntity
 import np.mad.assignment.mad_assignment_t01_team1.util.SecurityUtils
 import java.time.LocalDate
 
+val UserMgmtDarkBlue = Color(0xFF1565C0)
+val UserMgmtLightBlue = Color(0xFFE3F2FD)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserManagementScreen(
@@ -177,7 +179,7 @@ fun UserItem(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            containerColor = UserMgmtLightBlue
         ),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -196,7 +198,7 @@ fun UserItem(
                 Icon(
                     imageVector = Icons.Default.Person,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary
+                    tint = UserMgmtDarkBlue
                 )
             },
             trailingContent = {
