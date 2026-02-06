@@ -187,7 +187,9 @@ fun MainNavigation(
                     onManageStalls = {
                         navController.navigate("stallManagement")
                     },
-                    onManageDishes = { },
+                    onManageDishes = {
+                        navController.navigate("dishManagement")
+                    },
                     onManageUsers = {
                         navController.navigate("userManagement")
                     },
@@ -206,8 +208,9 @@ fun MainNavigation(
             composable("stallManagement"){
                 AdminStallManagementScreen(navController = navController)
             }
-
-
+            composable("dishManagement"){
+                AdminDishManagementScreen(navController = navController)
+            }
         }
     }
 }

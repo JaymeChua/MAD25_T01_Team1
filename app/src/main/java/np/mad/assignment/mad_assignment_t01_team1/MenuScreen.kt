@@ -202,14 +202,23 @@ fun DishCard(dish: DishEntity) {
         modifier = Modifier.fillMaxWidth()
     ) {
         Column {
-            Image(
-                painter = painterResource(id = dish.imageResId),
-                contentDescription = dish.dishName,
-                contentScale = ContentScale.Crop,
+            val imageModel = if (dish.imagePath != null) {
+                File(dish.imagePath)
+            } else {
+                dish.imageResId ?: R.drawable.ic_launcher_foreground
+            }
+
+            AsyncImage(
+                model = imageModel,
+                contentDescription = "Dish Image",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp)
-                    .background(Color.LightGray)
+                    .height(200.dp)
+                    .padding(bottom = 8.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color.Gray),
+                contentScale = ContentScale.Crop,
+                error = painterResource(R.drawable.ic_launcher_foreground)
             )
 
             Column(modifier = Modifier.padding(12.dp)) {

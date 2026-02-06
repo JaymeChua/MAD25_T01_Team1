@@ -64,7 +64,7 @@ public class AppDatabase_Impl : AppDatabase() {
   }
 
   protected override fun createOpenDelegate(): RoomOpenDelegate {
-    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(3, "6219793f1c091d6cbc51aba6a6cfbf4a", "c3fde2a70dc7b83a2873851548a518f9") {
+    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(3, "f16752f2747c3e4c438c9f160b94b829", "70f818e3af523b247eb063c26d37df7d") {
       public override fun createAllTables(connection: SQLiteConnection) {
         connection.execSQL("CREATE TABLE IF NOT EXISTS `canteens` (`canteenId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `stalls` (`stallId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `canteenName` TEXT NOT NULL, `canteenId` INTEGER NOT NULL, `cuisine` TEXT NOT NULL, `description` TEXT NOT NULL, `name` TEXT NOT NULL, `imageResId` INTEGER, `halal` INTEGER NOT NULL, `imagePath` TEXT, FOREIGN KEY(`canteenId`) REFERENCES `canteens`(`canteenId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
@@ -75,10 +75,10 @@ public class AppDatabase_Impl : AppDatabase() {
         connection.execSQL("CREATE TABLE IF NOT EXISTS `users` (`userId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `password` TEXT NOT NULL, `role` TEXT NOT NULL, `createdDate` TEXT DEFAULT CURRENT_TIMESTAMP)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `reviews` (`reviewId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stallId` INTEGER NOT NULL, `userId` INTEGER NOT NULL, `username` TEXT NOT NULL, `review` TEXT NOT NULL, `rating` INTEGER NOT NULL, `date` TEXT NOT NULL, FOREIGN KEY(`stallId`) REFERENCES `stalls`(`stallId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
         connection.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_reviews_userId_stallId` ON `reviews` (`userId`, `stallId`)")
-        connection.execSQL("CREATE TABLE IF NOT EXISTS `dishes` (`dishId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stallId` INTEGER NOT NULL, `dishName` TEXT NOT NULL, `dishPrice` TEXT NOT NULL, `imageResId` INTEGER NOT NULL, FOREIGN KEY(`stallId`) REFERENCES `stalls`(`stallId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+        connection.execSQL("CREATE TABLE IF NOT EXISTS `dishes` (`dishId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stallId` INTEGER NOT NULL, `dishName` TEXT NOT NULL, `dishPrice` TEXT NOT NULL, `imageResId` INTEGER, `imagePath` TEXT, FOREIGN KEY(`stallId`) REFERENCES `stalls`(`stallId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_dishes_stallId` ON `dishes` (`stallId`)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)")
-        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6219793f1c091d6cbc51aba6a6cfbf4a')")
+        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f16752f2747c3e4c438c9f160b94b829')")
       }
 
       public override fun dropAllTables(connection: SQLiteConnection) {
@@ -215,7 +215,8 @@ public class AppDatabase_Impl : AppDatabase() {
         _columnsDishes.put("stallId", TableInfo.Column("stallId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
         _columnsDishes.put("dishName", TableInfo.Column("dishName", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
         _columnsDishes.put("dishPrice", TableInfo.Column("dishPrice", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
-        _columnsDishes.put("imageResId", TableInfo.Column("imageResId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsDishes.put("imageResId", TableInfo.Column("imageResId", "INTEGER", false, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsDishes.put("imagePath", TableInfo.Column("imagePath", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY))
         val _foreignKeysDishes: MutableSet<TableInfo.ForeignKey> = mutableSetOf()
         _foreignKeysDishes.add(TableInfo.ForeignKey("stalls", "CASCADE", "NO ACTION", listOf("stallId"), listOf("stallId")))
         val _indicesDishes: MutableSet<TableInfo.Index> = mutableSetOf()
