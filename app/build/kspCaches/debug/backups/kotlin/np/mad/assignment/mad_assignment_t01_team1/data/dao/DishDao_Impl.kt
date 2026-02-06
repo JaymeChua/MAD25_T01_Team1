@@ -35,14 +35,25 @@ public class DishDao_Impl(
   init {
     this.__db = __db
     this.__insertAdapterOfDishEntity = object : EntityInsertAdapter<DishEntity>() {
-      protected override fun createQuery(): String = "INSERT OR IGNORE INTO `dishes` (`dishId`,`stallId`,`dishName`,`dishPrice`,`imageResId`) VALUES (nullif(?, 0),?,?,?,?)"
+      protected override fun createQuery(): String = "INSERT OR IGNORE INTO `dishes` (`dishId`,`stallId`,`dishName`,`dishPrice`,`imageResId`,`imagePath`) VALUES (nullif(?, 0),?,?,?,?,?)"
 
       protected override fun bind(statement: SQLiteStatement, entity: DishEntity) {
         statement.bindLong(1, entity.dishId)
         statement.bindLong(2, entity.stallId)
         statement.bindText(3, entity.dishName)
         statement.bindText(4, entity.dishPrice)
-        statement.bindLong(5, entity.imageResId.toLong())
+        val _tmpImageResId: Int? = entity.imageResId
+        if (_tmpImageResId == null) {
+          statement.bindNull(5)
+        } else {
+          statement.bindLong(5, _tmpImageResId.toLong())
+        }
+        val _tmpImagePath: String? = entity.imagePath
+        if (_tmpImagePath == null) {
+          statement.bindNull(6)
+        } else {
+          statement.bindText(6, _tmpImagePath)
+        }
       }
     }
     this.__deleteAdapterOfDishEntity = object : EntityDeleteOrUpdateAdapter<DishEntity>() {
@@ -53,15 +64,26 @@ public class DishDao_Impl(
       }
     }
     this.__updateAdapterOfDishEntity = object : EntityDeleteOrUpdateAdapter<DishEntity>() {
-      protected override fun createQuery(): String = "UPDATE OR ABORT `dishes` SET `dishId` = ?,`stallId` = ?,`dishName` = ?,`dishPrice` = ?,`imageResId` = ? WHERE `dishId` = ?"
+      protected override fun createQuery(): String = "UPDATE OR ABORT `dishes` SET `dishId` = ?,`stallId` = ?,`dishName` = ?,`dishPrice` = ?,`imageResId` = ?,`imagePath` = ? WHERE `dishId` = ?"
 
       protected override fun bind(statement: SQLiteStatement, entity: DishEntity) {
         statement.bindLong(1, entity.dishId)
         statement.bindLong(2, entity.stallId)
         statement.bindText(3, entity.dishName)
         statement.bindText(4, entity.dishPrice)
-        statement.bindLong(5, entity.imageResId.toLong())
-        statement.bindLong(6, entity.dishId)
+        val _tmpImageResId: Int? = entity.imageResId
+        if (_tmpImageResId == null) {
+          statement.bindNull(5)
+        } else {
+          statement.bindLong(5, _tmpImageResId.toLong())
+        }
+        val _tmpImagePath: String? = entity.imagePath
+        if (_tmpImagePath == null) {
+          statement.bindNull(6)
+        } else {
+          statement.bindText(6, _tmpImagePath)
+        }
+        statement.bindLong(7, entity.dishId)
       }
     }
   }
@@ -101,6 +123,7 @@ public class DishDao_Impl(
         val _columnIndexOfDishName: Int = getColumnIndexOrThrow(_stmt, "dishName")
         val _columnIndexOfDishPrice: Int = getColumnIndexOrThrow(_stmt, "dishPrice")
         val _columnIndexOfImageResId: Int = getColumnIndexOrThrow(_stmt, "imageResId")
+        val _columnIndexOfImagePath: Int = getColumnIndexOrThrow(_stmt, "imagePath")
         val _result: MutableList<DishEntity> = mutableListOf()
         while (_stmt.step()) {
           val _item: DishEntity
@@ -112,9 +135,63 @@ public class DishDao_Impl(
           _tmpDishName = _stmt.getText(_columnIndexOfDishName)
           val _tmpDishPrice: String
           _tmpDishPrice = _stmt.getText(_columnIndexOfDishPrice)
-          val _tmpImageResId: Int
-          _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
-          _item = DishEntity(_tmpDishId,_tmpStallId,_tmpDishName,_tmpDishPrice,_tmpImageResId)
+          val _tmpImageResId: Int?
+          if (_stmt.isNull(_columnIndexOfImageResId)) {
+            _tmpImageResId = null
+          } else {
+            _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          }
+          val _tmpImagePath: String?
+          if (_stmt.isNull(_columnIndexOfImagePath)) {
+            _tmpImagePath = null
+          } else {
+            _tmpImagePath = _stmt.getText(_columnIndexOfImagePath)
+          }
+          _item = DishEntity(_tmpDishId,_tmpStallId,_tmpDishName,_tmpDishPrice,_tmpImageResId,_tmpImagePath)
+          _result.add(_item)
+        }
+        _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
+  public override fun getAllDishes(): Flow<List<DishEntity>> {
+    val _sql: String = "SELECT * FROM dishes"
+    return createFlow(__db, false, arrayOf("dishes")) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        val _columnIndexOfDishId: Int = getColumnIndexOrThrow(_stmt, "dishId")
+        val _columnIndexOfStallId: Int = getColumnIndexOrThrow(_stmt, "stallId")
+        val _columnIndexOfDishName: Int = getColumnIndexOrThrow(_stmt, "dishName")
+        val _columnIndexOfDishPrice: Int = getColumnIndexOrThrow(_stmt, "dishPrice")
+        val _columnIndexOfImageResId: Int = getColumnIndexOrThrow(_stmt, "imageResId")
+        val _columnIndexOfImagePath: Int = getColumnIndexOrThrow(_stmt, "imagePath")
+        val _result: MutableList<DishEntity> = mutableListOf()
+        while (_stmt.step()) {
+          val _item: DishEntity
+          val _tmpDishId: Long
+          _tmpDishId = _stmt.getLong(_columnIndexOfDishId)
+          val _tmpStallId: Long
+          _tmpStallId = _stmt.getLong(_columnIndexOfStallId)
+          val _tmpDishName: String
+          _tmpDishName = _stmt.getText(_columnIndexOfDishName)
+          val _tmpDishPrice: String
+          _tmpDishPrice = _stmt.getText(_columnIndexOfDishPrice)
+          val _tmpImageResId: Int?
+          if (_stmt.isNull(_columnIndexOfImageResId)) {
+            _tmpImageResId = null
+          } else {
+            _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          }
+          val _tmpImagePath: String?
+          if (_stmt.isNull(_columnIndexOfImagePath)) {
+            _tmpImagePath = null
+          } else {
+            _tmpImagePath = _stmt.getText(_columnIndexOfImagePath)
+          }
+          _item = DishEntity(_tmpDishId,_tmpStallId,_tmpDishName,_tmpDishPrice,_tmpImageResId,_tmpImagePath)
           _result.add(_item)
         }
         _result

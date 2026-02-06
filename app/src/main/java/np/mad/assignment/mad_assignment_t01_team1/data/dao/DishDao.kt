@@ -9,6 +9,8 @@ import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.DishEntity
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.ReviewEntity
+import np.mad.assignment.mad_assignment_t01_team1.data.entity.StallEntity
+
 @Dao
 interface DishDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -31,4 +33,7 @@ interface DishDao {
 
     @Query("DELETE FROM dishes WHERE dishId = :dishId")
     suspend fun deleteDishById(dishId: Long)
+
+    @Query("SELECT * FROM dishes")
+    fun getAllDishes(): Flow<List<DishEntity>>
 }
