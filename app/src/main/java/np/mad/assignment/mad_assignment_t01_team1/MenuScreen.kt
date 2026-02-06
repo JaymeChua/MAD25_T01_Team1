@@ -29,15 +29,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import np.mad.assignment.mad_assignment_t01_team1.data.db.AppDatabase
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.DishEntity
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.ReviewEntity
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.StallEntity
-
-
-
-
-
+import java.io.File
 
 
 @Composable
@@ -72,13 +69,23 @@ fun MenuScreen(
     ) {
         item(span = { GridItemSpan(2) }) {
             Box {
-                Image(
-                    painter = painterResource(id = stall?.imageResId ?: R.drawable.ayampenyat),
-                    contentDescription = "Stall Header",
-                    contentScale = ContentScale.Crop,
+                val imageModel = if (stall?.imagePath != null) {
+                    File(stall?.imagePath)
+                } else {
+                    stall?.imageResId ?: R.drawable.ic_launcher_foreground
+                }
+
+                AsyncImage(
+                    model = imageModel,
+                    contentDescription = "Stall Image",
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(250.dp)
+                        .height(200.dp)
+                        .padding(bottom = 8.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.Gray), // Add background for loading state
+                    contentScale = ContentScale.Crop,
+                    error = painterResource(R.drawable.ic_launcher_foreground)
                 )
                 //Back Button to Stall Page
                 SmallFloatingActionButton(
