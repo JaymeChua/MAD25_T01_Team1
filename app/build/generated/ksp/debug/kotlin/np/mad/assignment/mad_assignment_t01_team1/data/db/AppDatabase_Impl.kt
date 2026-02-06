@@ -64,10 +64,10 @@ public class AppDatabase_Impl : AppDatabase() {
   }
 
   protected override fun createOpenDelegate(): RoomOpenDelegate {
-    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(3, "02625e0cd4ef7102cb102ad712d25b87", "7478157d68e3148cdfebb3f2e24ac6e5") {
+    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(3, "6219793f1c091d6cbc51aba6a6cfbf4a", "c3fde2a70dc7b83a2873851548a518f9") {
       public override fun createAllTables(connection: SQLiteConnection) {
         connection.execSQL("CREATE TABLE IF NOT EXISTS `canteens` (`canteenId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)")
-        connection.execSQL("CREATE TABLE IF NOT EXISTS `stalls` (`stallId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `canteenName` TEXT NOT NULL, `canteenId` INTEGER NOT NULL, `cuisine` TEXT NOT NULL, `description` TEXT NOT NULL, `name` TEXT NOT NULL, `imageResId` INTEGER NOT NULL, `halal` INTEGER NOT NULL, FOREIGN KEY(`canteenId`) REFERENCES `canteens`(`canteenId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
+        connection.execSQL("CREATE TABLE IF NOT EXISTS `stalls` (`stallId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `canteenName` TEXT NOT NULL, `canteenId` INTEGER NOT NULL, `cuisine` TEXT NOT NULL, `description` TEXT NOT NULL, `name` TEXT NOT NULL, `imageResId` INTEGER, `halal` INTEGER NOT NULL, `imagePath` TEXT, FOREIGN KEY(`canteenId`) REFERENCES `canteens`(`canteenId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_stalls_canteenId` ON `stalls` (`canteenId`)")
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_stalls_name` ON `stalls` (`name`)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `favorites` (`favoriteId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `userId` INTEGER NOT NULL, `stallId` INTEGER NOT NULL, FOREIGN KEY(`userId`) REFERENCES `users`(`userId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`stallId`) REFERENCES `stalls`(`stallId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
@@ -78,7 +78,7 @@ public class AppDatabase_Impl : AppDatabase() {
         connection.execSQL("CREATE TABLE IF NOT EXISTS `dishes` (`dishId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `stallId` INTEGER NOT NULL, `dishName` TEXT NOT NULL, `dishPrice` TEXT NOT NULL, `imageResId` INTEGER NOT NULL, FOREIGN KEY(`stallId`) REFERENCES `stalls`(`stallId`) ON UPDATE NO ACTION ON DELETE CASCADE )")
         connection.execSQL("CREATE INDEX IF NOT EXISTS `index_dishes_stallId` ON `dishes` (`stallId`)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)")
-        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '02625e0cd4ef7102cb102ad712d25b87')")
+        connection.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6219793f1c091d6cbc51aba6a6cfbf4a')")
       }
 
       public override fun dropAllTables(connection: SQLiteConnection) {
@@ -129,8 +129,9 @@ public class AppDatabase_Impl : AppDatabase() {
         _columnsStalls.put("cuisine", TableInfo.Column("cuisine", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
         _columnsStalls.put("description", TableInfo.Column("description", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
         _columnsStalls.put("name", TableInfo.Column("name", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
-        _columnsStalls.put("imageResId", TableInfo.Column("imageResId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsStalls.put("imageResId", TableInfo.Column("imageResId", "INTEGER", false, 0, null, TableInfo.CREATED_FROM_ENTITY))
         _columnsStalls.put("halal", TableInfo.Column("halal", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY))
+        _columnsStalls.put("imagePath", TableInfo.Column("imagePath", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY))
         val _foreignKeysStalls: MutableSet<TableInfo.ForeignKey> = mutableSetOf()
         _foreignKeysStalls.add(TableInfo.ForeignKey("canteens", "CASCADE", "NO ACTION", listOf("canteenId"), listOf("canteenId")))
         val _indicesStalls: MutableSet<TableInfo.Index> = mutableSetOf()

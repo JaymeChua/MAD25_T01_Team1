@@ -21,9 +21,11 @@
     import androidx.compose.ui.text.font.FontWeight
     import androidx.compose.ui.unit.dp
     import androidx.compose.ui.unit.sp
+    import coil.compose.AsyncImage
     import np.mad.assignment.mad_assignment_t01_team1.data.db.AppDatabase // Check your imports
     import np.mad.assignment.mad_assignment_t01_team1.data.entity.CanteenEntity
     import np.mad.assignment.mad_assignment_t01_team1.data.entity.StallEntity
+    import java.io.File
 
     // Colors from your design
     val HeaderBlue = Color(0xFF0F3460)
@@ -158,11 +160,23 @@
                 colors = CardDefaults.cardColors(containerColor = CardOrange),
                 modifier = Modifier.size(100.dp)
             ) {
-                Image(
-                    painter = painterResource(id = stall.imageResId), // Loads ID from DB
-                    contentDescription = stall.name,
+                val imageModel = if (stall.imagePath != null) {
+                    File(stall.imagePath)
+                } else {
+                    stall.imageResId ?: R.drawable.ic_launcher_foreground
+                }
+
+                AsyncImage(
+                    model = imageModel,
+                    contentDescription = "Stall Image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .padding(bottom = 8.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.Gray),
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
+                    error = painterResource(R.drawable.ic_launcher_foreground)
                 )
             }
             Spacer(modifier = Modifier.height(4.dp))

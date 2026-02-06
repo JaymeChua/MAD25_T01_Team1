@@ -1,11 +1,18 @@
 package np.mad.assignment.mad_assignment_t01_team1
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -21,11 +28,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import np.mad.assignment.mad_assignment_t01_team1.data.db.AppDatabase
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.CanteenEntity
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.StallEntity
+import java.io.File
 
 val AdminPrimary = Color(0xFF181F4D)
 val AdminBackground = Color(0xFFE3F2FD)
@@ -134,14 +143,21 @@ fun AdminStallItem(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = stall.imageResId),
+            val imageModel = if (stall.imagePath != null) {
+                File(stall.imagePath)
+            } else {
+                stall.imageResId ?: R.drawable.ic_launcher_foreground
+            }
+
+            AsyncImage(
+                model = imageModel,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(70.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(Color.Gray)
+                    .background(Color.Gray),
+                error = painterResource(R.drawable.ic_launcher_foreground)
             )
 
             Spacer(modifier = Modifier.width(16.dp))
@@ -176,7 +192,6 @@ fun AdminStallItem(
         }
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StallDialog(
@@ -185,61 +200,77 @@ fun StallDialog(
     onDismiss: () -> Unit,
     onConfirm: (StallEntity) -> Unit
 ) {
+    val context = LocalContext.current
     var name by remember { mutableStateOf(stallToEdit?.name ?: "") }
     var cuisine by remember { mutableStateOf(stallToEdit?.cuisine ?: "") }
     var description by remember { mutableStateOf(stallToEdit?.description ?: "") }
+
+    var currentImagePath by remember { mutableStateOf(stallToEdit?.imagePath) }
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+
     var canteenName by remember {
         mutableStateOf(
             if (stallToEdit != null) {
                 availableCanteens.find { it.canteenId == stallToEdit.canteenId }?.name ?: ""
-            } else {
-                ""
-            }
+            } else ""
         )
     }
-    val availableImages = mapOf(
-        "Standard Food" to R.drawable.ic_launcher_background,
-        "Fast Food" to R.drawable.ic_launcher_foreground,
-    )
+    var expandedCanteen by remember { mutableStateOf(false) }
 
-    var selectedImageId by remember {
-        mutableStateOf(stallToEdit?.imageResId ?: availableImages.values.first())
+    val photoPickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia())
+    { uri ->
+        uri?.let {
+            selectedImageUri = it
+        }
     }
 
-    var expandedCanteen by remember { mutableStateOf(false) }
-    var expandedImage by remember { mutableStateOf(false) }
-
-    val canteens = listOf("Makan Place", "Food Club", "Munch")
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = {
-            Text(
-                text = if (stallToEdit == null) "Add New Stall" else "Edit Stall",
-                fontWeight = FontWeight.Bold,
-                color = AdminPrimary
-            )
-        },
+        title = { Text(if (stallToEdit == null) "Add New Stall" else "Edit Stall") },
         text = {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
+                modifier = Modifier.verticalScroll(rememberScrollState()), // Make scrollable
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                OutlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
-                    label = { Text("Stall Name") },
-                    modifier = Modifier.fillMaxWidth()
-                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Color.LightGray)
+                        .clickable {
+                            photoPickerLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedImageUri != null) {
+                        AsyncImage(
+                            model = selectedImageUri,
+                            contentDescription = "Selected Image",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else if (currentImagePath != null) {
+                        AsyncImage(
+                            model = File(currentImagePath!!),
+                            contentDescription = "Saved Image",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    } else {
+                        // Show placeholder
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(Icons.Default.Add, contentDescription = null, tint = Color.Gray)
+                            Text("Tap to upload image", color = Color.Gray)
+                        }
+                    }
+                }
 
-                OutlinedTextField(
-                    value = cuisine,
-                    onValueChange = { cuisine = it },
-                    label = { Text("Cuisine (e.g. Western)") },
-                    modifier = Modifier.fillMaxWidth()
-                )
+                OutlinedTextField(value = name, onValueChange = { name = it }, label = { Text("Name") })
+                OutlinedTextField(value = cuisine, onValueChange = { cuisine = it }, label = { Text("Cuisine") })
 
                 ExposedDropdownMenuBox(
                     expanded = expandedCanteen,
@@ -257,11 +288,11 @@ fun StallDialog(
                         expanded = expandedCanteen,
                         onDismissRequest = { expandedCanteen = false }
                     ) {
-                        canteens.forEach { item ->
+                        availableCanteens.forEach { item ->
                             DropdownMenuItem(
-                                text = { Text(item) },
+                                text = { Text(item.name) },
                                 onClick = {
-                                    canteenName = item
+                                    canteenName = item.name
                                     expandedCanteen = false
                                 }
                             )
@@ -269,84 +300,51 @@ fun StallDialog(
                     }
                 }
 
-                // Image Selector Dropdown (Crucial for ResId)
-                ExposedDropdownMenuBox(
-                    expanded = expandedImage,
-                    onExpandedChange = { expandedImage = !expandedImage }
-                ) {
-                    // Find the name key for the current selected ID
-                    val selectedName = availableImages.entries.find { it.value == selectedImageId }?.key ?: "Select Image"
-
-                    OutlinedTextField(
-                        value = selectedName,
-                        onValueChange = {},
-                        readOnly = true,
-                        label = { Text("Stall Image") },
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedImage) },
-                        modifier = Modifier.menuAnchor().fillMaxWidth()
-                    )
-                    ExposedDropdownMenu(
-                        expanded = expandedImage,
-                        onDismissRequest = { expandedImage = false }
-                    ) {
-                        availableImages.forEach { (imgName, resId) ->
-                            DropdownMenuItem(
-                                text = {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Image(
-                                            painter = painterResource(id = resId),
-                                            contentDescription = null,
-                                            modifier = Modifier.size(24.dp)
-                                        )
-                                        Spacer(modifier = Modifier.width(8.dp))
-                                        Text(imgName)
-                                    }
-                                },
-                                onClick = {
-                                    selectedImageId = resId
-                                    expandedImage = false
-                                }
-                            )
-                        }
-                    }
-                }
-
-                OutlinedTextField(
-                    value = description,
-                    onValueChange = { description = it },
-                    label = { Text("Description") },
-                    modifier = Modifier.fillMaxWidth(),
-                    maxLines = 3
-                )
+                OutlinedTextField(value = description, onValueChange = { description = it }, label = { Text("Description") })
             }
         },
         confirmButton = {
-            Button(
-                colors = ButtonDefaults.buttonColors(containerColor = AdminPrimary),
-                onClick = {
-                    if (name.isNotBlank() && cuisine.isNotBlank()) {
-                        val matchedCanteen = availableCanteens.find { it.name == canteenName }
-                        val matchedId = matchedCanteen?.canteenId ?: 0L
-                        val newStall = StallEntity(
-                            stallId = stallToEdit?.stallId ?: 0,
-                            name = name,
-                            cuisine = cuisine,
-                            description = description,
-                            imageResId = selectedImageId,
-                            canteenName = canteenName,
-                            canteenId = matchedId,
-                        )
-                        onConfirm(newStall)
+            Button(onClick = {
+                if (name.isNotBlank()) {
+                    var finalPath = currentImagePath
+
+                    if (selectedImageUri != null) {
+                        finalPath = saveImageToInternalStorage(context, selectedImageUri!!)
                     }
+
+                    val matchedCanteen = availableCanteens.find { it.name == canteenName }
+
+                    val newStall = StallEntity(
+                        stallId = stallToEdit?.stallId ?: 0,
+                        name = name,
+                        cuisine = cuisine,
+                        description = description,
+                        imagePath = finalPath,
+                        imageResId = null,
+                        canteenName = canteenName,
+                        canteenId = matchedCanteen?.canteenId ?: 0L,
+                    )
+                    onConfirm(newStall)
                 }
-            ) {
-                Text("Save")
-            }
+            }) { Text("Save") }
         },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel", color = AdminPrimary)
+        dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } }
+    )
+}
+
+fun saveImageToInternalStorage(context: android.content.Context, uri: Uri): String? {
+    return try {
+        val fileName = "stall_${System.currentTimeMillis()}.jpg"
+        val file = File(context.filesDir, fileName)
+
+        context.contentResolver.openInputStream(uri)?.use { input ->
+            file.outputStream().use { output ->
+                input.copyTo(output)
             }
         }
-    )
+        file.absolutePath
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
 }
