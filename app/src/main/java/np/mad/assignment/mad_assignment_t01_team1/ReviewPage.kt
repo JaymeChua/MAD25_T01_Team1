@@ -35,9 +35,12 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.draw.clip
+import coil.compose.AsyncImage
 import kotlinx.coroutines.withContext
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.StallEntity
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.UserEntity
+import java.io.File
 
 @Composable
 fun ReviewPage(
@@ -86,11 +89,23 @@ fun ReviewPage(
                     contentAlignment = Alignment.Center
                 ) {
                     stall?.let { stallEntity ->
-                        Image(
-                            painter = painterResource(stallEntity.imageResId),
-                            contentDescription = stallEntity.name,
+                        val imageModel = if (stallEntity.imagePath != null) {
+                            File(stallEntity.imagePath)
+                        } else {
+                            stallEntity.imageResId ?: R.drawable.ic_launcher_foreground
+                        }
+
+                        AsyncImage(
+                            model = imageModel,
+                            contentDescription = "Stall Image",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp)
+                                .padding(bottom = 8.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(Color.Gray), // Add background for loading state
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
+                            error = painterResource(R.drawable.ic_launcher_foreground)
                         )
                     }
                 }

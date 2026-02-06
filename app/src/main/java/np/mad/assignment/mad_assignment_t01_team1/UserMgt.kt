@@ -31,6 +31,7 @@ import java.time.LocalDate
 
 val UserMgmtDarkBlue = Color(0xFF1565C0)
 val UserMgmtLightBlue = Color(0xFFE3F2FD)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserManagementScreen(

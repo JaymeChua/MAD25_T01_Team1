@@ -11,6 +11,9 @@ MERGED from [androidx.navigationevent:navigationevent-android:1.0.0] C:\Users\lu
 MERGED from [androidx.navigationevent:navigationevent-compose-android:1.0.0] C:\Users\lucas\.gradle\caches\8.13\transforms\e76a6a42fb385bd59c077fadb7a9bca5\transformed\navigationevent-compose\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.compose.material3:material3-adaptive-navigation-suite-android:1.3.0] C:\Users\lucas\.gradle\caches\8.13\transforms\f1787e4c41b95645f3251b9a473cf45a\transformed\material3-adaptive-navigation-suite-release\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.compose.material3:material3-android:1.3.0] C:\Users\lucas\.gradle\caches\8.13\transforms\f8f422b143fa5a73d365e53e0b0bd7dc\transformed\material3-release\AndroidManifest.xml:17:1-22:12
+MERGED from [io.coil-kt:coil-compose:2.5.0] C:\Users\lucas\.gradle\caches\8.13\transforms\b07750a344993d6b6c4193548c063733\transformed\coil-compose-2.5.0\AndroidManifest.xml:2:1-7:12
+MERGED from [io.coil-kt:coil-compose-base:2.5.0] C:\Users\lucas\.gradle\caches\8.13\transforms\64e3751f83eb9f84f5702bdffb01126e\transformed\coil-compose-base-2.5.0\AndroidManifest.xml:2:1-7:12
+MERGED from [com.google.accompanist:accompanist-drawablepainter:0.32.0] C:\Users\lucas\.gradle\caches\8.13\transforms\b9554a4153590575f81b18bcdbb54500\transformed\accompanist-drawablepainter-0.32.0\AndroidManifest.xml:17:1-23:12
 MERGED from [androidx.compose.material3.adaptive:adaptive-android:1.0.0] C:\Users\lucas\.gradle\caches\8.13\transforms\6813763e3cabf853b19e88d277250966\transformed\adaptive-release\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.compose.material:material-android:1.7.0] C:\Users\lucas\.gradle\caches\8.13\transforms\153c75802eb4775664fb0c4622517c8b\transformed\material-release\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.compose.material:material-ripple-android:1.7.0] C:\Users\lucas\.gradle\caches\8.13\transforms\698dad1e4225785cca25ce7fc3285200\transformed\material-ripple-release\AndroidManifest.xml:2:1-7:12
@@ -26,7 +29,12 @@ MERGED from [androidx.compose.ui:ui-unit-android:1.9.5] C:\Users\lucas\.gradle\c
 MERGED from [androidx.compose.ui:ui-tooling-preview-android:1.9.5] C:\Users\lucas\.gradle\caches\8.13\transforms\a04348d05a51691510336d466058ce17\transformed\ui-tooling-preview\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.compose.ui:ui-tooling-android:1.9.5] C:\Users\lucas\.gradle\caches\8.13\transforms\d77a70621403825d5882f7cf72b24de7\transformed\ui-tooling\AndroidManifest.xml:17:1-28:12
 MERGED from [androidx.graphics:graphics-path:1.0.1] C:\Users\lucas\.gradle\caches\8.13\transforms\ea91564e46c580b2f30c2859b22a204e\transformed\graphics-path-1.0.1\AndroidManifest.xml:2:1-7:12
+MERGED from [io.coil-kt:coil:2.5.0] C:\Users\lucas\.gradle\caches\8.13\transforms\3b8dfcef42ad2269d17aab29e3f6192c\transformed\coil-2.5.0\AndroidManifest.xml:2:1-7:12
+MERGED from [io.coil-kt:coil-base:2.5.0] C:\Users\lucas\.gradle\caches\8.13\transforms\89f5c9725fe1aee9b56ced0765038584\transformed\coil-base-2.5.0\AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\lucas\.gradle\caches\8.13\transforms\8d26841df898f5cdbb5bd51deffdcceb\transformed\appcompat-resources-1.6.1\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.autofill:autofill:1.0.0] C:\Users\lucas\.gradle\caches\8.13\transforms\9701acb7168d70634ae931975ba856ab\transformed\autofill-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\lucas\.gradle\caches\8.13\transforms\d2649bd425ac3f9ce3fb87ba39f92cf9\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\lucas\.gradle\caches\8.13\transforms\325ee76295805c5b097a779eb2466b7e\transformed\vectordrawable-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.emoji2:emoji2:1.4.0] C:\Users\lucas\.gradle\caches\8.13\transforms\67720adf27faa1d21662f99b2291e7e8\transformed\emoji2-1.4.0\AndroidManifest.xml:17:1-35:12
 MERGED from [androidx.window:window-core-android:1.3.0] C:\Users\lucas\.gradle\caches\8.13\transforms\b3be32f17b6cbb7d45f6dcb4734d870e\transformed\window-core-release\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.window:window:1.3.0] C:\Users\lucas\.gradle\caches\8.13\transforms\6976bc6621ab073319f86e7ca3fc4897\transformed\window-1.3.0\AndroidManifest.xml:17:1-31:12
@@ -72,6 +80,7 @@ MERGED from [androidx.tracing:tracing:1.2.0] C:\Users\lucas\.gradle\caches\8.13\
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\lucas\.gradle\caches\8.13\transforms\0d233a56d031a4e9888dfab423bffd2c\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
 MERGED from [androidx.sqlite:sqlite-framework-android:2.6.2] C:\Users\lucas\.gradle\caches\8.13\transforms\2319ed8a52bfba2fd3e8613ef28a9d59\transformed\sqlite-framework\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.sqlite:sqlite-android:2.6.2] C:\Users\lucas\.gradle\caches\8.13\transforms\b3cec21d1e12436da88bf59c1a00129b\transformed\sqlite\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.exifinterface:exifinterface:1.3.6] C:\Users\lucas\.gradle\caches\8.13\transforms\38ec883f2503263603eae75ed34d1dda\transformed\exifinterface-1.3.6\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.window.extensions.core:core:1.0.0] C:\Users\lucas\.gradle\caches\8.13\transforms\70296306e3aac55ee9b78907dc5fd0ab\transformed\core-1.0.0\AndroidManifest.xml:2:1-7:12
 	package
 		INJECTED from C:\Users\lucas\StudioProjects\MAD25_T01_Team1\app\src\main\AndroidManifest.xml
@@ -182,6 +191,12 @@ MERGED from [androidx.compose.material3:material3-adaptive-navigation-suite-andr
 MERGED from [androidx.compose.material3:material3-adaptive-navigation-suite-android:1.3.0] C:\Users\lucas\.gradle\caches\8.13\transforms\f1787e4c41b95645f3251b9a473cf45a\transformed\material3-adaptive-navigation-suite-release\AndroidManifest.xml:5:5-44
 MERGED from [androidx.compose.material3:material3-android:1.3.0] C:\Users\lucas\.gradle\caches\8.13\transforms\f8f422b143fa5a73d365e53e0b0bd7dc\transformed\material3-release\AndroidManifest.xml:20:5-44
 MERGED from [androidx.compose.material3:material3-android:1.3.0] C:\Users\lucas\.gradle\caches\8.13\transforms\f8f422b143fa5a73d365e53e0b0bd7dc\transformed\material3-release\AndroidManifest.xml:20:5-44
+MERGED from [io.coil-kt:coil-compose:2.5.0] C:\Users\lucas\.gradle\caches\8.13\transforms\b07750a344993d6b6c4193548c063733\transformed\coil-compose-2.5.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-compose:2.5.0] C:\Users\lucas\.gradle\caches\8.13\transforms\b07750a344993d6b6c4193548c063733\transformed\coil-compose-2.5.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-compose-base:2.5.0] C:\Users\lucas\.gradle\caches\8.13\transforms\64e3751f83eb9f84f5702bdffb01126e\transformed\coil-compose-base-2.5.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-compose-base:2.5.0] C:\Users\lucas\.gradle\caches\8.13\transforms\64e3751f83eb9f84f5702bdffb01126e\transformed\coil-compose-base-2.5.0\AndroidManifest.xml:5:5-44
+MERGED from [com.google.accompanist:accompanist-drawablepainter:0.32.0] C:\Users\lucas\.gradle\caches\8.13\transforms\b9554a4153590575f81b18bcdbb54500\transformed\accompanist-drawablepainter-0.32.0\AndroidManifest.xml:21:5-44
+MERGED from [com.google.accompanist:accompanist-drawablepainter:0.32.0] C:\Users\lucas\.gradle\caches\8.13\transforms\b9554a4153590575f81b18bcdbb54500\transformed\accompanist-drawablepainter-0.32.0\AndroidManifest.xml:21:5-44
 MERGED from [androidx.compose.material3.adaptive:adaptive-android:1.0.0] C:\Users\lucas\.gradle\caches\8.13\transforms\6813763e3cabf853b19e88d277250966\transformed\adaptive-release\AndroidManifest.xml:20:5-44
 MERGED from [androidx.compose.material3.adaptive:adaptive-android:1.0.0] C:\Users\lucas\.gradle\caches\8.13\transforms\6813763e3cabf853b19e88d277250966\transformed\adaptive-release\AndroidManifest.xml:20:5-44
 MERGED from [androidx.compose.material:material-android:1.7.0] C:\Users\lucas\.gradle\caches\8.13\transforms\153c75802eb4775664fb0c4622517c8b\transformed\material-release\AndroidManifest.xml:5:5-44
@@ -212,8 +227,18 @@ MERGED from [androidx.compose.ui:ui-tooling-android:1.9.5] C:\Users\lucas\.gradl
 MERGED from [androidx.compose.ui:ui-tooling-android:1.9.5] C:\Users\lucas\.gradle\caches\8.13\transforms\d77a70621403825d5882f7cf72b24de7\transformed\ui-tooling\AndroidManifest.xml:20:5-44
 MERGED from [androidx.graphics:graphics-path:1.0.1] C:\Users\lucas\.gradle\caches\8.13\transforms\ea91564e46c580b2f30c2859b22a204e\transformed\graphics-path-1.0.1\AndroidManifest.xml:5:5-44
 MERGED from [androidx.graphics:graphics-path:1.0.1] C:\Users\lucas\.gradle\caches\8.13\transforms\ea91564e46c580b2f30c2859b22a204e\transformed\graphics-path-1.0.1\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil:2.5.0] C:\Users\lucas\.gradle\caches\8.13\transforms\3b8dfcef42ad2269d17aab29e3f6192c\transformed\coil-2.5.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil:2.5.0] C:\Users\lucas\.gradle\caches\8.13\transforms\3b8dfcef42ad2269d17aab29e3f6192c\transformed\coil-2.5.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-base:2.5.0] C:\Users\lucas\.gradle\caches\8.13\transforms\89f5c9725fe1aee9b56ced0765038584\transformed\coil-base-2.5.0\AndroidManifest.xml:5:5-44
+MERGED from [io.coil-kt:coil-base:2.5.0] C:\Users\lucas\.gradle\caches\8.13\transforms\89f5c9725fe1aee9b56ced0765038584\transformed\coil-base-2.5.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\lucas\.gradle\caches\8.13\transforms\8d26841df898f5cdbb5bd51deffdcceb\transformed\appcompat-resources-1.6.1\AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] C:\Users\lucas\.gradle\caches\8.13\transforms\8d26841df898f5cdbb5bd51deffdcceb\transformed\appcompat-resources-1.6.1\AndroidManifest.xml:20:5-44
 MERGED from [androidx.autofill:autofill:1.0.0] C:\Users\lucas\.gradle\caches\8.13\transforms\9701acb7168d70634ae931975ba856ab\transformed\autofill-1.0.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.autofill:autofill:1.0.0] C:\Users\lucas\.gradle\caches\8.13\transforms\9701acb7168d70634ae931975ba856ab\transformed\autofill-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\lucas\.gradle\caches\8.13\transforms\d2649bd425ac3f9ce3fb87ba39f92cf9\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] C:\Users\lucas\.gradle\caches\8.13\transforms\d2649bd425ac3f9ce3fb87ba39f92cf9\transformed\vectordrawable-animated-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\lucas\.gradle\caches\8.13\transforms\325ee76295805c5b097a779eb2466b7e\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] C:\Users\lucas\.gradle\caches\8.13\transforms\325ee76295805c5b097a779eb2466b7e\transformed\vectordrawable-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.emoji2:emoji2:1.4.0] C:\Users\lucas\.gradle\caches\8.13\transforms\67720adf27faa1d21662f99b2291e7e8\transformed\emoji2-1.4.0\AndroidManifest.xml:21:5-44
 MERGED from [androidx.emoji2:emoji2:1.4.0] C:\Users\lucas\.gradle\caches\8.13\transforms\67720adf27faa1d21662f99b2291e7e8\transformed\emoji2-1.4.0\AndroidManifest.xml:21:5-44
 MERGED from [androidx.window:window-core-android:1.3.0] C:\Users\lucas\.gradle\caches\8.13\transforms\b3be32f17b6cbb7d45f6dcb4734d870e\transformed\window-core-release\AndroidManifest.xml:5:5-44
@@ -304,6 +329,8 @@ MERGED from [androidx.sqlite:sqlite-framework-android:2.6.2] C:\Users\lucas\.gra
 MERGED from [androidx.sqlite:sqlite-framework-android:2.6.2] C:\Users\lucas\.gradle\caches\8.13\transforms\2319ed8a52bfba2fd3e8613ef28a9d59\transformed\sqlite-framework\AndroidManifest.xml:20:5-44
 MERGED from [androidx.sqlite:sqlite-android:2.6.2] C:\Users\lucas\.gradle\caches\8.13\transforms\b3cec21d1e12436da88bf59c1a00129b\transformed\sqlite\AndroidManifest.xml:20:5-44
 MERGED from [androidx.sqlite:sqlite-android:2.6.2] C:\Users\lucas\.gradle\caches\8.13\transforms\b3cec21d1e12436da88bf59c1a00129b\transformed\sqlite\AndroidManifest.xml:20:5-44
+MERGED from [androidx.exifinterface:exifinterface:1.3.6] C:\Users\lucas\.gradle\caches\8.13\transforms\38ec883f2503263603eae75ed34d1dda\transformed\exifinterface-1.3.6\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.3.6] C:\Users\lucas\.gradle\caches\8.13\transforms\38ec883f2503263603eae75ed34d1dda\transformed\exifinterface-1.3.6\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.window.extensions.core:core:1.0.0] C:\Users\lucas\.gradle\caches\8.13\transforms\70296306e3aac55ee9b78907dc5fd0ab\transformed\core-1.0.0\AndroidManifest.xml:5:5-44
 MERGED from [androidx.window.extensions.core:core:1.0.0] C:\Users\lucas\.gradle\caches\8.13\transforms\70296306e3aac55ee9b78907dc5fd0ab\transformed\core-1.0.0\AndroidManifest.xml:5:5-44
 	android:targetSdkVersion

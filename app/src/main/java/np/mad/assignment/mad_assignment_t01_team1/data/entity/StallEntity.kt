@@ -24,6 +24,7 @@ data class StallEntity(
     val cuisine: String,
     val description: String,
     val name: String,
-    val imageResId: Int,
-    val halal: Boolean = false
+    val imageResId: Int? = null,
+    val halal: Boolean = false,
+    val imagePath: String? = null
 )

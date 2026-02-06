@@ -1,6 +1,7 @@
 package np.mad.assignment.mad_assignment_t01_team1
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,11 +25,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import kotlinx.coroutines.launch
 import np.mad.assignment.mad_assignment_t01_team1.data.db.AppDatabase
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.FavoriteEntity
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.ReviewEntity
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.StallEntity
+import java.io.File
 
 //Is it in main?
 // Data class representing a food stall
@@ -36,7 +39,8 @@ data class FoodStall(
     val stallId: Long,
     val name: String,
     val cuisine: String,
-    val imageResId: Int, // Resource ID for the image
+    val imageResId: Int?,
+    val imagePath: String?,
     val description: String,
     val canteen: String
 )
@@ -46,8 +50,9 @@ fun StallEntity.toFoodStall(): FoodStall {
         name = this.name,
         cuisine = this.cuisine,
         imageResId = this.imageResId,
+        imagePath = this.imagePath,
         description = this.description,
-        canteen = "" // not needed since we use canteenId now
+        canteen = "",
     )
 }
 
@@ -139,15 +144,23 @@ fun StallCard(
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
-            Image(
-                painter = painterResource(id = stall.imageResId),
+            val imageModel = if (stall.imagePath != null) {
+                File(stall.imagePath)
+            } else {
+                stall.imageResId ?: R.drawable.ic_launcher_foreground
+            }
+
+            AsyncImage(
+                model = imageModel,
                 contentDescription = "Stall Image",
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
                     .padding(bottom = 8.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-                contentScale = ContentScale.Crop
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color.Gray), // Add background for loading state
+                contentScale = ContentScale.Crop,
+                error = painterResource(R.drawable.ic_launcher_foreground)
             )
             Text(
                 text = stall.name,
