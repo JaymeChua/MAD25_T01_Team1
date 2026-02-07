@@ -64,6 +64,7 @@ fun RegisterScreen(
     val coroutineScope = rememberCoroutineScope()
     var username by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
     val context = androidx.compose.ui.platform.LocalContext.current
 
     Column(
@@ -87,6 +88,14 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        OutlinedTextField(
             value = password,
             onValueChange = { password = it },
             label = { Text("Password") },
@@ -99,9 +108,14 @@ fun RegisterScreen(
             onClick = {
                 val trimmedUsername = username.trim()
                 val trimmedPassword = password.trim()
+                val trimmedEmail = email.trim()
 
-                if (trimmedUsername.isEmpty() || trimmedPassword.isEmpty()) {
-                    Toast.makeText(context, "Please enter username & password", Toast.LENGTH_SHORT).show()
+                if (trimmedUsername.isEmpty() || trimmedEmail.isEmpty() || trimmedPassword.isEmpty()) {
+                    Toast.makeText(context, "Please enter username, email & password", Toast.LENGTH_SHORT).show()
+                    return@Button
+                }
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(trimmedEmail).matches()) {
+                    Toast.makeText(context, "Please enter a valid email address", Toast.LENGTH_SHORT).show()
                     return@Button
                 }
 
