@@ -47,7 +47,7 @@ class FirestoreCanteenService (
     }
 
     fun listCanteens(
-        onSuccess: (List<pair<String, CanteenRemote>>) -> Unit,
+        onSuccess: (List<Pair<String, CanteenRemote>>) -> Unit,
         onError: (Exception) -> Unit
     ) {
         col().orderBy("name", Query.Direction.ASCENDING).get().addOnSuccessListener { q ->

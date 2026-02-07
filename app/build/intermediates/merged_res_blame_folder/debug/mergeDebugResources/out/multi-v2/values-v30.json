@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "np.mad.assignment.mad_assignment_t01_team1.app-mergeDebugResources-55:/values-v30/values-v30.xml",
+            "outputFile": "np.mad.assignment.mad_assignment_t01_team1.app-mergeDebugResources-59:/values-v30/values-v30.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\c0285\\.gradle\\caches\\8.13\\transforms\\fc4ac98ebe09e068713c54948e5d230e\\transformed\\material3-release\\res\\values-v30\\values-v30.xml",
+                    "source": "C:\\Users\\Admin\\.gradle\\caches\\8.13\\transforms\\46e8ea92ac1d5239f5133c23d4ec0a31\\transformed\\material3-release\\res\\values-v30\\values-v30.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
