@@ -157,9 +157,9 @@ public class DishDao_Impl(
     }
   }
 
-  public override fun getAllDishes(): Flow<List<DishEntity>> {
+  public override suspend fun getAllDishesNow(): List<DishEntity> {
     val _sql: String = "SELECT * FROM dishes"
-    return createFlow(__db, false, arrayOf("dishes")) { _connection ->
+    return performSuspending(__db, true, false) { _connection ->
       val _stmt: SQLiteStatement = _connection.prepare(_sql)
       try {
         val _columnIndexOfDishId: Int = getColumnIndexOrThrow(_stmt, "dishId")
@@ -201,9 +201,9 @@ public class DishDao_Impl(
     }
   }
 
-  public override suspend fun getAllDishesNow(): List<DishEntity> {
+  public override fun getAllDishes(): Flow<List<DishEntity>> {
     val _sql: String = "SELECT * FROM dishes"
-    return performSuspending(__db, true, false) { _connection ->
+    return createFlow(__db, false, arrayOf("dishes")) { _connection ->
       val _stmt: SQLiteStatement = _connection.prepare(_sql)
       try {
         val _columnIndexOfDishId: Int = getColumnIndexOrThrow(_stmt, "dishId")
@@ -211,6 +211,7 @@ public class DishDao_Impl(
         val _columnIndexOfDishName: Int = getColumnIndexOrThrow(_stmt, "dishName")
         val _columnIndexOfDishPrice: Int = getColumnIndexOrThrow(_stmt, "dishPrice")
         val _columnIndexOfImageResId: Int = getColumnIndexOrThrow(_stmt, "imageResId")
+        val _columnIndexOfImagePath: Int = getColumnIndexOrThrow(_stmt, "imagePath")
         val _result: MutableList<DishEntity> = mutableListOf()
         while (_stmt.step()) {
           val _item: DishEntity
@@ -222,9 +223,19 @@ public class DishDao_Impl(
           _tmpDishName = _stmt.getText(_columnIndexOfDishName)
           val _tmpDishPrice: String
           _tmpDishPrice = _stmt.getText(_columnIndexOfDishPrice)
-          val _tmpImageResId: Int
-          _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
-          _item = DishEntity(_tmpDishId,_tmpStallId,_tmpDishName,_tmpDishPrice,_tmpImageResId)
+          val _tmpImageResId: Int?
+          if (_stmt.isNull(_columnIndexOfImageResId)) {
+            _tmpImageResId = null
+          } else {
+            _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          }
+          val _tmpImagePath: String?
+          if (_stmt.isNull(_columnIndexOfImagePath)) {
+            _tmpImagePath = null
+          } else {
+            _tmpImagePath = _stmt.getText(_columnIndexOfImagePath)
+          }
+          _item = DishEntity(_tmpDishId,_tmpStallId,_tmpDishName,_tmpDishPrice,_tmpImageResId,_tmpImagePath)
           _result.add(_item)
         }
         _result

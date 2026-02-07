@@ -260,6 +260,18 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.padding(8.dp))
 
+            Button(onClick = { context.startActivity(Intent(context, ForgotPasswordActivity::class.java)) },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Black
+                ),
+                modifier = Modifier
+                    .fillMaxWidth(0.85f)
+                    .height(50.dp)
+            ) {
+                Text(text = "Forgot Password?")
+            }
+
         }
     }
 }
