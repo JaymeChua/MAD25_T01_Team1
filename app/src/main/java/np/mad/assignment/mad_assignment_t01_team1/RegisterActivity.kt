@@ -180,15 +180,23 @@ fun RegisterScreen(
                                             // ✅ Keep your Firestore profile write
                                             // NOTE: Your UserProfileRemote currently has (displayName, createdAt).
                                             // If you later add email/firebaseUid fields, put them here too.
+                                            val uid = FirebaseAuth.getInstance().currentUser?.uid
+
                                             FirestoreUserService(refs = UserScopedRefs { trimmedUsername })
                                                 .putUserProfile(
                                                     UserProfileRemote(
                                                         displayName = trimmedUsername,
-                                                        createdAt = System.currentTimeMillis()
+                                                        role = "USER",
+                                                        createdAt = System.currentTimeMillis(),
+                                                        email = trimmedEmail,
+                                                        firebaseUid = uid
                                                     ),
-                                                    {},
-                                                    {}
+                                                    onSuccess = {},
+                                                    onError = { e ->
+                                                        Toast.makeText(context, "Failed to save profile: ${e.message}", Toast.LENGTH_LONG).show()
+                                                    }
                                                 )
+
 
                                             withContext(Dispatchers.Main) {
                                                 Toast.makeText(context, "Registration successful", Toast.LENGTH_SHORT).show()
