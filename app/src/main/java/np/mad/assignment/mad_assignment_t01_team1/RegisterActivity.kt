@@ -36,6 +36,8 @@ import np.mad.assignment.mad_assignment_t01_team1.ui.theme.MAD_Assignment_T01_Te
 import np.mad.assignment.mad_assignment_t01_team1.util.SecurityUtils
 import np.mad.assignment.mad_assignment_t01_team1.data.firebase.FirestoreUserService
 import np.mad.assignment.mad_assignment_t01_team1.data.firebase.UserScopedRefs
+import android.util.Patterns
+import com.google.firebase.auth.FirebaseAuth
 
 class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -134,6 +136,7 @@ fun RegisterScreen(
                             }
                         } else {
                             // create user using your existing UserEntity and Dao.upsert()
+                            /*
                             val hashedPassword = SecurityUtils.sha256(trimmedPassword)
                             val newUser = UserEntity(name = trimmedUsername, password = hashedPassword)
                             val newId = withContext(Dispatchers.IO) {
@@ -144,7 +147,60 @@ fun RegisterScreen(
                             withContext(Dispatchers.Main) {
                                 Toast.makeText(context, "Registration successful", Toast.LENGTH_SHORT).show()
                                 onRegisterSuccess()
-                            }
+                            }*/
+                            // 1) Create Firebase Auth account (email/password)
+                            val auth = FirebaseAuth.getInstance()
+
+                            auth.createUserWithEmailAndPassword(trimmedEmail, trimmedPassword)
+                                .addOnCompleteListener { task ->
+                                    if (!task.isSuccessful) {
+                                        val msg = task.exception?.message ?: "Firebase registration failed"
+                                        Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+                                        return@addOnCompleteListener
+                                    }
+
+                                    val firebaseUid = auth.currentUser?.uid
+
+                                    // 2) After Firebase account is created, also save local user + profile
+                                    coroutineScope.launch {
+                                        try {
+                                            val hashedPassword = SecurityUtils.sha256(trimmedPassword)
+
+                                            // Keep Room user creation (local login support)
+                                            // UserEntity has only (name, password)
+                                            val newUser = UserEntity(
+                                                name = trimmedUsername,
+                                                password = hashedPassword
+                                            )
+
+                                            withContext(Dispatchers.IO) {
+                                                db.userDao().upsert(newUser)
+                                            }
+
+                                            // ✅ Keep your Firestore profile write
+                                            // NOTE: Your UserProfileRemote currently has (displayName, createdAt).
+                                            // If you later add email/firebaseUid fields, put them here too.
+                                            FirestoreUserService(refs = UserScopedRefs { trimmedUsername })
+                                                .putUserProfile(
+                                                    UserProfileRemote(
+                                                        displayName = trimmedUsername,
+                                                        createdAt = System.currentTimeMillis()
+                                                    ),
+                                                    {},
+                                                    {}
+                                                )
+
+                                            withContext(Dispatchers.Main) {
+                                                Toast.makeText(context, "Registration successful", Toast.LENGTH_SHORT).show()
+                                                onRegisterSuccess()
+                                            }
+                                        } catch (e: Exception) {
+                                            withContext(Dispatchers.Main) {
+                                                Toast.makeText(context, "Registration failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                    }
+                                }
                         }
                     } catch (e: Exception) {
                         withContext(Dispatchers.Main) {
