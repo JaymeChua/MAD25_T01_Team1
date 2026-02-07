@@ -31,6 +31,6 @@ interface UserDao{
 
     @Delete
     suspend fun deleteUser(user: UserEntity)
-    @Query("SELECT * FROM users")
-    fun getAllUsers(): Flow<List<UserEntity>>
+    @Query("SELECT * FROM users WHERE userId != :currentAdminId")
+    fun getAllUsersExceptAdmin(currentAdminId: Long): Flow<List<UserEntity>>
 }

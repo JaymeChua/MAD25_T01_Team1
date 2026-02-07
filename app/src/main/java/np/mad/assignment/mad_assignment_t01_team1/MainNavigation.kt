@@ -184,10 +184,13 @@ fun MainNavigation(
             }
             composable("Admin") {
                 AdminDashboardScreen(
-                    onManageStalls = { },
-                    onManageDishes = { },
+                    onManageStalls = {
+                        navController.navigate("stallManagement")
+                    },
+                    onManageDishes = {
+                        navController.navigate("dishManagement")
+                    },
                     onManageUsers = {
-                        println("DEBUG: Navigation triggered")
                         navController.navigate("userManagement")
                     },
                     onLogout = {
@@ -199,9 +202,15 @@ fun MainNavigation(
                 println("DEBUG: Arrived at UserManagementScreen")
                 UserManagementScreen(
                     navController = navController,
+                    currentAdminId = userId,
                 )
             }
-
+            composable("stallManagement"){
+                AdminStallManagementScreen(navController = navController)
+            }
+            composable("dishManagement"){
+                AdminDishManagementScreen(navController = navController)
+            }
         }
     }
 }

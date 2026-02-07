@@ -5,6 +5,7 @@ import androidx.room.EntityInsertAdapter
 import androidx.room.RoomDatabase
 import androidx.room.coroutines.createFlow
 import androidx.room.util.getColumnIndexOrThrow
+import androidx.room.util.performBlocking
 import androidx.room.util.performSuspending
 import androidx.sqlite.SQLiteStatement
 import javax.`annotation`.processing.Generated
@@ -36,7 +37,7 @@ public class StallDao_Impl(
   init {
     this.__db = __db
     this.__insertAdapterOfStallEntity = object : EntityInsertAdapter<StallEntity>() {
-      protected override fun createQuery(): String = "INSERT OR REPLACE INTO `stalls` (`stallId`,`canteenName`,`canteenId`,`cuisine`,`description`,`name`,`imageResId`,`halal`) VALUES (nullif(?, 0),?,?,?,?,?,?,?)"
+      protected override fun createQuery(): String = "INSERT OR REPLACE INTO `stalls` (`stallId`,`canteenName`,`canteenId`,`cuisine`,`description`,`name`,`imageResId`,`halal`,`imagePath`) VALUES (nullif(?, 0),?,?,?,?,?,?,?,?)"
 
       protected override fun bind(statement: SQLiteStatement, entity: StallEntity) {
         statement.bindLong(1, entity.stallId)
@@ -45,9 +46,20 @@ public class StallDao_Impl(
         statement.bindText(4, entity.cuisine)
         statement.bindText(5, entity.description)
         statement.bindText(6, entity.name)
-        statement.bindLong(7, entity.imageResId.toLong())
+        val _tmpImageResId: Int? = entity.imageResId
+        if (_tmpImageResId == null) {
+          statement.bindNull(7)
+        } else {
+          statement.bindLong(7, _tmpImageResId.toLong())
+        }
         val _tmp: Int = if (entity.halal) 1 else 0
         statement.bindLong(8, _tmp.toLong())
+        val _tmpImagePath: String? = entity.imagePath
+        if (_tmpImagePath == null) {
+          statement.bindNull(9)
+        } else {
+          statement.bindText(9, _tmpImagePath)
+        }
       }
     }
     this.__deleteAdapterOfStallEntity = object : EntityDeleteOrUpdateAdapter<StallEntity>() {
@@ -58,7 +70,7 @@ public class StallDao_Impl(
       }
     }
     this.__updateAdapterOfStallEntity = object : EntityDeleteOrUpdateAdapter<StallEntity>() {
-      protected override fun createQuery(): String = "UPDATE OR ABORT `stalls` SET `stallId` = ?,`canteenName` = ?,`canteenId` = ?,`cuisine` = ?,`description` = ?,`name` = ?,`imageResId` = ?,`halal` = ? WHERE `stallId` = ?"
+      protected override fun createQuery(): String = "UPDATE OR ABORT `stalls` SET `stallId` = ?,`canteenName` = ?,`canteenId` = ?,`cuisine` = ?,`description` = ?,`name` = ?,`imageResId` = ?,`halal` = ?,`imagePath` = ? WHERE `stallId` = ?"
 
       protected override fun bind(statement: SQLiteStatement, entity: StallEntity) {
         statement.bindLong(1, entity.stallId)
@@ -67,10 +79,21 @@ public class StallDao_Impl(
         statement.bindText(4, entity.cuisine)
         statement.bindText(5, entity.description)
         statement.bindText(6, entity.name)
-        statement.bindLong(7, entity.imageResId.toLong())
+        val _tmpImageResId: Int? = entity.imageResId
+        if (_tmpImageResId == null) {
+          statement.bindNull(7)
+        } else {
+          statement.bindLong(7, _tmpImageResId.toLong())
+        }
         val _tmp: Int = if (entity.halal) 1 else 0
         statement.bindLong(8, _tmp.toLong())
-        statement.bindLong(9, entity.stallId)
+        val _tmpImagePath: String? = entity.imagePath
+        if (_tmpImagePath == null) {
+          statement.bindNull(9)
+        } else {
+          statement.bindText(9, _tmpImagePath)
+        }
+        statement.bindLong(10, entity.stallId)
       }
     }
   }
@@ -84,7 +107,7 @@ public class StallDao_Impl(
     __deleteAdapterOfStallEntity.handle(_connection, stall)
   }
 
-  public override suspend fun updateStall(stall: StallEntity): Unit = performSuspending(__db, false, true) { _connection ->
+  public override fun updateStall(stall: StallEntity): Unit = performBlocking(__db, false, true) { _connection ->
     __updateAdapterOfStallEntity.handle(_connection, stall)
   }
 
@@ -103,6 +126,7 @@ public class StallDao_Impl(
         val _columnIndexOfName: Int = getColumnIndexOrThrow(_stmt, "name")
         val _columnIndexOfImageResId: Int = getColumnIndexOrThrow(_stmt, "imageResId")
         val _columnIndexOfHalal: Int = getColumnIndexOrThrow(_stmt, "halal")
+        val _columnIndexOfImagePath: Int = getColumnIndexOrThrow(_stmt, "imagePath")
         val _result: MutableList<StallEntity> = mutableListOf()
         while (_stmt.step()) {
           val _item: StallEntity
@@ -118,13 +142,23 @@ public class StallDao_Impl(
           _tmpDescription = _stmt.getText(_columnIndexOfDescription)
           val _tmpName: String
           _tmpName = _stmt.getText(_columnIndexOfName)
-          val _tmpImageResId: Int
-          _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          val _tmpImageResId: Int?
+          if (_stmt.isNull(_columnIndexOfImageResId)) {
+            _tmpImageResId = null
+          } else {
+            _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          }
           val _tmpHalal: Boolean
           val _tmp: Int
           _tmp = _stmt.getLong(_columnIndexOfHalal).toInt()
           _tmpHalal = _tmp != 0
-          _item = StallEntity(_tmpStallId,_tmpCanteenName,_tmpCanteenId,_tmpCuisine,_tmpDescription,_tmpName,_tmpImageResId,_tmpHalal)
+          val _tmpImagePath: String?
+          if (_stmt.isNull(_columnIndexOfImagePath)) {
+            _tmpImagePath = null
+          } else {
+            _tmpImagePath = _stmt.getText(_columnIndexOfImagePath)
+          }
+          _item = StallEntity(_tmpStallId,_tmpCanteenName,_tmpCanteenId,_tmpCuisine,_tmpDescription,_tmpName,_tmpImageResId,_tmpHalal,_tmpImagePath)
           _result.add(_item)
         }
         _result
@@ -149,6 +183,7 @@ public class StallDao_Impl(
         val _columnIndexOfName: Int = getColumnIndexOrThrow(_stmt, "name")
         val _columnIndexOfImageResId: Int = getColumnIndexOrThrow(_stmt, "imageResId")
         val _columnIndexOfHalal: Int = getColumnIndexOrThrow(_stmt, "halal")
+        val _columnIndexOfImagePath: Int = getColumnIndexOrThrow(_stmt, "imagePath")
         val _result: MutableList<StallEntity> = mutableListOf()
         while (_stmt.step()) {
           val _item: StallEntity
@@ -164,13 +199,23 @@ public class StallDao_Impl(
           _tmpDescription = _stmt.getText(_columnIndexOfDescription)
           val _tmpName: String
           _tmpName = _stmt.getText(_columnIndexOfName)
-          val _tmpImageResId: Int
-          _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          val _tmpImageResId: Int?
+          if (_stmt.isNull(_columnIndexOfImageResId)) {
+            _tmpImageResId = null
+          } else {
+            _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          }
           val _tmpHalal: Boolean
           val _tmp: Int
           _tmp = _stmt.getLong(_columnIndexOfHalal).toInt()
           _tmpHalal = _tmp != 0
-          _item = StallEntity(_tmpStallId,_tmpCanteenName,_tmpCanteenId,_tmpCuisine,_tmpDescription,_tmpName,_tmpImageResId,_tmpHalal)
+          val _tmpImagePath: String?
+          if (_stmt.isNull(_columnIndexOfImagePath)) {
+            _tmpImagePath = null
+          } else {
+            _tmpImagePath = _stmt.getText(_columnIndexOfImagePath)
+          }
+          _item = StallEntity(_tmpStallId,_tmpCanteenName,_tmpCanteenId,_tmpCuisine,_tmpDescription,_tmpName,_tmpImageResId,_tmpHalal,_tmpImagePath)
           _result.add(_item)
         }
         _result
@@ -195,6 +240,7 @@ public class StallDao_Impl(
         val _columnIndexOfName: Int = getColumnIndexOrThrow(_stmt, "name")
         val _columnIndexOfImageResId: Int = getColumnIndexOrThrow(_stmt, "imageResId")
         val _columnIndexOfHalal: Int = getColumnIndexOrThrow(_stmt, "halal")
+        val _columnIndexOfImagePath: Int = getColumnIndexOrThrow(_stmt, "imagePath")
         val _result: StallEntity?
         if (_stmt.step()) {
           val _tmpStallId: Long
@@ -209,13 +255,23 @@ public class StallDao_Impl(
           _tmpDescription = _stmt.getText(_columnIndexOfDescription)
           val _tmpName: String
           _tmpName = _stmt.getText(_columnIndexOfName)
-          val _tmpImageResId: Int
-          _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          val _tmpImageResId: Int?
+          if (_stmt.isNull(_columnIndexOfImageResId)) {
+            _tmpImageResId = null
+          } else {
+            _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          }
           val _tmpHalal: Boolean
           val _tmp: Int
           _tmp = _stmt.getLong(_columnIndexOfHalal).toInt()
           _tmpHalal = _tmp != 0
-          _result = StallEntity(_tmpStallId,_tmpCanteenName,_tmpCanteenId,_tmpCuisine,_tmpDescription,_tmpName,_tmpImageResId,_tmpHalal)
+          val _tmpImagePath: String?
+          if (_stmt.isNull(_columnIndexOfImagePath)) {
+            _tmpImagePath = null
+          } else {
+            _tmpImagePath = _stmt.getText(_columnIndexOfImagePath)
+          }
+          _result = StallEntity(_tmpStallId,_tmpCanteenName,_tmpCanteenId,_tmpCuisine,_tmpDescription,_tmpName,_tmpImageResId,_tmpHalal,_tmpImagePath)
         } else {
           _result = null
         }
@@ -241,6 +297,7 @@ public class StallDao_Impl(
         val _columnIndexOfName: Int = getColumnIndexOrThrow(_stmt, "name")
         val _columnIndexOfImageResId: Int = getColumnIndexOrThrow(_stmt, "imageResId")
         val _columnIndexOfHalal: Int = getColumnIndexOrThrow(_stmt, "halal")
+        val _columnIndexOfImagePath: Int = getColumnIndexOrThrow(_stmt, "imagePath")
         val _result: StallEntity?
         if (_stmt.step()) {
           val _tmpStallId: Long
@@ -255,13 +312,23 @@ public class StallDao_Impl(
           _tmpDescription = _stmt.getText(_columnIndexOfDescription)
           val _tmpName: String
           _tmpName = _stmt.getText(_columnIndexOfName)
-          val _tmpImageResId: Int
-          _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          val _tmpImageResId: Int?
+          if (_stmt.isNull(_columnIndexOfImageResId)) {
+            _tmpImageResId = null
+          } else {
+            _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          }
           val _tmpHalal: Boolean
           val _tmp: Int
           _tmp = _stmt.getLong(_columnIndexOfHalal).toInt()
           _tmpHalal = _tmp != 0
-          _result = StallEntity(_tmpStallId,_tmpCanteenName,_tmpCanteenId,_tmpCuisine,_tmpDescription,_tmpName,_tmpImageResId,_tmpHalal)
+          val _tmpImagePath: String?
+          if (_stmt.isNull(_columnIndexOfImagePath)) {
+            _tmpImagePath = null
+          } else {
+            _tmpImagePath = _stmt.getText(_columnIndexOfImagePath)
+          }
+          _result = StallEntity(_tmpStallId,_tmpCanteenName,_tmpCanteenId,_tmpCuisine,_tmpDescription,_tmpName,_tmpImageResId,_tmpHalal,_tmpImagePath)
         } else {
           _result = null
         }
@@ -287,6 +354,7 @@ public class StallDao_Impl(
         val _columnIndexOfName: Int = getColumnIndexOrThrow(_stmt, "name")
         val _columnIndexOfImageResId: Int = getColumnIndexOrThrow(_stmt, "imageResId")
         val _columnIndexOfHalal: Int = getColumnIndexOrThrow(_stmt, "halal")
+        val _columnIndexOfImagePath: Int = getColumnIndexOrThrow(_stmt, "imagePath")
         val _result: StallEntity?
         if (_stmt.step()) {
           val _tmpStallId: Long
@@ -301,13 +369,23 @@ public class StallDao_Impl(
           _tmpDescription = _stmt.getText(_columnIndexOfDescription)
           val _tmpName: String
           _tmpName = _stmt.getText(_columnIndexOfName)
-          val _tmpImageResId: Int
-          _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          val _tmpImageResId: Int?
+          if (_stmt.isNull(_columnIndexOfImageResId)) {
+            _tmpImageResId = null
+          } else {
+            _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          }
           val _tmpHalal: Boolean
           val _tmp: Int
           _tmp = _stmt.getLong(_columnIndexOfHalal).toInt()
           _tmpHalal = _tmp != 0
-          _result = StallEntity(_tmpStallId,_tmpCanteenName,_tmpCanteenId,_tmpCuisine,_tmpDescription,_tmpName,_tmpImageResId,_tmpHalal)
+          val _tmpImagePath: String?
+          if (_stmt.isNull(_columnIndexOfImagePath)) {
+            _tmpImagePath = null
+          } else {
+            _tmpImagePath = _stmt.getText(_columnIndexOfImagePath)
+          }
+          _result = StallEntity(_tmpStallId,_tmpCanteenName,_tmpCanteenId,_tmpCuisine,_tmpDescription,_tmpName,_tmpImageResId,_tmpHalal,_tmpImagePath)
         } else {
           _result = null
         }
@@ -338,6 +416,7 @@ public class StallDao_Impl(
         val _columnIndexOfName: Int = getColumnIndexOrThrow(_stmt, "name")
         val _columnIndexOfImageResId: Int = getColumnIndexOrThrow(_stmt, "imageResId")
         val _columnIndexOfHalal: Int = getColumnIndexOrThrow(_stmt, "halal")
+        val _columnIndexOfImagePath: Int = getColumnIndexOrThrow(_stmt, "imagePath")
         val _result: MutableList<StallEntity> = mutableListOf()
         while (_stmt.step()) {
           val _item: StallEntity
@@ -353,13 +432,23 @@ public class StallDao_Impl(
           _tmpDescription = _stmt.getText(_columnIndexOfDescription)
           val _tmpName: String
           _tmpName = _stmt.getText(_columnIndexOfName)
-          val _tmpImageResId: Int
-          _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          val _tmpImageResId: Int?
+          if (_stmt.isNull(_columnIndexOfImageResId)) {
+            _tmpImageResId = null
+          } else {
+            _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          }
           val _tmpHalal: Boolean
           val _tmp: Int
           _tmp = _stmt.getLong(_columnIndexOfHalal).toInt()
           _tmpHalal = _tmp != 0
-          _item = StallEntity(_tmpStallId,_tmpCanteenName,_tmpCanteenId,_tmpCuisine,_tmpDescription,_tmpName,_tmpImageResId,_tmpHalal)
+          val _tmpImagePath: String?
+          if (_stmt.isNull(_columnIndexOfImagePath)) {
+            _tmpImagePath = null
+          } else {
+            _tmpImagePath = _stmt.getText(_columnIndexOfImagePath)
+          }
+          _item = StallEntity(_tmpStallId,_tmpCanteenName,_tmpCanteenId,_tmpCuisine,_tmpDescription,_tmpName,_tmpImageResId,_tmpHalal,_tmpImagePath)
           _result.add(_item)
         }
         _result
@@ -387,9 +476,9 @@ public class StallDao_Impl(
     }
   }
 
-  public override suspend fun getAllStallsNow(): List<StallEntity> {
+  public override fun getAllStalls(): Flow<List<StallEntity>> {
     val _sql: String = "SELECT * FROM stalls"
-    return performSuspending(__db, true, false) { _connection ->
+    return createFlow(__db, false, arrayOf("stalls")) { _connection ->
       val _stmt: SQLiteStatement = _connection.prepare(_sql)
       try {
         val _columnIndexOfStallId: Int = getColumnIndexOrThrow(_stmt, "stallId")
@@ -400,6 +489,7 @@ public class StallDao_Impl(
         val _columnIndexOfName: Int = getColumnIndexOrThrow(_stmt, "name")
         val _columnIndexOfImageResId: Int = getColumnIndexOrThrow(_stmt, "imageResId")
         val _columnIndexOfHalal: Int = getColumnIndexOrThrow(_stmt, "halal")
+        val _columnIndexOfImagePath: Int = getColumnIndexOrThrow(_stmt, "imagePath")
         val _result: MutableList<StallEntity> = mutableListOf()
         while (_stmt.step()) {
           val _item: StallEntity
@@ -415,13 +505,23 @@ public class StallDao_Impl(
           _tmpDescription = _stmt.getText(_columnIndexOfDescription)
           val _tmpName: String
           _tmpName = _stmt.getText(_columnIndexOfName)
-          val _tmpImageResId: Int
-          _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          val _tmpImageResId: Int?
+          if (_stmt.isNull(_columnIndexOfImageResId)) {
+            _tmpImageResId = null
+          } else {
+            _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          }
           val _tmpHalal: Boolean
           val _tmp: Int
           _tmp = _stmt.getLong(_columnIndexOfHalal).toInt()
           _tmpHalal = _tmp != 0
-          _item = StallEntity(_tmpStallId,_tmpCanteenName,_tmpCanteenId,_tmpCuisine,_tmpDescription,_tmpName,_tmpImageResId,_tmpHalal)
+          val _tmpImagePath: String?
+          if (_stmt.isNull(_columnIndexOfImagePath)) {
+            _tmpImagePath = null
+          } else {
+            _tmpImagePath = _stmt.getText(_columnIndexOfImagePath)
+          }
+          _item = StallEntity(_tmpStallId,_tmpCanteenName,_tmpCanteenId,_tmpCuisine,_tmpDescription,_tmpName,_tmpImageResId,_tmpHalal,_tmpImagePath)
           _result.add(_item)
         }
         _result

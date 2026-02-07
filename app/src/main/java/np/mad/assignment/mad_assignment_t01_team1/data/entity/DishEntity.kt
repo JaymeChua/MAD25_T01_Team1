@@ -22,5 +22,6 @@ data class DishEntity (
     val stallId: Long,
     val dishName: String,
     val dishPrice: String,
-    val imageResId: Int,
+    val imageResId: Int? = null,
+    val imagePath: String? = null
 )
