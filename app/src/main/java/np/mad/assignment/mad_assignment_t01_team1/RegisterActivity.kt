@@ -31,8 +31,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import np.mad.assignment.mad_assignment_t01_team1.data.db.AppDatabase
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.UserEntity
+import np.mad.assignment.mad_assignment_t01_team1.data.firebase.dto.UserProfileRemote
 import np.mad.assignment.mad_assignment_t01_team1.ui.theme.MAD_Assignment_T01_Team1Theme
 import np.mad.assignment.mad_assignment_t01_team1.util.SecurityUtils
+import np.mad.assignment.mad_assignment_t01_team1.data.firebase.FirestoreUserService
+import np.mad.assignment.mad_assignment_t01_team1.data.firebase.UserScopedRefs
 
 class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,7 +125,8 @@ fun RegisterScreen(
                             val newId = withContext(Dispatchers.IO) {
                                 db.userDao().upsert(newUser)
                             }
-
+                            FirestoreUserService(refs = UserScopedRefs { trimmedUsername })
+                                .putUserProfile(UserProfileRemote(displayName = trimmedUsername, createdAt = System.currentTimeMillis()), {}, {})
                             withContext(Dispatchers.Main) {
                                 Toast.makeText(context, "Registration successful", Toast.LENGTH_SHORT).show()
                                 onRegisterSuccess()

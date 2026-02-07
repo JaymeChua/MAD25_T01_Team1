@@ -17,4 +17,11 @@ interface CanteenDao{
 
     @Query("SELECT * FROM canteens WHERE name = :name LIMIT 1")
     suspend fun getByName(name: String): CanteenEntity?
+
+    @Query("SELECT * FROM canteens")
+    suspend fun getAllNow(): List<CanteenEntity>
+
+//    @Query("SELECT * FROM canteens WHERE remoteId = :remoteId LIMIT 1")
+//    suspend fun getByRemoteId(remoteId: String): CanteenEntity?
+
 }

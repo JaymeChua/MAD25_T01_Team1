@@ -93,6 +93,30 @@ public class CanteenDao_Impl(
     }
   }
 
+  public override suspend fun getAllNow(): List<CanteenEntity> {
+    val _sql: String = "SELECT * FROM canteens"
+    return performSuspending(__db, true, false) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        val _columnIndexOfCanteenId: Int = getColumnIndexOrThrow(_stmt, "canteenId")
+        val _columnIndexOfName: Int = getColumnIndexOrThrow(_stmt, "name")
+        val _result: MutableList<CanteenEntity> = mutableListOf()
+        while (_stmt.step()) {
+          val _item: CanteenEntity
+          val _tmpCanteenId: Long
+          _tmpCanteenId = _stmt.getLong(_columnIndexOfCanteenId)
+          val _tmpName: String
+          _tmpName = _stmt.getText(_columnIndexOfName)
+          _item = CanteenEntity(_tmpCanteenId,_tmpName)
+          _result.add(_item)
+        }
+        _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
   public companion object {
     public fun getRequiredConverters(): List<KClass<*>> = emptyList()
   }

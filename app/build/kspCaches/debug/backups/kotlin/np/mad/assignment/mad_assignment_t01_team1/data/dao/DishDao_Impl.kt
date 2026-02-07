@@ -201,6 +201,39 @@ public class DishDao_Impl(
     }
   }
 
+  public override suspend fun getAllDishesNow(): List<DishEntity> {
+    val _sql: String = "SELECT * FROM dishes"
+    return performSuspending(__db, true, false) { _connection ->
+      val _stmt: SQLiteStatement = _connection.prepare(_sql)
+      try {
+        val _columnIndexOfDishId: Int = getColumnIndexOrThrow(_stmt, "dishId")
+        val _columnIndexOfStallId: Int = getColumnIndexOrThrow(_stmt, "stallId")
+        val _columnIndexOfDishName: Int = getColumnIndexOrThrow(_stmt, "dishName")
+        val _columnIndexOfDishPrice: Int = getColumnIndexOrThrow(_stmt, "dishPrice")
+        val _columnIndexOfImageResId: Int = getColumnIndexOrThrow(_stmt, "imageResId")
+        val _result: MutableList<DishEntity> = mutableListOf()
+        while (_stmt.step()) {
+          val _item: DishEntity
+          val _tmpDishId: Long
+          _tmpDishId = _stmt.getLong(_columnIndexOfDishId)
+          val _tmpStallId: Long
+          _tmpStallId = _stmt.getLong(_columnIndexOfStallId)
+          val _tmpDishName: String
+          _tmpDishName = _stmt.getText(_columnIndexOfDishName)
+          val _tmpDishPrice: String
+          _tmpDishPrice = _stmt.getText(_columnIndexOfDishPrice)
+          val _tmpImageResId: Int
+          _tmpImageResId = _stmt.getLong(_columnIndexOfImageResId).toInt()
+          _item = DishEntity(_tmpDishId,_tmpStallId,_tmpDishName,_tmpDishPrice,_tmpImageResId)
+          _result.add(_item)
+        }
+        _result
+      } finally {
+        _stmt.close()
+      }
+    }
+  }
+
   public override suspend fun deleteDishById(dishId: Long) {
     val _sql: String = "DELETE FROM dishes WHERE dishId = ?"
     return performSuspending(__db, false, true) { _connection ->
