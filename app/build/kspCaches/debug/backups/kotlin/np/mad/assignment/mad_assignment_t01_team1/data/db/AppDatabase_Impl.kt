@@ -64,7 +64,7 @@ public class AppDatabase_Impl : AppDatabase() {
   }
 
   protected override fun createOpenDelegate(): RoomOpenDelegate {
-    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(3, "f16752f2747c3e4c438c9f160b94b829", "70f818e3af523b247eb063c26d37df7d") {
+    val _openDelegate: RoomOpenDelegate = object : RoomOpenDelegate(4, "f16752f2747c3e4c438c9f160b94b829", "70f818e3af523b247eb063c26d37df7d") {
       public override fun createAllTables(connection: SQLiteConnection) {
         connection.execSQL("CREATE TABLE IF NOT EXISTS `canteens` (`canteenId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL)")
         connection.execSQL("CREATE TABLE IF NOT EXISTS `stalls` (`stallId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `canteenName` TEXT NOT NULL, `canteenId` INTEGER NOT NULL, `cuisine` TEXT NOT NULL, `description` TEXT NOT NULL, `name` TEXT NOT NULL, `imageResId` INTEGER, `halal` INTEGER NOT NULL, `imagePath` TEXT, FOREIGN KEY(`canteenId`) REFERENCES `canteens`(`canteenId`) ON UPDATE NO ACTION ON DELETE CASCADE )")

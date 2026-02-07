@@ -32,6 +32,12 @@
             android:exported="true"
             android:label="Register"
             android:theme="@style/Theme.MAD_Assignment_T01_Team1" />
+
+        <activity
+            android:name=".ForgotPasswordActivity"
+            android:exported="true"
+            android:label="Forgot Password"
+            android:theme="@style/Theme.MAD_Assignment_T01_Team1" />
     </application>
 
 </manifest>
