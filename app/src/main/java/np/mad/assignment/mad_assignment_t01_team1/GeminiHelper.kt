@@ -62,7 +62,6 @@ object MenuScanner {
                     val item = jsonArray.getJSONObject(i)
                     val name = item.optString("name")
                     val price = item.optString("price")
-
                     val box = item.optJSONArray("box")
                     if (box != null && box.length() == 4) {
                         val ymin = box.getDouble(0).toFloat()
@@ -95,38 +94,35 @@ object MenuScanner {
             val width = original.width.toFloat()
             val height = original.height.toFloat()
 
-            // --- SCALE FIX ---
-            // Gemini typically returns values 0-1000.
-            // If values are > 1, treat them as 1000-scale percentages.
 
             var normXMin = xmin
             var normYMin = ymin
             var normXMax = xmax
             var normYMax = ymax
 
-            if (xmin > 1 || ymin > 1 || xmax > 1 || ymax > 1) {
-                normXMin = xmin / 1000f
-                normYMin = ymin / 1000f
-                normXMax = xmax / 1000f
-                normYMax = ymax / 1000f
-            }
+            // Divide values by 1000 for percentage
+            normXMin = xmin / 1000f
+            normYMin = ymin / 1000f
+            normXMax = xmax / 1000f
+            normYMax = ymax / 1000f
 
-            // Convert normalized (0.0 - 1.0) to actual pixels
+            // Multiply by original image size to get 4 corner for crop
             var finalX = normXMin * width
             var finalY = normYMin * height
             var finalMaxX = normXMax * width
             var finalMaxY = normYMax * height
 
-            // Calculate Width & Height
+            // Get width and height to crop image
             var cropW = finalMaxX - finalX
             var cropH = finalMaxY - finalY
 
-            // --- SAFETY CLAMPS ---
+            //Ensures location is not negeative or past the image size
             if (finalX < 0) finalX = 0f
             if (finalY < 0) finalY = 0f
             if (finalX + cropW > width) cropW = width - finalX
             if (finalY + cropH > height) cropH = height - finalY
 
+            // Ensures box exists
             if (cropW <= 0 || cropH <= 0) return null
 
             Bitmap.createBitmap(
