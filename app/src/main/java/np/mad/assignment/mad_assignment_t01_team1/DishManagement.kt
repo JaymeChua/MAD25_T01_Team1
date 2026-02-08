@@ -39,7 +39,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.ui.graphics.graphicsLayer
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdminDishManagementScreen(
@@ -91,6 +90,9 @@ fun AdminDishManagementScreen(
                             preSelectedStallId = stall.stallId
                             showDialog = true
                         },
+                        onAiScan = {
+                            navController.navigate("bulk_add/${stall.stallId}")
+                        },
                         onEditDish = { dish ->
                             dishToEdit = dish
                             preSelectedStallId = stall.stallId
@@ -130,6 +132,7 @@ fun StallSection(
     stall: StallEntity,
     dishes: List<DishEntity>,
     onAddDish: () -> Unit,
+    onAiScan: () -> Unit,
     onEditDish: (DishEntity) -> Unit,
     onDeleteDish: (DishEntity) -> Unit
 ) {
@@ -176,12 +179,21 @@ fun StallSection(
                 }
             }
 
-            IconButton(onClick = onAddDish) {
-                Icon(
-                    Icons.Default.AddCircle,
-                    contentDescription = "Add Dish",
-                    tint = AdminPrimary
-                )
+            Row {
+                IconButton(onClick = onAiScan) {
+                    Icon(
+                        Icons.Filled.Call,
+                        contentDescription = "AI Scan",
+                        tint = AdminPrimary
+                    )
+                }
+                IconButton(onClick = onAddDish) {
+                    Icon(
+                        Icons.Default.AddCircle,
+                        contentDescription = "Add Manual",
+                        tint = AdminPrimary
+                    )
+                }
             }
         }
 

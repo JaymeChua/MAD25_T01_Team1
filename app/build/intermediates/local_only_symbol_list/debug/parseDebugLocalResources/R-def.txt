@@ -78,3 +78,4 @@ string title_activity_main_navigation
 style Theme.MAD_Assignment_T01_Team1
 xml backup_rules
 xml data_extraction_rules
+xml file_paths
