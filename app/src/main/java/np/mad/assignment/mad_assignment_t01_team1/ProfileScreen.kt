@@ -1,6 +1,7 @@
 package np.mad.assignment.mad_assignment_t01_team1
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,10 +21,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import np.mad.assignment.mad_assignment_t01_team1.data.db.AppDatabase
 import np.mad.assignment.mad_assignment_t01_team1.data.entity.UserEntity
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.resume
 
 @Composable
 fun ProfileScreen(
@@ -37,6 +44,9 @@ fun ProfileScreen(
     val favoritesDao = remember { db.favoriteDao() }
     val scope = rememberCoroutineScope()
 
+    val auth = remember { FirebaseAuth.getInstance() }
+    val firestore = remember { FirebaseFirestore.getInstance() }
+
     // Data Observables
     val user by userDao.getUserById(userId).collectAsState(initial = null)
     val reviewCount by reviewsDao.getReviewCountForUser(userId).collectAsState(initial = 0)
@@ -47,6 +57,20 @@ fun ProfileScreen(
     var isEditing by remember { mutableStateOf(false) }
     var editedName by rememberSaveable(user) { mutableStateOf(user?.name ?: "") }
     var showDeleteDialog by remember { mutableStateOf(false) }
+    var isDeleting by remember { mutableStateOf(false) }
+    var isSavingName by remember { mutableStateOf(false) }
+
+
+    fun toast(msg: String) {
+        Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+    }
+
+    // Await Firebase Task without extra dependencies
+    suspend fun <T> com.google.android.gms.tasks.Task<T>.await(): T =
+        suspendCancellableCoroutine { cont ->
+            addOnSuccessListener { result -> cont.resume(result) }
+            addOnFailureListener { e -> cont.resumeWithException(e) }
+        }
 
     LazyColumn(
         modifier = Modifier
@@ -77,16 +101,85 @@ fun ProfileScreen(
                         modifier = Modifier.weight(1f).height(56.dp),
                         singleLine = true
                     )
-                    IconButton(onClick = {
-                        user?.let {
-                            scope.launch(Dispatchers.IO) {
-                                userDao.updateUser(it.copy(name = editedName))
+                    IconButton(
+                        enabled = !isSavingName,
+                        onClick = {
+                            val currentUser = user ?: run {
+                                toast("User not loaded yet")
+                                return@IconButton
+                            }
+
+                            val oldUsername = currentUser.name.trim()
+                            val newUsername = editedName.trim()
+
+                            if (newUsername.isEmpty()) {
+                                toast("Username cannot be empty")
+                                return@IconButton
+                            }
+                            if (newUsername == oldUsername) {
                                 isEditing = false
+                                return@IconButton
+                            }
+
+                            isSavingName = true
+
+                            scope.launch {
+                                try {
+                                    // 1) Check if new username doc already exists
+                                    val newDocSnap = firestore.collection("users")
+                                        .document(newUsername)
+                                        .get()
+                                        .await()
+
+                                    if (newDocSnap.exists()) {
+                                        toast("Username already taken")
+                                        isSavingName = false
+                                        return@launch
+                                    }
+
+                                    // 2) Read old username doc data (if exists)
+                                    val oldDocSnap = firestore.collection("users")
+                                        .document(oldUsername)
+                                        .get()
+                                        .await()
+
+                                    val oldData = oldDocSnap.data ?: emptyMap<String, Any?>()
+
+                                    // 3) Create new doc with copied data + updated displayName
+                                    val newData = oldData.toMutableMap()
+                                    newData["displayName"] = newUsername
+                                    firestore.collection("users")
+                                        .document(newUsername)
+                                        .set(newData)
+                                        .await()
+
+                                    // 4) Delete old doc (only if old doc existed)
+                                    if (oldDocSnap.exists()) {
+                                        firestore.collection("users")
+                                            .document(oldUsername)
+                                            .delete()
+                                            .await()
+                                    }
+
+                                    // 5) Update Room username
+                                    withContext(Dispatchers.IO) {
+                                        userDao.updateUser(currentUser.copy(name = newUsername))
+                                    }
+
+                                    toast("Username updated")
+                                    isEditing = false
+                                    isSavingName = false
+
+                                } catch (e: Exception) {
+                                    isSavingName = false
+                                    toast(e.message ?: "Failed to update username")
+                                }
                             }
                         }
-                    }) {
+                    ) {
                         Icon(Icons.Default.Check, contentDescription = "Save", tint = Color.Green)
                     }
+
                 } else {
                     Text(
                         text = user?.name ?: "Loading...",
@@ -179,14 +272,63 @@ fun ProfileScreen(
             title = { Text("Delete Account?") },
             text = { Text("This will permanently remove your profile and reviews. This cannot be undone.") },
             confirmButton = {
-                TextButton(onClick = {
-                    user?.let {
-                        scope.launch(Dispatchers.IO) {
-                            userDao.deleteUser(it)
-                            launch(Dispatchers.Main) { onLogout() }
+                TextButton(
+                    enabled = !isDeleting,
+                    onClick = {
+                        val currentUser = user ?: run {
+                            toast("User not loaded yet")
+                            return@TextButton
+                        }
+
+                        isDeleting = true
+
+                        scope.launch {
+                            try {
+                                val usernameKey = currentUser.name.trim()
+
+                                // 1) Delete Firestore profile doc: users/{username}
+                                // (This matches your existing pattern of using username as doc id)
+                                firestore.collection("users")
+                                    .document(usernameKey)
+                                    .delete()
+                                    .await()
+
+                                // 2) Delete Firebase Auth user (requires recent login sometimes)
+                                val fbUser = auth.currentUser
+                                if (fbUser != null) {
+                                    fbUser.delete().await()
+                                } else {
+                                    // Not signed in? Still continue local deletion.
+                                    toast("Warning: No Firebase user session found; deleting local profile only.")
+                                }
+
+                                // 3) Delete local Room user (your existing logic)
+                                withContext(Dispatchers.IO) {
+                                    userDao.deleteUser(currentUser)
+                                }
+
+                                // 4) Clear prefs + logout
+                                val prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+                                prefs.edit().clear().apply()
+
+                                showDeleteDialog = false
+                                toast("Account deleted")
+                                onLogout()
+
+                            } catch (e: Exception) {
+                                isDeleting = false
+
+                                val msg = e.message ?: "Delete failed"
+
+                                // Common Firebase Auth issue:
+                                // "This operation is sensitive and requires recent authentication"
+                                toast(msg)
+
+                                // Keep dialog open so they can try again (or you can add a re-auth flow later)
+                            }
                         }
                     }
-                }) { Text("Confirm Delete", color = Color.Red) }
+                ) { Text("Confirm Delete", color = Color.Red) }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteDialog = false }) { Text("Cancel") }
