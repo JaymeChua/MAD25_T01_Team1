@@ -28,7 +28,7 @@ import np.mad.assignment.mad_assignment_t01_team1.data.entity.ReviewEntity
         ReviewEntity::class,
         DishEntity::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = true
 )
 @TypeConverters(DateConverters::class)
@@ -51,7 +51,7 @@ abstract  class AppDatabase: RoomDatabase(){
                     context.applicationContext,
                     AppDatabase::class.java,
                     "mad_team1.db"
-                ).build().also { INSTANCE=it }
+                ).fallbackToDestructiveMigration().build().also { INSTANCE=it }
             }
     }
 }

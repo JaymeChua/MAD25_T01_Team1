@@ -46,7 +46,8 @@ interface StallDao{
 
     @Delete
     suspend fun deleteStall(stall: StallEntity)
-
+    @Query("SELECT * FROM stalls")
+    suspend fun getAllStallsNow(): List<StallEntity>
     @Query("DELETE FROM stalls WHERE stallId = :stallId")
     suspend fun deleteStallById(stallId: Long)
 

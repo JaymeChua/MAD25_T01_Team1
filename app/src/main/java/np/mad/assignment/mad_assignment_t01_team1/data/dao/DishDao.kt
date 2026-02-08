@@ -30,7 +30,8 @@ interface DishDao {
 
     @Delete
     suspend fun deleteDish(dish: DishEntity)
-
+    @Query("SELECT * FROM dishes")
+    suspend fun getAllDishesNow(): List<DishEntity>
     @Query("DELETE FROM dishes WHERE dishId = :dishId")
     suspend fun deleteDishById(dishId: Long)
 

@@ -9,11 +9,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.lifecycleScope
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import np.mad.assignment.mad_assignment_t01_team1.data.db.AppDatabase
 import np.mad.assignment.mad_assignment_t01_team1.data.db.seedMockData
+import np.mad.assignment.mad_assignment_t01_team1.data.firebase.FirebaseTest
+import np.mad.assignment.mad_assignment_t01_team1.data.sync.PeriodicSyncWorker
 import np.mad.assignment.mad_assignment_t01_team1.ui.theme.MAD_Assignment_T01_Team1Theme
+import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +36,14 @@ class MainActivity : ComponentActivity() {
             }
         }
         enableEdgeToEdge()
-
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "SyncWorker",
+            ExistingPeriodicWorkPolicy.KEEP,
+            PeriodicWorkRequestBuilder<PeriodicSyncWorker>(
+                15, TimeUnit.SECONDS
+            ).build()
+        )
+        //FirebaseTest.test()
         setContent {
             MAD_Assignment_T01_Team1Theme {
                 val context = LocalContext.current

@@ -1,8 +1,7 @@
 package np.mad.assignment.mad_assignment_t01_team1
 
 import android.content.Intent
-import android.os.Bundle
-import android.util.Log
+import android.util.Patterns
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,9 +26,6 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -51,18 +46,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.lifecycleScope
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import np.mad.assignment.mad_assignment_t01_team1.data.db.AppDatabase
-import np.mad.assignment.mad_assignment_t01_team1.data.db.seedMockData
+import np.mad.assignment.mad_assignment_t01_team1.data.entity.UserEntity
 import np.mad.assignment.mad_assignment_t01_team1.ui.theme.MAD_Assignment_T01_Team1Theme
 import np.mad.assignment.mad_assignment_t01_team1.util.SecurityUtils
 
 class LoginActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-
+    override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
@@ -71,17 +66,15 @@ class LoginActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     LoginScreen(
                         onLoginSuccess = { userId, role ->
-                            // Save userId to SharedPreferences (simple session)
                             val prefs = getSharedPreferences("auth", MODE_PRIVATE)
                             prefs.edit().putLong("logged_in_user", userId).putString("user_role", role).apply()
-                            // Launch MainActivity and finish LoginActivity
+
                             val intent = Intent(this@LoginActivity, MainActivity::class.java)
                             intent.putExtra("userId", userId)
                             startActivity(intent)
                             finish()
                         },
                         onRegisterClick = {
-                            // Start RegisterActivity
                             startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
                         },
                         contentPadding = innerPadding,
@@ -103,12 +96,66 @@ fun LoginScreen(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    var username by rememberSaveable { mutableStateOf("") }
+    var usernameOrEmail by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
 
+    val auth = FirebaseAuth.getInstance()
+    val firestore = FirebaseFirestore.getInstance()
+
+    fun toast(msg: String) = Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+
+    suspend fun ensureLocalUser(username: String, role: String, passwordForHash: String): UserEntity? {
+        val db = AppDatabase.get(context)
+
+        val existing = withContext(Dispatchers.IO) {
+            db.userDao().getByName(username)
+        }
+
+        if (existing != null) return existing
+
+        // Create a local record for session/role purposes (password hash here is NOT used for auth anymore)
+        val hashed = SecurityUtils.sha256(passwordForHash)
+        val newUser = UserEntity(
+            name = username,
+            password = hashed,
+            role = role
+        )
+
+        withContext(Dispatchers.IO) {
+            db.userDao().upsert(newUser)
+        }
+
+        return withContext(Dispatchers.IO) {
+            db.userDao().getByName(username)
+        }
+    }
+
+    fun loginWithFirebase(email: String, passwordInput: String, resolvedUsername: String?, resolvedRole: String?) {
+        auth.signInWithEmailAndPassword(email, passwordInput)
+            .addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    val msg = task.exception?.message ?: "Firebase login failed"
+                    toast(msg)
+                    return@addOnCompleteListener
+                }
+
+                // After Firebase login success, we still want a local userId/role for your existing session logic
+                val finalUsername = resolvedUsername ?: email.substringBefore("@")
+                val finalRole = resolvedRole ?: "user"
+
+                coroutineScope.launch {
+                    val localUser = ensureLocalUser(finalUsername, finalRole, passwordInput)
+                    if (localUser != null) {
+                        onLoginSuccess(localUser.userId, localUser.role)
+                    } else {
+                        toast("Login succeeded but local user setup failed")
+                    }
+                }
+            }
+    }
+
     Box(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Image(
@@ -116,14 +163,16 @@ fun LoginScreen(
             contentDescription = null,
             modifier = modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
-            )
+        )
+
         Column(
             modifier = Modifier
-            .fillMaxSize()
-            .padding(contentPadding)
-            .padding(top = 200.dp),
+                .fillMaxSize()
+                .padding(contentPadding)
+                .padding(top = 200.dp),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally) {
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(
                 text = "Welcome to",
                 fontSize = 45.sp,
@@ -135,7 +184,6 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // "np" + Logo in a Row
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
@@ -157,7 +205,6 @@ fun LoginScreen(
                 )
             }
 
-            // "foodies"
             Text(
                 text = "foodies",
                 fontSize = 64.sp,
@@ -167,14 +214,11 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-//            Text(text = "Login Page", style = MaterialTheme.typography.headlineLarge)
-//            Spacer(modifier = Modifier.padding(12.dp))
-
             TextField(
-                value = username,
-                onValueChange = { username = it },
-                label = { Text(text = "Username") },
-                leadingIcon = { Icon(Icons.Default.Person, contentDescription = "Username") },
+                value = usernameOrEmail,
+                onValueChange = { usernameOrEmail = it },
+                label = { Text(text = "Username or Email") },
+                leadingIcon = { Icon(Icons.Default.Person, contentDescription = "Username or Email") },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.White,
@@ -183,7 +227,9 @@ fun LoginScreen(
                     cursorColor = Color.Black
                 ),
                 shape = RoundedCornerShape(8.dp),
-                modifier = Modifier.fillMaxWidth(0.85f).padding (top = 50.dp)
+                modifier = Modifier
+                    .fillMaxWidth(0.85f)
+                    .padding(top = 50.dp)
             )
 
             Spacer(modifier = Modifier.padding(12.dp))
@@ -202,41 +248,103 @@ fun LoginScreen(
                 ),
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.fillMaxWidth(0.85f)
-
-
             )
 
             Spacer(modifier = Modifier.padding(12.dp))
 
-            // Login button: validate using Room DAO
-            Button(onClick = {
-                coroutineScope.launch {
-                    try {
-                        val db = AppDatabase.get(context)
-                        // Your UserDao.getByName(name) exists in the code you provided.
-                        val user = withContext(Dispatchers.IO) {
-                            db.userDao().getByName(username)
-                        }
+            Button(
+                onClick = {
+                    val identifier = usernameOrEmail.trim()
+                    val pw = password.trim()
 
-                        val hashedInput = SecurityUtils.sha256(password)
-                        if (user != null && user.password == hashedInput) {
-                            // success: return real userId
-                            onLoginSuccess(user.userId, user.role)
-                        } else {
-                            // show simple toast on failure
-                            Toast.makeText(context, "Invalid username or password", Toast.LENGTH_SHORT).show()
-                        }
-                    } catch (e: Exception) {
-                        Toast.makeText(context, "Login failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                    if (identifier.isEmpty() || pw.isEmpty()) {
+                        toast("Please enter your credentials")
+                        return@Button
                     }
-                }
-            },
+
+                    // ============================
+                    // OLD CODE (ROOM PASSWORD LOGIN) - COMMENTED OUT
+                    // ============================
+                    /*
+                    coroutineScope.launch {
+                        try {
+                            val db = AppDatabase.get(context)
+                            val user = withContext(Dispatchers.IO) {
+                                db.userDao().getByName(identifier)
+                            }
+
+                            val hashedInput = SecurityUtils.sha256(pw)
+                            if (user != null && user.password == hashedInput) {
+                                onLoginSuccess(user.userId, user.role)
+                            } else {
+                                Toast.makeText(context, "Invalid username or password", Toast.LENGTH_SHORT).show()
+                            }
+                        } catch (e: Exception) {
+                            Toast.makeText(context, "Login failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    */
+
+                    // ============================
+                    // NEW CODE (USERNAME OR EMAIL -> FIRESTORE -> FIREBASE AUTH)
+                    // ============================
+
+                    // Case A: identifier is an email
+                    if (Patterns.EMAIL_ADDRESS.matcher(identifier).matches()) {
+                        // Find matching username/role via Firestore so your local session stays consistent
+                        firestore.collection("users")
+                            .whereEqualTo("email", identifier)
+                            .limit(1)
+                            .get()
+                            .addOnSuccessListener { snap ->
+                                if (snap.isEmpty) {
+                                    // still try firebase login even if mapping not found
+                                    loginWithFirebase(identifier, pw, resolvedUsername = null, resolvedRole = null)
+                                    return@addOnSuccessListener
+                                }
+
+                                val doc = snap.documents.first()
+                                val resolvedUsername = doc.id
+                                val resolvedRole = doc.getString("role") ?: "user"
+
+                                loginWithFirebase(identifier, pw, resolvedUsername, resolvedRole)
+                            }
+                            .addOnFailureListener { e ->
+                                toast("Failed to lookup email: ${e.message}")
+                            }
+
+                        return@Button
+                    }
+
+                    // Case B: identifier is a username -> resolve email from users/{username}
+                    firestore.collection("users")
+                        .document(identifier)
+                        .get()
+                        .addOnSuccessListener { doc ->
+                            if (!doc.exists()) {
+                                toast("Username not found (Firestore)")
+                                return@addOnSuccessListener
+                            }
+
+                            val email = doc.getString("email")?.trim()
+                            if (email.isNullOrEmpty()) {
+                                toast("No email linked to this username")
+                                return@addOnSuccessListener
+                            }
+
+                            val role = doc.getString("role") ?: "user"
+                            loginWithFirebase(email, pw, resolvedUsername = identifier, resolvedRole = role)
+                        }
+                        .addOnFailureListener { e ->
+                            toast("Failed to lookup username: ${e.message}")
+                        }
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
                     contentColor = Color.Black
                 ),
                 modifier = Modifier
-                    .padding (top = 50.dp)
+                    .padding(top = 50.dp)
                     .fillMaxWidth(0.85f)
                     .height(50.dp)
             ) {
@@ -245,8 +353,8 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.padding(8.dp))
 
-            // Register button
-            Button(onClick = { onRegisterClick() },
+            Button(
+                onClick = { onRegisterClick() },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
                     contentColor = Color.Black
@@ -260,6 +368,18 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.padding(8.dp))
 
+            Button(
+                onClick = { context.startActivity(Intent(context, ForgotPasswordActivity::class.java)) },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Black
+                ),
+                modifier = Modifier
+                    .fillMaxWidth(0.85f)
+                    .height(50.dp)
+            ) {
+                Text(text = "Forgot Password?")
+            }
         }
     }
 }
