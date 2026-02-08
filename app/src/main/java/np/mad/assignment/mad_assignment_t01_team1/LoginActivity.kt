@@ -265,7 +265,7 @@ fun LoginScreen(
                     // ============================
                     // OLD CODE (ROOM PASSWORD LOGIN) - COMMENTED OUT
                     // ============================
-                    /*
+
                     coroutineScope.launch {
                         try {
                             val db = AppDatabase.get(context)
@@ -283,7 +283,7 @@ fun LoginScreen(
                             Toast.makeText(context, "Login failed: ${e.message}", Toast.LENGTH_SHORT).show()
                         }
                     }
-                    */
+
 
                     // ============================
                     // NEW CODE (USERNAME OR EMAIL -> FIRESTORE -> FIREBASE AUTH)
