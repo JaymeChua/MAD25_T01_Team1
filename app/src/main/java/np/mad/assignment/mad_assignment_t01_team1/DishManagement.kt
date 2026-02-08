@@ -182,7 +182,7 @@ fun StallSection(
             Row {
                 IconButton(onClick = onAiScan) {
                     Icon(
-                        Icons.Filled.Call,
+                        Icons.Filled.Menu,
                         contentDescription = "AI Scan",
                         tint = AdminPrimary
                     )
