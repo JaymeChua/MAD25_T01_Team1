@@ -71,7 +71,6 @@ fun BulkAddDishesScreen(
         )
     }
 
-    // --- 2. CAMERA LAUNCHER ---
     val takePictureLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
     ) { success ->
@@ -160,7 +159,7 @@ fun BulkAddDishesScreen(
                         }
                     }
                 ) {
-                    Icon(Icons.Default.Add, contentDescription = null) // Changed from CameraAlt to avoid import error
+                    Icon(Icons.Default.Add, contentDescription = null)
                     Spacer(Modifier.width(8.dp))
                     Text("Camera")
                 }
