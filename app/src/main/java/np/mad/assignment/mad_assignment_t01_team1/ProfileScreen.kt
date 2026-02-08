@@ -58,6 +58,8 @@ fun ProfileScreen(
     var editedName by rememberSaveable(user) { mutableStateOf(user?.name ?: "") }
     var showDeleteDialog by remember { mutableStateOf(false) }
     var isDeleting by remember { mutableStateOf(false) }
+    var isSavingName by remember { mutableStateOf(false) }
+
 
     fun toast(msg: String) {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
@@ -99,16 +101,85 @@ fun ProfileScreen(
                         modifier = Modifier.weight(1f).height(56.dp),
                         singleLine = true
                     )
-                    IconButton(onClick = {
-                        user?.let {
-                            scope.launch(Dispatchers.IO) {
-                                userDao.updateUser(it.copy(name = editedName))
+                    IconButton(
+                        enabled = !isSavingName,
+                        onClick = {
+                            val currentUser = user ?: run {
+                                toast("User not loaded yet")
+                                return@IconButton
+                            }
+
+                            val oldUsername = currentUser.name.trim()
+                            val newUsername = editedName.trim()
+
+                            if (newUsername.isEmpty()) {
+                                toast("Username cannot be empty")
+                                return@IconButton
+                            }
+                            if (newUsername == oldUsername) {
                                 isEditing = false
+                                return@IconButton
+                            }
+
+                            isSavingName = true
+
+                            scope.launch {
+                                try {
+                                    // 1) Check if new username doc already exists
+                                    val newDocSnap = firestore.collection("users")
+                                        .document(newUsername)
+                                        .get()
+                                        .await()
+
+                                    if (newDocSnap.exists()) {
+                                        toast("Username already taken")
+                                        isSavingName = false
+                                        return@launch
+                                    }
+
+                                    // 2) Read old username doc data (if exists)
+                                    val oldDocSnap = firestore.collection("users")
+                                        .document(oldUsername)
+                                        .get()
+                                        .await()
+
+                                    val oldData = oldDocSnap.data ?: emptyMap<String, Any?>()
+
+                                    // 3) Create new doc with copied data + updated displayName
+                                    val newData = oldData.toMutableMap()
+                                    newData["displayName"] = newUsername
+                                    firestore.collection("users")
+                                        .document(newUsername)
+                                        .set(newData)
+                                        .await()
+
+                                    // 4) Delete old doc (only if old doc existed)
+                                    if (oldDocSnap.exists()) {
+                                        firestore.collection("users")
+                                            .document(oldUsername)
+                                            .delete()
+                                            .await()
+                                    }
+
+                                    // 5) Update Room username
+                                    withContext(Dispatchers.IO) {
+                                        userDao.updateUser(currentUser.copy(name = newUsername))
+                                    }
+
+                                    toast("Username updated")
+                                    isEditing = false
+                                    isSavingName = false
+
+                                } catch (e: Exception) {
+                                    isSavingName = false
+                                    toast(e.message ?: "Failed to update username")
+                                }
                             }
                         }
-                    }) {
+                    ) {
                         Icon(Icons.Default.Check, contentDescription = "Save", tint = Color.Green)
                     }
+
                 } else {
                     Text(
                         text = user?.name ?: "Loading...",
